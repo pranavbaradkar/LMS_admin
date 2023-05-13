@@ -1,0 +1,2188 @@
+<template>
+  <v-container fluid class="pa-8 secondary">
+    <v-row>
+      <v-col class="d-flex align-center">
+        <v-btn
+          v-if="!showUsers"
+          @click="
+            () => {
+              dialog = true;
+              e1 = 1;
+            }
+          "
+          class="primary"
+          large
+          rounded
+          elevation="0"
+          ><v-icon>mdi-plus</v-icon>Create Assessment</v-btn
+        >
+
+        <div class="mt-4" v-if="showUsers">
+          <span class="m-4 cursor" @click="showUsers = false">Assessments</span>
+          <v-icon>mdi-chevron-right</v-icon>
+          <span class="text--secondary">Assessment Name</span>
+          <v-icon>mdi-chevron-right</v-icon>
+          <select
+            @change="
+              () => {
+                screeningMainsUser == 'false'
+                  ? fetchMainsUsers(selectedId)
+                  : fetchScreeningUsers(selectedId);
+              }
+            "
+            v-model="screeningMainsUser"
+          >
+            <option value="true" selected>
+              Users in Screening Assessments
+            </option>
+            <option value="false">Users in Mains Assessments</option>
+          </select>
+        </div>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field
+          v-if="!showUsers"
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+        ></v-text-field
+      ></v-col>
+    </v-row>
+
+    <!-- assessment user table row with filter btn and color code -->
+    <v-row justify="space-between" class="my-8" v-if="showUsers">
+      <v-col cols="6" sm="6" md="" class="ma-0 pa-0 f-flex align-center">
+        <div class="m-tab">
+          <v-tabs
+            background-color="#0000000D"
+            class="ml-2 d-flex space-evenly"
+            height="38"
+            hide-slider
+          >
+            <v-tab
+              active-class=" white ma-1 black--text"
+              class="rounded"
+              v-on:click="assessmentUsers = inProgress"
+            >
+              In Progress
+            </v-tab>
+            <v-tab
+              active-class=" white ma-1 black--text"
+              class="rounded"
+              v-on:click="assessmentUsers = cleared"
+            >
+              Cleared
+            </v-tab>
+
+            <v-tab
+              active-class="white ma-1 black--text"
+              class="rounded"
+              v-on:click="assessmentUsers = yetToAttempt"
+            >
+              Not Cleared
+            </v-tab>
+            <v-tab
+              active-class="ma-1 white black--text"
+              class="rounded"
+              v-on:click="assessmentUsers = yetToAttempt"
+            >
+              Yet To Attempt
+            </v-tab>
+          </v-tabs>
+        </div>
+      </v-col>
+      <!-- filter btn and color code -->
+      <v-col
+        cols="6"
+        sm="6"
+        md="6"
+        class="d-flex justify-end align-center ma-0 pa-0"
+      >
+        <v-spacer></v-spacer>
+
+        <v-spacer></v-spacer>
+        <v-text-field
+          label="Search"
+          class="ma-0 pa-0"
+          prepend-inner-icon="mdi-magnify"
+        ></v-text-field>
+        <v-btn class="primary ml-2" rounded>
+          <v-icon>mdi-tune</v-icon>Filter</v-btn
+        >
+      </v-col>
+    </v-row>
+
+    <!-- Assessment row and fiter and export btn -->
+
+    <v-row justify="space-between" class="my-0" v-if="!showUsers">
+      <v-col cols="4" sm="4" md="4">
+        <div class="text-h5 ml-4">Assessments</div>
+      </v-col>
+      <v-col cols="8" sm="8" class="d-flex justify-end">
+        <div>
+          <v-btn class="primary mx-2" rounded @click="filterDialog = true"
+            ><v-icon>mdi-tune</v-icon>Filter</v-btn
+          >
+          <v-btn class="primary mx-2" rounded
+            ><v-icon>mdi-export</v-icon>Export</v-btn
+          >
+        </div>
+      </v-col>
+    </v-row>
+
+    <!-- Live assessment and color code row  -->
+    <v-row justify="space-between" class="mb-4 mt-0" v-if="!showUsers">
+      <v-col cols="4" sm="4" md="4">
+        <div class="text-h5 ml-4">
+          Live Assessments ({{ assessments.length }})
+        </div>
+      </v-col>
+
+      <v-col cols="8" sm="8" class="d-flex justify-end align-center">
+        <v-icon color="#06C270CC" class="mr-2 ml-4">mdi-circle</v-icon> Cleared
+        <v-icon class="mr-2 ml-4" color="#1B72E8B2">mdi-circle</v-icon> In
+        progress
+        <v-icon class="mr-2 ml-4" color="#FF9501CC">mdi-circle</v-icon> Not
+        Cleared<v-icon class="mr-2 ml-4" color="#0000001F">mdi-circle</v-icon>
+        Yet to attempt
+      </v-col>
+    </v-row>
+
+    <!------------------------------------------ Assessment card here---------------------------- -->
+    <div class="d-flex flex-row pb-4" id="myScroll-x" v-if="!showUsers">
+      <v-card
+        width="427px"
+        min-width="427px"
+        height="auto"
+        class="pa-5 ml-4 pb-8"
+        v-for="assessment in assessments"
+        
+        :key="assessment.id"
+      >
+        <v-card-title @click="fetchScreeningUsers(assessment.id)" class="pa-0 cursor">{{ assessment.name }}</v-card-title>
+        <div class="my-2 text-subtitle-1">
+          <!-- Assessment title -->
+          Senior Secondary
+        </div>
+        <!-- assessment type -->
+
+        <div
+          v-for="data in assessment.assessment_configurations"
+          :key="data.id"
+        >
+          <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
+          <div
+            class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 " 
+          >
+            <div class="assessmentIconColor">
+              <v-icon  class="pr-0 ">mdi-help-circle-outline</v-icon
+              >{{ data.total_no_of_questions }} Questions
+            </div>
+            <div class="assessmentIconColor">
+              <v-icon class="pr-0 pl-4">mdi-clock-outline</v-icon
+              >{{ formatTime(data.duration_of_assessment)  }}
+            </div>
+            <div class="assessmentIconColor">
+              <v-icon class="pr-0 pl-4">mdi-alpha-a-circle-outline</v-icon
+              >{{ data.correct_score_answer }} marks
+            </div>
+          </div>
+          <v-card
+          
+            class="d-flex flex-row pa-0 ma-0"
+            width="100%"
+            height="40px"
+            color="transparent"
+            depressed
+            elevation="0"
+          >
+            <v-card
+            elevation="0"
+              class="d-flex flex-row pa-0 ma-0"
+              width="100%"
+              height="0px"
+              color="grey"
+            >
+              <v-card
+              elevation="0"
+                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
+                width="20%"
+                height="10px"
+                color="#43ff64d9"
+                justify-center
+              >
+                <div class="graph-value litegreen">50</div>
+              </v-card>
+              <v-card
+              elevation="0"
+                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
+                width="30%"
+                height="10px"
+                color="#1b72e8b3"
+                justify-center
+              >
+                <div class="graph-value liteblue">50</div>
+              </v-card>
+              <v-card
+              elevation="0"
+                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
+                width="25%"
+                height="10px"
+                color="#ff9501cc"
+                justify-center
+              >
+                <div class="graph-value liteyellow">50</div>
+              </v-card>
+              <v-card
+              elevation="0"
+                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0" 
+                width="25%"
+                height="10px"
+                color="#D9D9D9"
+                justify-center
+              >
+                <div class="graph-value">50</div>
+              </v-card>
+            </v-card>
+          </v-card>
+          <div class="d-flex justify-end">
+          
+            <v-card-title class="pa-0 cursor" @click="publishMethod(data.id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
+          </div>
+          <v-divider class="mb-4 mt-2"></v-divider>
+        </div>
+
+        <!-- Assessment type -->
+      </v-card>
+    </div>
+
+    <v-data-table
+      v-if="showUsers"
+      :headers="screeningHeaders"
+      :items="assessmentUsers"
+    >
+      <template v-slot:[`item.actions`]="{}">
+        <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
+      </template>
+    </v-data-table>
+
+    <!-- <v-dialog v-model="successDialog" max-width="366px" persistent>
+      <v-card>
+        <v-container fluid class="pa-8">
+          <v-card-text class="text-center">
+            <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
+            <p class="text-h5 py-4">New Grade Created</p>
+            <v-btn
+              class="primary"
+              large
+              width="157px"
+              rounded
+              @click="successDialog = false"
+              >OK</v-btn
+            >
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog> -->
+    <!-- Assessment Creation Dialog Form -->
+    <v-dialog v-model="dialog" fullscreen hide-overlay>
+      <v-card class="secondary">
+        <v-card-title class="mx-4">
+          <v-toolbar elevation="0" class="secondary">
+            <v-toolbar-title class="text-h5">Create Assessment</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-row align="center" justify="end">
+              <v-btn text @click="dialog = false">Cancel</v-btn>
+              <!-- <v-btn outlined rounded v-if="e1 > 1" @click="e1--" class="mr-4"
+                >Back</v-btn
+              > -->
+              <v-btn width="111px" height="48px" rounded class="primary" @click="nextStep(e1)">
+                <v-icon v-if="e1 == 6">mdi-book-open-variant</v-icon
+                >{{ e1 == 6 ? "Create" : "Next" }}
+              </v-btn>
+            </v-row>
+          </v-toolbar>
+        </v-card-title>
+        <v-card-text>
+          <v-stepper v-model="e1" elevation="0" class="secondary">
+            <v-stepper-header class="mx-6 white rounded-xl" >
+              <v-stepper-step  :complete="e1 > 1" step="1">
+                DETAILS
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="e1 > 2" step="2">
+                SCREENING CONFIGURATION
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="e1 > 3" step="3">
+                QUESTIONS
+              </v-stepper-step>
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="e1 > 4" step="4">
+                MAINS CONFIGURATION
+              </v-stepper-step>
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="e1 > 5" step="5">
+                QUESTIONS
+              </v-stepper-step>
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="e1 > 6" step="6">
+                PREVIEW
+              </v-stepper-step>
+            </v-stepper-header>
+            <!-- stepper items starts here -->
+            <v-stepper-items class="secondary">
+              <v-stepper-content step="1">
+                <v-form ref="step1" lazy-validation>
+                  <v-card elevation="0">
+                    <v-card-text class="pt-10">
+                      <v-row class="py-0">
+                        <v-col class="py-0">
+                          <div class="text-body-1 my-2">Assessment Name*</div>
+                          <v-text-field
+                            outlined
+                            class="rounded-xl"
+                            v-model="name"
+                            solo
+                            flat
+                            label="Enter Assessment Name*"
+                            :rules="[
+                              (v) => !!v || 'Assessment Name is required',
+                            ]"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row class="py-0">
+                        <v-col class="py-0">
+                          <div class="text-body-1 my-2">Instructions*</div>
+                          <v-textarea
+                            outlined
+                            class="rounded-xl"
+                            label="Enter Instructions"
+                            solo
+                            flat
+                            v-model="instructions"
+                            :rules="[(v) => !!v || 'Instructions is required']"
+                          >
+                          </v-textarea>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-form>
+              </v-stepper-content>
+
+              <v-stepper-content step="2">
+                <v-form ref="step2" lazy-validation>
+                  <v-card elevation="0">
+                    <v-card-text>
+                      <div class="text-body-1 my-4">
+                        Screening Configuration
+                      </div>
+                      <v-row
+                        class="py-0"
+                        v-for="(
+                          skillsField, index
+                        ) in screeningConfiguration.skillsFields"
+                        :key="index"
+                        align="center"
+                      >
+                        <v-col fluid class="py-0" cols="5">
+                          <div class="text-body-1 my-2">
+                            Skill Distribution* (change skill settings)
+                          </div>
+                          <v-select
+                            :items="skillsList"
+                            outlined
+                            class="rounded-xl py-0 mytextFiled"
+                            v-model="skillsField.skill_id"
+                            item-text="name"
+                            item-value="id"
+                            :rules="[(v) => !!v || 'Skill is required']"
+                          >
+                          </v-select>
+                          <div class="py-0 text-subtitle-2 font-weight-light">
+                            Novice : 0-20, Advance : 20-40, Competent : 40-60,
+                            Proficient : 60-80, Expert : 80-100
+                          </div>
+                        </v-col>
+                        <v-col class="py-0 pl-10" cols="3">
+                          <div class="text-body-1 my-2">
+                            Number of Questions*
+                          </div>
+                          <v-text-field
+                            v-model.number="skillsField.no_of_questions"
+                            outlined
+                            class="rounded-xl"
+                            type="number"
+                            :rules="[
+                              (v) => !!v || 'Number of Questions is required',
+                            ]"
+                            disabled
+                            required
+                          ></v-text-field>
+                        </v-col>
+                        <v-col
+                          align-self="center"
+                          v-if="screeningConfiguration.skillsFields.length > 1"
+                        >
+                          <v-btn
+                            @click="deleteScreeningSkillField(index)"
+                            text
+                            color="blue"
+                          >
+                            Delete
+                          </v-btn>
+                        </v-col>
+                        <v-col>
+                          <!-- screning open dialog -->
+                          <v-btn
+                            v-if="checkSubjects(skillsField.skill_id)"
+                            text
+                            color="blue"
+                            @click="
+                              openSubjectDialog(
+                                skillsList.find(
+                                  (skill) => skill.id == skillsField.skill_id
+                                ),
+                                skillsField
+                              )
+                            "
+                            >Add/Edit Subject</v-btn
+                          >
+                        </v-col>
+                      </v-row>
+
+                      <v-row
+                        justify="start"
+                        align="center"
+                        class="px-2 blue--text"
+                        @click="addScreeningSkillsField"
+                      >
+                        <v-icon large>mdi-plus-circle-outline</v-icon>
+                        <v-btn width="125px" height="20px" class="pl-0" text x-large color="blue"
+                          >Add Skills</v-btn
+                        >
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+
+                  <v-card elevation="0" class="my-4">
+                    <v-card-text >
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1 my-4">Difficulty Level*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="screeningConfiguration.difficultyLevel"
+                            :rules="[(v) => !!v || 'Please select one']"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                  <v-card elevation="0" class="my-4">
+                    <v-card-text>
+                      <v-row>
+                        <v-col cols="6">
+                          <div class="text-body-1 my-4">
+                            Total Number Of Questions
+                          </div>
+                          <v-text-field
+                            hide-details
+                            outlined
+                            class="rounded-xl"
+                            solo
+                            flat
+                            label="Total Number Of Questions"
+                            type="number"
+                            v-model.number="
+                              screeningConfiguration.totalNumberQuestions
+                            "
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                          <div class="text-body-1 my-4">Teaching Level</div>
+                          <v-select
+                            hide-details
+                            label="Choose Level"
+                            :items="levels"
+                            item-text="name"
+                            item-value="id"
+                            outlined
+                            class="rounded-xl"
+                            v-model="screeningConfiguration.teachingLevel"
+                          >
+                          </v-select>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">
+                            Score For Correct Answer*
+                          </div>
+                        </v-col>
+                        <v-col cols="2">
+                          <v-text-field
+                            hide-details
+                            outlined
+                            class="rounded-xl green"
+                            solo
+                            flat
+                            type="number"
+                            required
+                            v-model.number="
+                              screeningConfiguration.correctAnswerScore
+                            "
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Duration Of Assessment*</div>
+                        </v-col>
+                        <v-col cols="2">
+                          <v-text-field
+                            hide-details
+                            type="number"
+                            outlined
+                            class="rounded-xl green"
+                            solo
+                            flat
+                            v-model.number="
+                              screeningConfiguration.assessmentDuration
+                            "
+                            required
+                            
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Negative Marking*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="screeningConfiguration.negativeMarking"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Randomize Questions*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="screeningConfiguration.randomizeQuestions"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col> </v-row
+                      ><v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Shuffle Options*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="screeningConfiguration.shuffleOptions"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col> </v-row
+                      ><v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Display Correct Answer*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            required
+                            v-model="
+                              screeningConfiguration.displayCorrectAnswer
+                            "
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col> </v-row
+                      ><v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Display Result*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="screeningConfiguration.displayResult"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Passing Criteria*</div>
+                        </v-col>
+                        <v-col cols="2">
+                          <v-text-field
+                            append-icon="mdi-percent-outline"
+                            hide-details
+                            type="number"
+                            outlined
+                            required
+                            class="rounded-xl green"
+                            solo
+                            flat
+                            v-model.number="
+                              screeningConfiguration.passingCriteria
+                            "
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="6">
+                          <div class="text-body-1 my-4">
+                            Assessment Time Up First Reminder
+                          </div>
+                          <v-select
+                            v-model="screeningConfiguration.timeUpFirstReminder"
+                            hide-details
+                            label="Choose First Reminder Time"
+                            :items="[1, 2, 3, 4, 5]"
+                            outlined
+                            class="rounded-xl"
+                          >
+                          </v-select>
+                        </v-col>
+                        <v-col cols="6">
+                          <div class="text-body-1 my-4">
+                            Assessment Time Up Last Reminder
+                          </div>
+                          <v-select
+                            v-model="screeningConfiguration.timeUpLastReminder"
+                            hide-details
+                            label="Choose Last Reminder Time"
+                            :items="[1, 2, 3, 4, 5]"
+                            outlined
+                            class="rounded-xl"
+                          >
+                          </v-select>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-form>
+              </v-stepper-content>
+
+              <v-stepper-content step="3">
+                <v-form>
+                  <v-card elevation="0">
+                    <v-card-text>
+                      <v-row>
+                        <v-spacer></v-spacer>
+                        <v-btn v-if="scrBtnShow" class="ma-4" @click="expandAndCollMethod" text>{{screeningBtnValue()}}</v-btn>
+                      </v-row>
+                     
+                      <v-expansion-panels v-model="screenPanel" popout multiple>
+                        <v-expansion-panel
+                          v-for="(skill, index) in skillQuestions"
+                          :key="index"
+                        >
+                          <v-expansion-panel-header>{{
+                            skill.name
+                          }}</v-expansion-panel-header>
+                          <v-expansion-panel-content
+                            v-for="(question, i) in skill.questions"
+                            :key="i"
+                          >
+                            <v-card>
+                              <v-card-subtitle class="pb-0">
+                                {{ question.question_type }}
+                              </v-card-subtitle>
+                              <v-card-title class="pt-0">
+                                {{ question.statement }}
+                              </v-card-title>
+                              <v-card-text>
+                                <p>Options</p>
+                                <v-row justify="start">
+                                  <div
+                                    v-for="(
+                                      option, inx
+                                    ) in question.question_options"
+                                    :key="inx"
+                                  >
+                                    <v-chip class="ma-2">{{
+                                      option.option_value
+                                    }}</v-chip>
+                                  </div>
+                                </v-row>
+                              </v-card-text>
+                            </v-card>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                    </v-card-text>
+                  </v-card>
+                </v-form>
+              </v-stepper-content>
+              <v-stepper-content step="4">
+                <v-form ref="step4">
+                  <v-card elevation="0">
+                    <v-card-text>
+                      <div class="text-body-1 my-4">Mains Configuration</div>
+                      <v-row
+                        class="py-0"
+                        v-for="(
+                          skillsField, index
+                        ) in mainsConfiguration.skillsFields"
+                        :key="index"
+                        align="center"
+                      >
+                        <v-col fluid class="py-0" cols="5">
+                          <div class="text-body-1 my-2">
+                            Skill Distribution* (change skill settings)
+                          </div>
+                          <v-select
+                            :items="skillsList"
+                            outlined
+                            class="rounded-xl py-0 mytextFiled"
+                            v-model="skillsField.skill_id"
+                            item-text="name"
+                            item-value="id"
+                            required
+                            :rules="[(v) => !!v || 'Skills is required']"
+                          >
+                          </v-select>
+                          <div class="py-0 text-subtitle-2 font-weight-light">
+                            Novice : 0-20, Advance : 20-40, Competent : 40-60,
+                            Proficient : 60-80, Expert : 80-100
+                          </div>
+                        </v-col>
+                        <v-col class="py-0 pl-10" cols="3">
+                          <div class="text-body-1 my-2">
+                            Number of Questions*
+                          </div>
+                          <v-text-field
+                            v-model.number="skillsField.no_of_questions"
+                            outlined
+                            class="rounded-xl"
+                            type="number"
+                            :rules="[
+                              (v) => !!v || 'Number of Questions is required',
+                            ]"
+                            required
+                            disabled
+                          ></v-text-field>
+                        </v-col>
+                        <v-col
+                          cols="2"
+                          align-self="center"
+                          v-if="mainsConfiguration.skillsFields.length > 1"
+                        >
+                          <v-btn
+                            @click="deleteMainsSkillField(index)"
+                            text
+                            color="blue"
+                          >
+                            Delete
+                          </v-btn>
+                        </v-col>
+                        <v-col>
+                          <!-- mains open subject Dialog -->
+                          <v-btn
+                            v-if="checkSubjects(skillsField.skill_id)"
+                            text
+                            color="blue"
+                            @click="
+                              openSubjectDialogMains(
+                                skillsList.find(
+                                  (skill) => skill.id == skillsField.skill_id
+                                ),
+                                skillsField
+                              )
+                            "
+                            >Add/Edit Subject</v-btn
+                          >
+                        </v-col>
+                      </v-row>
+
+                      <v-row
+                        justify="start"
+                        align="center"
+                        class="px-2 blue--text"
+                        @click="addMainsSkillsField"
+                      >
+                        <v-icon large>mdi-plus-circle-outline</v-icon>
+                        <v-btn width="125px" height="20px" class="pl-0" text x-large color="blue"
+                          >Add Skills</v-btn
+                        >
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                  <v-card elevation="0" class="my-4">
+                    <v-card-text>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1 my-4">Difficulty Level*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="mainsConfiguration.difficultyLevel"
+                            :rules="[(v) => !!v || 'Please select one']"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                  <v-card elevation="0" class="my-4">
+                    <v-card-text>
+                      <v-row>
+                        <v-col cols="6">
+                          <div class="text-body-1 my-4">
+                            Total Number Of Questions
+                          </div>
+                          <v-text-field
+                            hide-details
+                            outlined
+                            class="rounded-xl"
+                            solo
+                            flat
+                            label="Total Number Of Questions"
+                            type="number"
+                            v-model.number="
+                              mainsConfiguration.totalNumberQuestions
+                            "
+                            :rules="[
+                              (v) =>
+                                !!v || 'Total Number Of Questions is required',
+                            ]"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                          <div class="text-body-1 my-4">Teaching Level</div>
+                          <v-select
+                            hide-details
+                            label="Choose Level"
+                            :items="levels"
+                            item-text="name"
+                            item-value="id"
+                            outlined
+                            class="rounded-xl"
+                            v-model="mainsConfiguration.teachingLevel"
+                          >
+                          </v-select>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">
+                            Score For Correct Answer*
+                          </div>
+                        </v-col>
+                        <v-col cols="2">
+                          <v-text-field
+                            hide-details
+                            outlined
+                            class="rounded-xl green"
+                            solo
+                            flat
+                            type="number"
+                            required
+                            v-model.number="
+                              mainsConfiguration.correctAnswerScore
+                            "
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Duration Of Assessment*</div>
+                        </v-col>
+                        <v-col cols="2">
+                          <v-text-field
+                            hide-details
+                            type="number"
+                            outlined
+                            
+                            class="rounded-xl green"
+                            solo
+                            flat
+                            v-model.number="
+                              mainsConfiguration.assessmentDuration
+                            "
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Negative Marking*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="mainsConfiguration.negativeMarking"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1" required>
+                            Randomize Questions*
+                          </div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="mainsConfiguration.randomizeQuestions"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col> </v-row
+                      ><v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Shuffle Options*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="mainsConfiguration.shuffleOptions"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col> </v-row
+                      ><v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Display Correct Answer*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="mainsConfiguration.displayCorrectAnswer"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col> </v-row
+                      ><v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Display Result*</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="mainsConfiguration.displayResult"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="YES" value="YES"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="NO" value="NO"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col>
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1">Passing Criteria*</div>
+                        </v-col>
+                        <v-col cols="2">
+                          <v-text-field
+                            append-icon="mdi-percent-outline"
+                            hide-details
+                            type="number"
+                            outlined
+                            class="rounded-xl green"
+                            solo
+                            flat
+                            v-model.number="mainsConfiguration.passingCriteria"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="6">
+                          <div class="text-body-1 my-4">
+                            Assessment Time Up First Reminder
+                          </div>
+                          <v-select
+                            v-model="mainsConfiguration.timeUpFirstReminder"
+                            hide-details
+                            label="Choose First Reminder Time"
+                            :items="[1, 2, 3, 4, 5]"
+                            outlined
+                            class="rounded-xl"
+                          >
+                          </v-select>
+                        </v-col>
+                        <v-col cols="6">
+                          <div class="text-body-1 my-4">
+                            Assessment Time Up Last Reminder
+                          </div>
+                          <v-select
+                            v-model="mainsConfiguration.timeUpLastReminder"
+                            hide-details
+                            label="Choose Last Reminder Time"
+                            :items="[1, 2, 3, 4, 5]"
+                            outlined
+                            class="rounded-xl"
+                          >
+                          </v-select>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-form>
+              </v-stepper-content>
+              <v-stepper-content step="5">
+                <v-form>
+                  <v-card elevation="0">
+                    <v-card-text>
+                      <v-row>
+                        <v-spacer></v-spacer>
+                        <v-btn v-if="mainBtnShow" class="ma-4" @click="mainExpandAndCollMethod" text>{{mainBtnValue()}}</v-btn>
+                      </v-row>
+                      <v-expansion-panels  v-model="mainPanel"  popout multiple>
+                        <v-expansion-panel
+                          v-for="(skill, index) in mainsQuestions"
+                          :key="index"
+                        >
+                          <v-expansion-panel-header>{{
+                            skill.name
+                          }}</v-expansion-panel-header>
+                          <v-expansion-panel-content
+                            v-for="(question, i) in skill.questions"
+                            :key="i"
+                          >
+                            <v-card elevation="0">
+                              <v-card-subtitle class="pb-0">
+                                {{ question.question_type }}
+                              </v-card-subtitle>
+                              <v-card-title class="pt-0">
+                                {{ question.statement }}
+                              </v-card-title>
+                              <v-card-text>
+                                <p>Options</p>
+                                <v-row justify="start">
+                                  <div
+                                    v-for="(
+                                      option, inx
+                                    ) in question.question_options"
+                                    :key="inx"
+                                  >
+                                    <v-chip class="ma-2">{{
+                                      option.option_value
+                                    }}</v-chip>
+                                  </div>
+                                </v-row>
+                              </v-card-text>
+                            </v-card>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                    </v-card-text>
+                  </v-card>
+                </v-form>
+              </v-stepper-content>
+              <v-stepper-content step="6">
+                <v-form>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-card elevation="0">
+                        <v-card-title> Mobile App </v-card-title>
+                        <v-card-title>
+                          <v-img
+                            src="../assets/phone.png"
+                            height="60vh"
+                            contain
+                          ></v-img>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-card elevation="0">
+                        <v-card-title> Web App </v-card-title>
+                        <v-card-title>
+                          <v-img
+                            src="../assets/web.png"
+                            height="60vh"
+                            contain
+                          ></v-img>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-form>
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <!-- Success Dialog -->
+    <v-dialog v-model="successDialog" max-width="366px" persistent>
+      <v-card>
+        <v-container fluid class="pa-8">
+          <v-card-text class="text-center">
+            <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
+            <p class="text-h5 py-4">{{ successMessage }}</p>
+            <v-btn
+              class="primary"
+              large
+              width="157px"
+              rounded
+              @click="successDialog = false"
+              >OK</v-btn
+            >
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog>
+    <!-- Error Dialog -->
+    <v-dialog v-model="errorDialog" max-width="366px" persistent>
+      <v-card>
+        <v-container fluid class="pa-8">
+          <v-card-text class="text-center">
+            <v-icon color="error" size="96">mdi-close-circle-outline</v-icon>
+            <p class="text-h5 py-4">{{ errorMessage }}</p>
+            <v-btn
+              class="primary"
+              large
+              width="157px"
+              rounded
+              @click="errorDialog = false"
+              >OK</v-btn
+            >
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog>
+
+    <!-- ASSESSMENT PUBLISH CONFORMATION POP UP -->
+    <v-dialog v-model="publishDialog" max-width="366px" persistent>
+      <v-card fluid>
+        <v-container fluid class="pa-0">
+          <v-card-text class="text-center">
+            <v-avatar color="secondary" size="90"
+              ><v-icon size="65">mdi-notebook-check-outline</v-icon></v-avatar
+            >
+
+            <p class="text-h5 pt-4 pb-0">Publish Results</p>
+            <p
+              class="text-disabled grey--text text-subtitle-1 mb-4"
+              color="rgba(0, 0, 0, 0.6)"
+              disabled
+            >
+            This action will publish the assessment results. This cannot be undone
+            </p>
+
+            <div class="d-flex justify-space-between" fluid>
+              <v-btn
+                depressed
+                class="secondary black--text"
+                large
+                width="157px"
+                rounded
+                @click="publishDialog = false"
+                >CANCEL</v-btn
+              >
+              <v-btn
+                class="black white--text"
+                depressed
+                large
+                width="157px"
+                rounded
+                @click="publishResults(publishData.id,publishData.assessmentType)"
+                >Publish</v-btn
+              >
+             </div>
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog>
+
+
+    <v-dialog v-model="deleteDialog" max-width="366px" persistent>
+      <v-card fluid>
+        <v-container fluid class="pa-0">
+          <v-card-text class="text-center">
+            <v-avatar color="secondary" size="90"
+              ><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar
+            >
+
+            <p class="text-h5 pt-4 pb-0">Delete Assessment</p>
+            <p
+              class="text-disabled grey--text text-subtitle-1"
+              color="rgba(0, 0, 0, 0.6)"
+              disabled
+            >
+              This action will permanently delete the item . This cannot be
+              undone
+            </p>
+
+            <div class="d-flex justify-space-between" fluid>
+              <v-btn
+                depressed
+                class="secondary black--text"
+                large
+                width="157px"
+                rounded
+                @click="deleteDialog = false"
+                >CANCEL</v-btn
+              >
+              <v-btn
+                class="black white--text"
+                depressed
+                large
+                width="157px"
+                rounded
+                @click="deleteAssessment(selectedId)"
+                >DELETE</v-btn
+              >
+            </div>
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog>
+    <!-- Add Subject Dialog Screening--> 
+    <v-dialog max-width="550px" v-model="subjectDialog" center>
+      <v-form ref="form" lazy-validation>
+        <v-card>
+          <v-card-title class="secondary mb-8">Add Subject</v-card-title>
+
+          <v-container>
+            <v-card-text>
+              <v-row
+                v-for="(subjectField, index) in selectedSubjects"
+                :key="index"
+              >
+                <v-col fluid class="py-0" cols="6">
+                  <div class="font-weight-medium">Subject</div>
+                  <v-select
+                    v-model.number="subjectField.subject_id"
+                    clearable
+                    deletable-chips
+                    label="Select or Search Subject"
+                    outlined
+                    class="rounded-xl"
+                    :items="selectedSkillSubjects"
+                    item-text="name"
+                    item-value="id"
+                  >
+                  </v-select>
+                </v-col>
+                <v-col fluid class="py-0" cols="4">
+                  <div class="font-weight-medium">Number of Questions*</div>
+                  <v-text-field
+                    v-model.number="subjectField.no_of_questions"
+                    hide-details
+                    type="number"
+                    outlined
+                    class="rounded-xl green"
+                    solo
+                    flat
+                    :rules="[rules.required]"
+                    required
+                  ></v-text-field>
+                </v-col>
+
+                <v-col
+                  class="pr-5 mb-5"
+                  align-self="center"
+                  cols="2"
+                  v-if="selectedSubjects.length > 1"
+                >
+                  <v-btn @click="deleteSubjectField(index)" text color="blue">
+                    Delete
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row
+                justify="start"
+                align="center"
+                class="px-2 blue--text"
+                @click="addSubjectField"
+              >
+                <v-icon large>mdi-plus-circle-outline</v-icon>
+                <v-btn class="pl-0" text x-large color="blue"
+                  >Add New Subject</v-btn
+                >
+              </v-row>
+            </v-card-text>
+            <v-card-actions class="px-6 pb-6">
+              <v-btn
+                rounded
+                outlined
+                class="pa-4"
+                @click="
+                  () => {
+                    subjectDialog = false;
+                  }
+                "
+                >Cancel</v-btn
+              >
+              <v-btn rounded class="primary pa-4" @click="addSubjectsToSkill"
+                >Apply</v-btn
+              >
+            </v-card-actions>
+          </v-container>
+        </v-card>
+      </v-form>
+    </v-dialog>
+    <!-- Add Subject Dialog Mains--> 
+    <v-dialog max-width="550px" v-model="MainsDialog" center>
+      <v-form ref="form" lazy-validation>
+        <v-card>
+          <v-card-title class="secondary mb-8">Add Subject</v-card-title>
+
+          <v-container>
+            <v-card-text>
+              <v-row
+                v-for="(subjectField, index) in selectedSubjectsMains"
+                :key="index"
+              >
+                <v-col fluid class="py-0" cols="6">
+                  <div class="font-weight-medium">Subject</div>
+                  <v-select
+                    v-model.number="subjectField.subject_id"
+                    clearable
+                    deletable-chips
+                    label="Select or Search Subject"
+                    outlined
+                    class="rounded-xl"
+                    :items="selectedSkillSubjectsMains"
+                    item-text="name"
+                    item-value="id"
+                  >
+                  </v-select>
+                </v-col>
+                <v-col fluid class="py-0" cols="4">
+                  <div class="font-weight-medium">Number of Questions*</div>
+                  <v-text-field
+                    v-model.number="subjectField.no_of_questions"
+                    hide-details
+                    type="number"
+                    outlined
+                    class="rounded-xl green"
+                    solo
+                    flat
+                    :rules="[rules.required]"
+                    required
+                  ></v-text-field>
+                </v-col>
+
+                <v-col
+                  class="pr-5 mb-5"
+                  align-self="center"
+                  cols="2"
+                  v-if="selectedSubjectsMains.length > 1"
+                >
+                  <v-btn @click="deleteSubjectFieldMains(index)" text color="blue">
+                    Delete
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row
+                justify="start"
+                align="center"
+                class="px-2 blue--text"
+                @click="addSubjectFieldMains"
+              >
+                <v-icon large>mdi-plus-circle-outline</v-icon>
+                <v-btn class="pl-0" text x-large color="blue"
+                  >Add New Subject</v-btn
+                >
+              </v-row>
+            </v-card-text>
+            <v-card-actions class="px-6 pb-6">
+              <v-btn
+                rounded
+                outlined
+                class="pa-4"
+                @click="MainsDialog = false"
+                >Cancel</v-btn
+              >
+              <v-btn rounded class="primary pa-4" @click="addSubjectsToSkillMains"
+                >Apply</v-btn
+              >
+            </v-card-actions>
+          </v-container>
+        </v-card>
+      </v-form>
+    </v-dialog>
+    <!-- filter dialog-->
+    <v-dialog v-model="filterDialog" max-width="400px">
+      <v-card width="400px" height="100%">
+        <v-card-text class="pa-6">
+          <v-row>
+            <v-col>
+              <div class="pl-1 text-body1 font-weight-bold">FILTER</div>
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col>
+              <div
+                @click="clearFilter"
+                class="text-body1 font-weight-bold black--text cursor"
+              >
+                CLEAR FILTER
+              </div>
+            </v-col>
+          </v-row>
+          <div>
+            <v-card
+              height="450px"
+              elevation="0"
+              id="myScroll"
+              class="pt-5 ,pb-5"
+            >
+              <v-row class="pl-1">
+                <v-col>
+                  <div class="text-body1 font-weight-normal black--text">
+                    Skills
+                  </div>
+                </v-col>
+              </v-row>
+              <v-chip-group
+                v-model="selectedSkillsFilter"
+                active-class="primary"
+                column
+                :multiple="true"
+              >
+                <v-chip
+                  v-for="(skillType, index) in skillsList"
+                  :key="index"
+                  :value="skillType"
+                  elevated
+                >
+                  {{ skillType.name }}
+                </v-chip>
+              </v-chip-group>
+            </v-card>
+            <div>
+              <v-card-actions class="px-6 pb-6">
+                <v-spacer></v-spacer>
+                <v-btn
+                  rounded
+                  outlined
+                  class="pa-4"
+                  @click="filterDialog = false"
+                  >Cancel</v-btn
+                >
+                <v-btn rounded class="primary pa-4">Apply</v-btn>
+              </v-card-actions>
+            </div>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </v-container>
+</template>
+<script>
+import "../styles.css";
+import { validationMixin } from "vuelidate";
+import { required, email } from "vuelidate/lib/validators";
+import AssessmentController from "@/controllers/AssessmentController";
+import SkillsController from "@/controllers/SkillsController";
+import LevelController from "@/controllers/LevelController";
+
+export default {
+  mixins: [validationMixin],
+
+  validations: {
+    email: { required, email },
+  },
+  name: "AssessmentView",
+  data() {
+    return {
+      rules: {
+        required: (value) => !!value || "Field is required",
+      },
+      successMessage:'New Assessment Created',
+      selectedSkillSubjects: [],
+      selectedSkillSubjectsMains: [],
+      MainsDialog: false,
+      selectedSubjects: [
+        {
+          subject_id: 0,
+          no_of_questions: 0,
+        },
+      ],
+      selectedSubjectsMains: [
+        {
+          subject_id: 0,
+          no_of_questions: 0,
+        },
+      ],
+      screenPanel:[],
+      e1: 1,
+      showUsers: false,
+      cleared: [],
+      inProgress: [],
+      notCleared: [],
+      yetToAttempt: [],
+      name: "",
+      scrBtnShow:false,
+      screeningItem:0,
+      mainItem:0,
+      assessmentUsers: [],
+      screeningMainsUser: "true",
+      instructions: "",
+      filterDialog: false,
+      mainPanel:[],
+      mainBtnShow:false,
+      screeningConfiguration: {
+        difficultyLevel: null,
+        totalNumberQuestions: null,
+        assessmentId: null,
+        teachingLevel: null,
+        searchSubjects: null,
+        correctAnswerScore: 1,
+        assessmentDuration: 0,
+        negativeMarking: "NO",
+        randomizeQuestions: "NO",
+        shuffleOptions: "NO",
+        displayCorrectAnswer: "NO",
+        displayResult: "NO",
+        selectedId: null,
+        passingCriteria: 40,
+        timeUpFirstReminder: null,
+        timeUpLastReminder: null,
+        assessmentType: "SCREENING",
+        skillsFields: [{ skill_id: null, no_of_questions: 10 }],
+        
+      },
+      breadItems: [
+        {
+          text: "Dashboard",
+          disabled: false,
+          to: "/",
+        },
+        {
+          text: "Dashboard",
+          disabled: false,
+          to: "/",
+        },
+        {
+          text: "Assessments",
+
+          to: "/assessment",
+        },
+        {
+          text: "Users in Mains Assessment",
+          disabled: true,
+          href: "",
+        },
+      ],
+      publishData: {
+          id: null,
+          assessmentType: null,
+        },
+      skill_questions: [],
+      skillQuestions: [],
+      mainsQuestions: [],
+      mainsConfiguration: {
+        difficultyLevel: null,
+        totalNumberQuestions: null,
+        teachingLevel: null,
+        correctAnswerScore: 1,
+        assessmentDuration: null,
+        negativeMarking: "NO",
+        randomizeQuestions: "NO",
+        shuffleOptions: "NO",
+        displayCorrectAnswer: "NO",
+        displayResult: "NO",
+        passingCriteria: 40,
+        timeUpFirstReminder: null,
+        timeUpLastReminder: null,
+        assessmentType: "MAINS",
+        skillsFields: [{ skill_id: null, no_of_questions: 10 }],
+      },
+      screeningUsers: [],
+      errorMessage: "Failed",
+      dialog: false,
+      subjectDialog: false,
+      singleSelect: true,
+      selected: [],
+      successDialog: false,
+      errorDialog: false,
+      deleteDialog: false,
+      publishDialog: false,
+      subjectData: [],
+      selectedSkillsFilter: [],
+      headers: [
+        { text: "Assessment Name", value: "name" },
+        { text: "Created At", value: "created_at" },
+        { text: "Instructions", value: "instructions" },
+        { text: "Score Type", value: "score_type" },
+        { text: "Actions", value: "actions" },
+      ],
+      breadMenu: ["menu1", "menu2", "menu3"],
+      breadData: "menu1",
+      screeningHeaders: [
+        { text: "Name", value: "user.first_name" },
+        { text: "Email ID", value: "user.email" },
+        { text: "Cluser", value: "cluser" },
+        { text: "Brand", value: "score_type" },
+        { text: "Status", value: "screening_status" },
+        { text: "Actions", value: "actions" },
+      ],
+      assessments: [],
+      skillsList: [],
+      levels: [],
+      skillQuestionsIds: [],
+      mainsQuestionsIds: [],
+      editedSkill: null,
+    };
+  },
+  methods: {
+    screeningBtnValue(){
+      return this.screenPanel.length === 0 ? "EXPAND" : "COLLAPSE";
+    },
+    expandAndCollMethod(){
+      return this.screenPanel.length === 0 ? this.screenPanel = [...Array(this.screeningItem).keys()].map((k, i) => i):this.screenPanel = [];
+    },
+    mainBtnValue(){
+      return this.mainPanel.length === 0 ? "EXPAND" : "COLLAPSE";
+    },
+    mainExpandAndCollMethod(){
+      return this.mainPanel.length === 0 ? this.mainPanel = [...Array(this.mainItem).keys()].map((k, i) => i):this.mainPanel = [];
+    },
+    publishMethod(id,type){
+      this.publishData.id = id; 
+      this.publishData.assessmentType = type;
+      this.publishDialog = true;
+    },
+    formatTime(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      //const remainingSeconds = seconds % 60;
+      if (hours == 0) {
+        return String(minutes).padStart(2, "0") + " mins";
+      } else {
+        return (
+          String(hours).padStart(2, "0") +
+          " h and " +
+          String(minutes).padStart(2, "0") +
+          " mins"
+        );
+      }
+    },
+    async publishResults(assessmentId,type) {
+      
+      const response=await AssessmentController.publishResults(assessmentId,type);
+     
+
+      if(response.data.success){
+        this.successMessage='Results Published Successfully';
+        this.successDialog=true;
+      }
+      else{
+        this.errorDialog=true;
+
+      }
+      this.publishDialog = false;
+
+    },
+    filterData() {
+      this.notCleared = this.assessmentUsers.filter(
+        (item) => item.screening_status == "FAILED"
+      );
+      console.log("not cleared", this.notCleared);
+      this.inProgress = this.assessmentUsers.filter(
+        (item) => item.screening_status == "STARTED"
+      );
+      console.log("inprogress", this.inProgress);
+      this.yetToAttempt = this.assessmentUsers.filter(
+        (item) => item.screening_status == "PENDING"
+      );
+
+      console.log("yet to attemp", this.yetToAttempt);
+      this.cleared = this.assessmentUsers.filter(
+        (item) => item.screening_status == "FINISHED"
+      );
+      console.log("cleared", this.cleared);
+    },
+
+    async nextStep(step) {
+      if (this.e1 == 6) {
+        if (this.Assessmentsupdate()) {
+          this.successDialog = true;
+        } else {
+          alert("Failed");
+        }
+      } else {
+        //console.log("current step is = ", step);
+        switch (step) {
+          case 1:
+            if (this.$refs.step1.validate()) {
+              //console.log("step1", this.step1);
+              if (this.createAssessment()) {
+                this.e1++;
+              } else {
+                alert("Invalid Data");
+              }
+            }
+            break;
+          case 2:
+            if (this.$refs.step2.validate()) {
+              //console.log("step2 value", this.step2);
+              if (this.createScreening()) {
+                this.e1++;
+              } else {
+                alert("Invalid Data");
+              }
+            }
+            break;
+          case 4:
+            if (this.$refs.step4.validate()) {
+              //console.log("step2 value", this.step2);
+              const response =await this.createMains()
+              if (response.data.success) {              
+                this.e1++;
+                this.getMainsQuestions();
+              } else {
+                alert(response.data.error);
+              }
+            }
+            break;
+
+          default:
+            this.e1++;
+        }
+      }
+    },
+    addSubjectsToSkill() {
+      //console.log(this.editedSkill);
+      this.editedSkill.subject_ids = this.selectedSubjects;
+      // this.selectedSubjects = [];
+      this.subjectDialog = false;
+      console.log(this.mainsConfiguration.skillsFields);
+    },
+    addSubjectsToSkillMains() {
+      this.MainsDialog = false;
+      console.log(this.editedSkill);      
+      this.editedSkill.subject_ids = this.selectedSubjectsMains;
+      // this.selectedSubjects = [];      
+      console.log(this.mainsConfiguration.skillsFields);
+    },
+    openSubjectDialog(skill, skillsField) {
+      this.selectedSkillSubjects = skill.subject_skills;
+      this.subjectDialog = true;
+      console.log(skill.subject_skills);
+      this.editedSkill = skillsField;
+      console.log("skill field",skillsField)
+    },
+    openSubjectDialogMains(skill, skillsField) {
+      this.selectedSkillSubjectsMains = skill.subject_skills;
+      this.MainsDialog = true;
+      console.log(skill.subject_skills);
+      this.editedSkill = skillsField;
+    },
+    async getScreeningQuestions() {
+      const response = await AssessmentController.screeningQuestions(
+        this.assessmentId
+      );
+      if(response.data.success){
+        this.skillQuestions = response.data.data.skill_questions;
+      console.log("skill questions", this.skillQuestions);
+      this.storingSkillsQuestionIds();
+      this.screeningItem = this.skillQuestions.length;
+      this.scrBtnShow=true
+      }
+      else{
+        alert(response.data.error)
+      }
+
+      
+
+      //console.log("screening request", response);
+    },
+    addSubjectField() {
+      this.selectedSubjects.push({
+        subject_id: 0,
+        no_of_questions: 0,
+      });
+    },
+    addSubjectFieldMains() {
+      this.selectedSubjectsMains.push({
+        subject_id: 0,
+        no_of_questions: 0,
+      });
+    },
+    deleteSubjectField(index) {
+      this.selectedSubjects.splice(index, 1);
+    },
+    deleteSubjectFieldMains(index) {
+      this.selectedSubjectsMains.splice(index, 1);
+    },
+
+    async getMainsQuestions() {
+      const response = await AssessmentController.mainsQuestions(
+        this.assessmentId
+       
+      );
+    
+      //console.log("screening request", response);
+      if(response.data.success){
+        this.mainsQuestions = response.data.data.skill_questions;
+      console.log("mains questions", this.mainsQuestions);
+      this.storingMainsQuestionIds();
+      this.mainItem=this.mainsQuestions.length
+      this.mainBtnShow=true
+      }
+      else{
+        alert(response.data.error)
+      }
+    },
+    addScreeningSkillsField() {
+      this.screeningConfiguration.skillsFields.push({
+        skill_id: null,
+        no_of_questions: 10,
+      });
+      console.log("list", this.editedSkill);
+      this.getAssessmentDuration();
+    },
+    deleteScreeningSkillField(index) {
+      this.screeningConfiguration.skillsFields.splice(index, 1);
+      this.getAssessmentDuration();
+    },
+    addMainsSkillsField() {
+      this.mainsConfiguration.skillsFields.push({
+        skill_id: null,
+        no_of_questions: 10,
+      });
+      this.getAssessmentDuration();
+    },
+    getAssessmentDuration() {
+      this.screeningConfiguration.assessmentDuration =
+        this.screeningConfiguration.skillsFields.length * 20 * 10;
+      this.mainsConfiguration.assessmentDuration =
+        this.mainsConfiguration.skillsFields.length * 20 * 10;
+    },
+    deleteMainsSkillField(index) {
+      this.mainsConfiguration.skillsFields.splice(index, 1);
+      this.getAssessmentDuration();
+    },
+    async createAssessment() {
+      const response = await AssessmentController.createAssessment({
+        name: this.name,
+        score_type: "ASSESSMENT",
+        instructions: this.instructions,
+      });
+      
+      this.assessmentId = response.data.data.id;
+      return response.data.success;
+    },
+
+    async createScreening() {
+      const response = await AssessmentController.createScreening(
+        {
+          skill_distributions: this.screeningConfiguration.skillsFields,
+          difficulty_level: this.screeningConfiguration.difficultyLevel,
+          total_no_of_questions:
+            this.screeningConfiguration.totalNumberQuestions,
+          level_id: this.screeningConfiguration.teachingLevel,
+          correct_score_answer: this.screeningConfiguration.correctAnswerScore,
+          negative_marking: this.screeningConfiguration.negativeMarking,
+          duration_of_assessment:
+            this.screeningConfiguration.assessmentDuration,
+          randomize_questions: this.screeningConfiguration.randomizeQuestions,
+          shuffle_questions: this.screeningConfiguration.shuffleOptions,
+          display_correct_answer:
+            this.screeningConfiguration.displayCorrectAnswer,
+          display_result: this.screeningConfiguration.displayResult,
+          passing_criteria: this.screeningConfiguration.passingCriteria,
+          time_up_first_remainder:
+            this.screeningConfiguration.timeUpFirstReminder,
+          time_up_last_remainder:
+            this.screeningConfiguration.timeUpLastReminder,
+        },
+        this.assessmentId
+      );
+
+      this.getScreeningQuestions();
+      return response.data.sucess;
+      //console.log(response);
+    },
+
+    async createMains() {
+      const response = await AssessmentController.createMains(
+        {
+          skill_distributions: this.mainsConfiguration.skillsFields,
+          difficulty_level: this.mainsConfiguration.difficultyLevel,
+          total_no_of_questions: this.mainsConfiguration.totalNumberQuestions,
+          level_id: this.mainsConfiguration.teachingLevel,
+          correct_score_answer: this.mainsConfiguration.correctAnswerScore,
+          negative_marking: this.mainsConfiguration.negativeMarking,
+          duration_of_assessment: this.mainsConfiguration.assessmentDuration,
+          randomize_questions: this.mainsConfiguration.randomizeQuestions,
+          shuffle_questions: this.mainsConfiguration.shuffleOptions,
+          display_correct_answer: this.mainsConfiguration.displayCorrectAnswer,
+          display_result: this.mainsConfiguration.displayResult,
+          passing_criteria: this.mainsConfiguration.passingCriteria,
+          time_up_first_remainder: this.mainsConfiguration.timeUpFirstReminder,
+          time_up_last_remainder: this.mainsConfiguration.timeUpLastReminder,
+        },
+        this.assessmentId
+      );
+
+      
+      console.log(response);
+      return response;
+    },
+
+    // async getSubjects() {
+    //   const response = await SubjectController.getSubject();
+    //   this.subjectData = response.data.data.rows;
+    //   //console.log("surbject responser", this.subjectData);
+    // },
+    async getSkills() {
+      const response = await SkillsController.getSkills();
+      //console.log(response);
+     
+      if(response.data.success){
+        this.skillsList = response.data.data.rows;
+      }
+      else{
+        alert(response.data.error)
+      }
+    },
+    async deleteAssessment(id) {
+      const response = await AssessmentController.deleteAssessment(id);
+      //console.log(response.data);
+   
+      
+
+
+      if(response.data.success){
+        this.deleteDialog = false;
+        this.selected = [];
+        this.fetchAssessment();
+      }
+      else{
+        alert(response.data.error)
+      }
+    },
+
+    async fetchAssessment() {
+      const response = await AssessmentController.getAssessments();
+      // console.log("response from ", response);   
+      if(response.data.success){
+        this.assessments = response.data.data.rows;
+      this.assessments.reverse();
+      }
+      else{
+        alert(response.data.error)
+      }
+       console.log(response.data.data);
+    },
+    async fetchMainsUsers(id) {
+      console.log("mains user clicked");
+      const response = await AssessmentController.getMainsUser(id);
+      
+      if(response.data.success){
+              this.assessmentUsers = [];
+            this.assessmentUsers = response.data.data.user_assessments;
+            if (this.assessmentUsers != undefined) {
+              this.filterData();
+            }
+            console.log("filter data", this.assessmentUsers);
+      }
+      else{
+        alert(response.data.error)
+      }
+    },
+    async fetchScreeningUsers(id) {
+      console.log("screening clicked");
+      this.showUsers = true;
+      this.selectedId = id;
+      const response = await AssessmentController.getScreeningUser(id);
+     
+      if(response.data.success){
+        this.assessmentUsers = response.data.data.user_assessments;
+      this.filterData();
+
+      // console.log(this.assessmentUsers);
+      }
+      else{
+        alert(response.data.error)
+      }
+    },
+
+    async getLevels() {
+      const response = await LevelController.getLevel();
+   
+      if(response.data.success){
+        this.levels = response.data.data.rows;
+      // console.log(this.assessmentUsers);
+      }
+      else{
+        alert(response.data.error)
+      }
+      // console.log("level data", this.levelData.rows);
+    },
+    checkSubjects(id) {
+      if (id == null) {
+        return false;
+      } else {
+        //console.log(id);
+        const skill = this.skillsList.find((skill) => skill.id == id);
+        //console.log(skill);
+        return skill.subject_skills.length == 0 ? false : true;
+      }
+    },
+    storingSkillsQuestionIds() {
+      this.skillQuestions.forEach((Questions_) => {
+        Questions_.questions.forEach((question_) => {
+          this.skillQuestionsIds.push(question_.id);
+        });
+      });
+      console.log("skills questions", this.skillQuestionsIds);
+    },
+
+    storingMainsQuestionIds() {
+      this.mainsQuestions.forEach((Questions_) => {
+        Questions_.questions.forEach((question_) => {
+          this.mainsQuestionsIds.push(question_.id);
+        });
+      });
+      console.log("mains questions", this.mainsQuestionsIds);
+    },
+
+    async Assessmentsupdate() {
+      const response = await AssessmentController.updateAssessments(
+        {
+          name: this.name,
+          screening_question_ids: this.skillQuestionsIds,
+          mains_question_ids: this.mainsQuestionsIds,
+        },
+        this.assessmentId
+      );
+      console.log(response);
+      this.dialog = false;
+      if(response.data.success){
+        this.fetchAssessment();
+         return response.data.success;
+      }
+      else {
+        alert(response.data.error)        
+        return false;
+      }
+      
+    },
+    clearFilter() {
+      this.selectedSkillsFilter = [];
+    },
+  },
+
+  created() {
+    this.fetchAssessment();
+    this.getAssessmentDuration();
+    //this.getSubjects();
+    this.getSkills();
+    this.getLevels();
+    if (this.$route.params.cdialog == true) {
+      this.dialog = true;
+    }
+
+    // this.getScreeningQuestions();
+  },
+};
+</script>
+  
