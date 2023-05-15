@@ -83,7 +83,8 @@
            
                  
                       <v-btn text class="float-right my-2"
-                          ><v-icon>mdi-attachment</v-icon> <span v-if="selectedFile != null
+                          ><v-icon>mdi-attachment</v-icon> 
+                          <span v-if="selectedFile != null
                           ">{{selectedFile.name}}</span>
                           <span v-else >Attach
                           Audio/Video/Image</span>
@@ -92,12 +93,8 @@
                               name="image"
                               @change="onChange"
                               accept="image/*, audio/*, video/*"
-                             
-                          
-                              
                           />
                         </v-btn>
-            
                     </v-row>
                     <!-- <v-textarea
                       outlined
@@ -116,6 +113,11 @@
                       required
                     >
                     </ckeditor>
+                    <v-row text class="float-right my-2"  v-if="questionAssetUrl"
+                          ><span  class="font-weight-bold">Attached File - </span>
+                              <span class="font-weight-bold">{{ getLastPart(questionAssetUrl) }}</span>
+                        </v-row>
+                    
                   </v-col>
                 </v-row>
                 <!-- Single Select Answers -->
@@ -1517,6 +1519,10 @@ export default {
       // The alphabet letter corresponding to num can be calculated by adding num to 65 and then getting the character using fromCharCode()
       return String.fromCharCode(65 + num);
     },
+    getLastPart(url) {
+      const parts = url.split('/');
+      return parts.at(-1);
+    },
     clearValue() {
       (this.questionName = ""), (this.questionType = "");
       (this.questionDescription = "NA"),
@@ -1622,6 +1628,7 @@ export default {
       }
       this.uploadingForOption = false;
       this.uploadingMsg = "File uploaded";
+      this.selectedFile = null
       console.log("Upload Response: ", uploadResponse);
     },
     formbtn() {
@@ -1686,6 +1693,9 @@ export default {
       this.level = item.level_id;
       this.options = item.question_options;
       this.mtfAnswers = item.question_mtf_answers;
+      this.questionAssetType = item.mime_type;
+      this.questionAssetUrl = item.s3_asset_urls;
+      this.selectedFile = null;
       // this.selectedLOs = item.lo_ids data not comming
       this.answerExplanation = item.answer_explanation;
 
