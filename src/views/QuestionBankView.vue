@@ -80,10 +80,12 @@
                     <v-row align="center" class="d-flex flex-row justify-space-between">
                 
                         <div class="text-body-1 my-2">Question*</div>
-           
-                 
+                      <div class="d-flex flex-row align-center">
+                      <a v-if="questionAssetUrl" :href="questionAssetUrl" target="_blank" class="font-weight-bold me-5 text-uppercase">Attached File</a>
                       <v-btn text class="float-right my-2"
-                          ><v-icon>mdi-attachment</v-icon> 
+                          >
+                          
+                          <v-icon>mdi-attachment</v-icon> 
                           <span v-if="selectedFile != null
                           ">{{selectedFile.name}}</span>
                           <span v-else >Attach
@@ -95,6 +97,7 @@
                               accept="image/*, audio/*, video/*"
                           />
                         </v-btn>
+                      </div>
                     </v-row>
                     <!-- <v-textarea
                       outlined
@@ -113,10 +116,6 @@
                       required
                     >
                     </ckeditor>
-                    <v-row text class="float-right my-2"  v-if="questionAssetUrl"
-                          ><span  class="font-weight-bold">Attached File - </span>
-                              <span class="font-weight-bold">{{ getLastPart(questionAssetUrl) }}</span>
-                        </v-row>
                     
                   </v-col>
                 </v-row>
