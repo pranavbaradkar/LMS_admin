@@ -158,7 +158,7 @@
         
         :key="assessment.id"
       >
-        <v-card-title @click="fetchScreeningUsers(assessment.id)" class="pa-0 cursor">{{ assessment.name }}</v-card-title>
+        <v-card-title @click="fetchAssessmentUsers(assessment)" class="pa-0 cursor">{{ assessment.name }}</v-card-title>
         <div class="my-2 text-subtitle-1">
           <!-- Assessment title -->
           Senior Secondary
@@ -1650,6 +1650,15 @@ export default {
       console.log(response);
       return response;
     },
+    fetchAssessmentUsers(assessment){
+      let type = assessment.assessment_configurations[0].assessment_type;
+      if(type == 'SCREENING') {
+        this.fetchScreeningUsers(assessment.id);
+      }
+      else {
+        this.fetchMainsUsers(assessment.id);
+      }
+    },
 
     // async getSubjects() {
     //   const response = await SubjectController.getSubject();
@@ -1698,6 +1707,8 @@ export default {
     },
     async fetchMainsUsers(id) {
       console.log("mains user clicked");
+      this.showUsers = true;
+      this.selectedId = id;
       const response = await AssessmentController.getMainsUser(id);
       
       if(response.data.success){
