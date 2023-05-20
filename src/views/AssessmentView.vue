@@ -296,8 +296,8 @@
                 >Back</v-btn
               > -->
               <v-btn width="111px" height="48px" rounded class="primary" @click="nextStep(e1)">
-                <v-icon v-if="e1 == 6">mdi-book-open-variant</v-icon
-                >{{ e1 == 6 ? "Create" : "Next" }}
+                <v-icon v-if="e1 == 4">mdi-book-open-variant</v-icon
+                >{{ e1 == 4 ? "Create" : "Next" }}
               </v-btn>
             </v-row>
           </v-toolbar>
@@ -323,16 +323,6 @@
               <v-divider></v-divider>
 
               <v-stepper-step :complete="e1 > 4" step="4">
-                MAINS CONFIGURATION
-              </v-stepper-step>
-              <v-divider></v-divider>
-
-              <v-stepper-step :complete="e1 > 5" step="5">
-                QUESTIONS
-              </v-stepper-step>
-              <v-divider></v-divider>
-
-              <v-stepper-step :complete="e1 > 6" step="6">
                 PREVIEW
               </v-stepper-step>
             </v-stepper-header>
@@ -340,8 +330,36 @@
             <v-stepper-items class="secondary">
               <v-stepper-content step="1">
                 <v-form ref="step1" lazy-validation>
+
+                  <v-card elevation="0" class="my-4">
+                    <v-card-text>
+                      <v-row align="center">
+                        <v-col cols="3">
+                          <div class="text-body-1 my-4">Assessment Type</div>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-radio-group
+                            v-model="assessment_type"
+                            :rules="[(v) => !!v || 'Please select one']"
+                            required
+                          >
+                            <v-row>
+                              <v-col>
+                                <v-radio label="SCREENING" value="SCREENING"></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio label="MAINS" value="MAINS"></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+
                   <v-card elevation="0">
                     <v-card-text class="pt-10">
+
                       <v-row class="py-0">
                         <v-col class="py-0">
                           <div class="text-body-1 my-2">Assessment Name*</div>
@@ -779,408 +797,8 @@
                   </v-card>
                 </v-form>
               </v-stepper-content>
-              <v-stepper-content step="4">
-                <v-form ref="step4">
-                  <v-card elevation="0">
-                    <v-card-text>
-                      <div class="text-body-1 my-4">Mains Configuration</div>
-                      <v-row
-                        class="py-0"
-                        v-for="(
-                          skillsField, index
-                        ) in mainsConfiguration.skillsFields"
-                        :key="index"
-                        align="center"
-                      >
-                        <v-col fluid class="py-0" cols="5">
-                          <div class="text-body-1 my-2">
-                            Skill Distribution* (change skill settings)
-                          </div>
-                          <v-select
-                            :items="skillsList"
-                            outlined
-                            class="rounded-xl py-0 mytextFiled"
-                            v-model="skillsField.skill_id"
-                            item-text="name"
-                            item-value="id"
-                            required
-                            :rules="[(v) => !!v || 'Skills is required']"
-                          >
-                          </v-select>
-                          <div class="py-0 text-subtitle-2 font-weight-light">
-                            Novice : 0-20, Advance : 20-40, Competent : 40-60,
-                            Proficient : 60-80, Expert : 80-100
-                          </div>
-                        </v-col>
-                        <v-col class="py-0 pl-10" cols="3">
-                          <div class="text-body-1 my-2">
-                            Number of Questions*
-                          </div>
-                          <v-text-field
-                            v-model.number="skillsField.no_of_questions"
-                            outlined
-                            class="rounded-xl"
-                            type="number"
-                            :rules="[
-                              (v) => !!v || 'Number of Questions is required',
-                            ]"
-                            required
-                            disabled
-                          ></v-text-field>
-                        </v-col>
-                        <v-col
-                          cols="2"
-                          align-self="center"
-                          v-if="mainsConfiguration.skillsFields.length > 1"
-                        >
-                          <v-btn
-                            @click="deleteMainsSkillField(index)"
-                            text
-                            color="blue"
-                          >
-                            Delete
-                          </v-btn>
-                        </v-col>
-                        <v-col>
-                          <!-- mains open subject Dialog -->
-                          <v-btn
-                            v-if="checkSubjects(skillsField.skill_id)"
-                            text
-                            color="blue"
-                            @click="
-                              openSubjectDialogMains(
-                                skillsList.find(
-                                  (skill) => skill.id == skillsField.skill_id
-                                ),
-                                skillsField
-                              )
-                            "
-                            >Add/Edit Subject</v-btn
-                          >
-                        </v-col>
-                      </v-row>
 
-                      <v-row
-                        justify="start"
-                        align="center"
-                        class="px-2 blue--text"
-                        @click="addMainsSkillsField"
-                      >
-                        <v-icon large>mdi-plus-circle-outline</v-icon>
-                        <v-btn width="125px" height="20px" class="pl-0" text x-large color="blue"
-                          >Add Skills</v-btn
-                        >
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                  <v-card elevation="0" class="my-4">
-                    <v-card-text>
-                      <v-row align="center">
-                        <v-col cols="3">
-                          <div class="text-body-1 my-4">Difficulty Level*</div>
-                        </v-col>
-                        <v-col cols="3">
-                          <v-radio-group
-                            v-model="mainsConfiguration.difficultyLevel"
-                            :rules="[(v) => !!v || 'Please select one']"
-                            required
-                          >
-                            <v-row>
-                              <v-col>
-                                <v-radio label="NO" value="NO"></v-radio>
-                              </v-col>
-                              <v-col>
-                                <v-radio label="YES" value="YES"></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                  <v-card elevation="0" class="my-4">
-                    <v-card-text>
-                      <v-row>
-                        <v-col cols="6">
-                          <div class="text-body-1 my-4">
-                            Total Number Of Questions
-                          </div>
-                          <v-text-field
-                            hide-details
-                            outlined
-                            class="rounded-xl"
-                            solo
-                            flat
-                            label="Total Number Of Questions"
-                            type="number"
-                            v-model.number="
-                              mainsConfiguration.totalNumberQuestions
-                            "
-                            :rules="[
-                              (v) =>
-                                !!v || 'Total Number Of Questions is required',
-                            ]"
-                            required
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="6">
-                          <div class="text-body-1 my-4">Teaching Level</div>
-                          <v-select
-                            hide-details
-                            label="Choose Level"
-                            :items="levels"
-                            item-text="name"
-                            item-value="id"
-                            outlined
-                            class="rounded-xl"
-                            v-model="mainsConfiguration.teachingLevel"
-                          >
-                          </v-select>
-                        </v-col>
-                      </v-row>
-                      <v-row align="center">
-                        <v-col cols="3">
-                          <div class="text-body-1">
-                            Score For Correct Answer*
-                          </div>
-                        </v-col>
-                        <v-col cols="2">
-                          <v-text-field
-                            hide-details
-                            outlined
-                            class="rounded-xl green"
-                            solo
-                            flat
-                            type="number"
-                            required
-                            v-model.number="
-                              mainsConfiguration.correctAnswerScore
-                            "
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row align="center">
-                        <v-col cols="3">
-                          <div class="text-body-1">Duration Of Assessment*</div>
-                        </v-col>
-                        <v-col cols="2">
-                          <v-text-field
-                            hide-details
-                            type="number"
-                            outlined
-                            
-                            class="rounded-xl green"
-                            solo
-                            flat
-                            v-model.number="
-                              mainsConfiguration.assessmentDuration
-                            "
-                            required
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row align="center">
-                        <v-col cols="3">
-                          <div class="text-body-1">Negative Marking*</div>
-                        </v-col>
-                        <v-col cols="3">
-                          <v-radio-group
-                            v-model="mainsConfiguration.negativeMarking"
-                            required
-                          >
-                            <v-row>
-                              <v-col>
-                                <v-radio label="YES" value="YES"></v-radio>
-                              </v-col>
-                              <v-col>
-                                <v-radio label="NO" value="NO"></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
-                        </v-col>
-                      </v-row>
-                      <v-row align="center">
-                        <v-col cols="3">
-                          <div class="text-body-1" required>
-                            Randomize Questions*
-                          </div>
-                        </v-col>
-                        <v-col cols="3">
-                          <v-radio-group
-                            v-model="mainsConfiguration.randomizeQuestions"
-                            required
-                          >
-                            <v-row>
-                              <v-col>
-                                <v-radio label="YES" value="YES"></v-radio>
-                              </v-col>
-                              <v-col>
-                                <v-radio label="NO" value="NO"></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
-                        </v-col> </v-row
-                      ><v-row align="center">
-                        <v-col cols="3">
-                          <div class="text-body-1">Shuffle Options*</div>
-                        </v-col>
-                        <v-col cols="3">
-                          <v-radio-group
-                            v-model="mainsConfiguration.shuffleOptions"
-                            required
-                          >
-                            <v-row>
-                              <v-col>
-                                <v-radio label="YES" value="YES"></v-radio>
-                              </v-col>
-                              <v-col>
-                                <v-radio label="NO" value="NO"></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
-                        </v-col> </v-row
-                      ><v-row align="center">
-                        <v-col cols="3">
-                          <div class="text-body-1">Display Correct Answer*</div>
-                        </v-col>
-                        <v-col cols="3">
-                          <v-radio-group
-                            v-model="mainsConfiguration.displayCorrectAnswer"
-                            required
-                          >
-                            <v-row>
-                              <v-col>
-                                <v-radio label="YES" value="YES"></v-radio>
-                              </v-col>
-                              <v-col>
-                                <v-radio label="NO" value="NO"></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
-                        </v-col> </v-row
-                      ><v-row align="center">
-                        <v-col cols="3">
-                          <div class="text-body-1">Display Result*</div>
-                        </v-col>
-                        <v-col cols="3">
-                          <v-radio-group
-                            v-model="mainsConfiguration.displayResult"
-                            required
-                          >
-                            <v-row>
-                              <v-col>
-                                <v-radio label="YES" value="YES"></v-radio>
-                              </v-col>
-                              <v-col>
-                                <v-radio label="NO" value="NO"></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
-                        </v-col>
-                      </v-row>
-                      <v-row align="center">
-                        <v-col cols="3">
-                          <div class="text-body-1">Passing Criteria*</div>
-                        </v-col>
-                        <v-col cols="2">
-                          <v-text-field
-                            append-icon="mdi-percent-outline"
-                            hide-details
-                            type="number"
-                            outlined
-                            class="rounded-xl green"
-                            solo
-                            flat
-                            v-model.number="mainsConfiguration.passingCriteria"
-                            required
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="6">
-                          <div class="text-body-1 my-4">
-                            Assessment Time Up First Reminder
-                          </div>
-                          <v-select
-                            v-model="mainsConfiguration.timeUpFirstReminder"
-                            hide-details
-                            label="Choose First Reminder Time"
-                            :items="[1, 2, 3, 4, 5]"
-                            outlined
-                            class="rounded-xl"
-                          >
-                          </v-select>
-                        </v-col>
-                        <v-col cols="6">
-                          <div class="text-body-1 my-4">
-                            Assessment Time Up Last Reminder
-                          </div>
-                          <v-select
-                            v-model="mainsConfiguration.timeUpLastReminder"
-                            hide-details
-                            label="Choose Last Reminder Time"
-                            :items="[1, 2, 3, 4, 5]"
-                            outlined
-                            class="rounded-xl"
-                          >
-                          </v-select>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-form>
-              </v-stepper-content>
-              <v-stepper-content step="5">
-                <v-form>
-                  <v-card elevation="0">
-                    <v-card-text>
-                      <v-row>
-                        <v-spacer></v-spacer>
-                        <v-btn v-if="mainBtnShow" class="ma-4" @click="mainExpandAndCollMethod" text>{{mainBtnValue()}}</v-btn>
-                      </v-row>
-                      <v-expansion-panels  v-model="mainPanel"  popout multiple>
-                        <v-expansion-panel
-                          v-for="(skill, index) in mainsQuestions"
-                          :key="index"
-                        >
-                          <v-expansion-panel-header>{{
-                            skill.name
-                          }}</v-expansion-panel-header>
-                          <v-expansion-panel-content
-                            v-for="(question, i) in skill.questions"
-                            :key="i"
-                          >
-                            <v-card elevation="0">
-                              <v-card-subtitle class="pb-0">
-                                {{ question.question_type }}
-                              </v-card-subtitle>
-                              <v-card-title class="pt-0">
-                                {{ question.statement }}
-                              </v-card-title>
-                              <v-card-text>
-                                <p>Options</p>
-                                <v-row justify="start">
-                                  <div
-                                    v-for="(
-                                      option, inx
-                                    ) in question.question_options"
-                                    :key="inx"
-                                  >
-                                    <v-chip class="ma-2">{{
-                                      option.option_value
-                                    }}</v-chip>
-                                  </div>
-                                </v-row>
-                              </v-card-text>
-                            </v-card>
-                          </v-expansion-panel-content>
-                        </v-expansion-panel>
-                      </v-expansion-panels>
-                    </v-card-text>
-                  </v-card>
-                </v-form>
-              </v-stepper-content>
-              <v-stepper-content step="6">
+              <v-stepper-content step="4">
                 <v-form>
                   <v-row>
                     <v-col cols="6">
@@ -1626,6 +1244,7 @@ export default {
       filterDialog: false,
       mainPanel:[],
       mainBtnShow:false,
+      assessment_type: 'SCREENING',
       screeningConfiguration: {
         difficultyLevel: null,
         totalNumberQuestions: null,
@@ -1800,7 +1419,7 @@ export default {
     },
 
     async nextStep(step) {
-      if (this.e1 == 6) {
+      if (this.e1 == 4) {
         if (this.Assessmentsupdate()) {
           this.successDialog = true;
         } else {
@@ -1821,26 +1440,27 @@ export default {
             break;
           case 2:
             if (this.$refs.step2.validate()) {
-              //console.log("step2 value", this.step2);
-              if (this.createScreening()) {
+              console.log("step2 value", this.step2);
+              // console.log("Selected Assessment type", this.assessment_type);
+              if (this.createConfigurations()) {
                 this.e1++;
               } else {
                 alert("Invalid Data");
               }
             }
             break;
-          case 4:
-            if (this.$refs.step4.validate()) {
-              //console.log("step2 value", this.step2);
-              const response =await this.createMains()
-              if (response.data.success) {              
-                this.e1++;
-                this.getMainsQuestions();
-              } else {
-                alert(response.data.error);
-              }
-            }
-            break;
+          // case 4:
+          //   if (this.$refs.step4.validate()) {
+          //     //console.log("step2 value", this.step2);
+          //     const response =await this.createMains()
+          //     if (response.data.success) {              
+          //       this.e1++;
+          //       this.getMainsQuestions();
+          //     } else {
+          //       alert(response.data.error);
+          //     }
+          //   }
+          //   break;
 
           default:
             this.e1++;
@@ -1970,9 +1590,9 @@ export default {
       return response.data.success;
     },
 
-    async createScreening() {
-      const response = await AssessmentController.createScreening(
-        {
+    async createConfigurations() {
+      let response;
+      let payload = {
           skill_distributions: this.screeningConfiguration.skillsFields,
           difficulty_level: this.screeningConfiguration.difficultyLevel,
           total_no_of_questions:
@@ -1992,11 +1612,15 @@ export default {
             this.screeningConfiguration.timeUpFirstReminder,
           time_up_last_remainder:
             this.screeningConfiguration.timeUpLastReminder,
-        },
-        this.assessmentId
-      );
+        };
+      if(this.assessment_type == 'SCREENING') {
+        response = await AssessmentController.createScreening( payload, this.assessmentId );
+        this.getScreeningQuestions();
+      }
+      else if(this.assessment_type == 'MAINS') {
+        response = await AssessmentController.createMains( payload, this.assessmentId );        
+      }
 
-      this.getScreeningQuestions();
       return response.data.sucess;
       //console.log(response);
     },
