@@ -480,3 +480,71 @@ tr:nth-child(even) {
   border-radius: 15px;
   font-weight: 500;
 }
+
+.danger {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: #FC6665;
+}
+
+.success-reco {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: #03C988;
+}
+.normaltext {
+  color: #2D2D2D;
+}
+
+.profile-details .name {
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #2D2D2D;
+}
+.profile-details .email {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #2D2D2D;
+}
+.profile-details .phone {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #2D2D2D;
+}
+
+.profileDetails {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  color: #2D2D2D;
+}
+.profilesub-heading {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 15px;
+  letter-spacing: 0.02em;
+
+  /* 11 Greys/80 */
+
+  color: #4D4D4D;
+
+}

@@ -442,7 +442,6 @@
                             :rules="[
                               (v) => !!v || 'Number of Questions is required',
                             ]"
-                            disabled
                             required
                           ></v-text-field>
                         </v-col>

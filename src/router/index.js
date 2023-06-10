@@ -17,6 +17,8 @@ import GradesView from '../views/masters/GradesView.vue'
 import TestView from '../views/TestView.vue'
 import QuestionBankView from '../views/QuestionBankView.vue'
 import AssessmentView from '../views/AssessmentView.vue'
+import RecommendationView from '../views/RecommendationView.vue'
+import UserProfileView from '../views/UserProfileView.vue'
 import UserAssessmentView from '../views/UserAssessmentView.vue'
 import TeachersView from '../views/TeachersView.vue'
 import JobSeekersView from '../views/JobSeekersView.vue'
@@ -87,6 +89,22 @@ const routes = [
     path: '/assessment',
     name: 'assessment',
     component: AssessmentView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/recommendations',
+    name: 'recommendations',
+    component: RecommendationView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/users/profile',
+    name: 'user_profile',
+    component: UserProfileView,
     meta: {
       requiresAuth: true,
     }
