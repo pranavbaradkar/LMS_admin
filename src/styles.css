@@ -548,3 +548,117 @@ tr:nth-child(even) {
   color: #4D4D4D;
 
 }
+.score label {
+  font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 15px;
+letter-spacing: 0.02em;
+
+/* 11 Greys/80 */
+
+color: #4D4D4D;
+
+}
+
+.score .per  {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  color: #2D2D2D;
+}
+.score .per span {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  color: #2D2D2D;
+}
+.success-badge {
+  color: rgba(6, 194, 112, 0.8);
+  padding: 4px 8px;
+  font-size: 14px;
+  background: rgba(6, 194, 112, 0.1);
+  border-radius: 68px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.skill-title, .skill-score {
+  font-size: 14px;
+  line-height: 15px;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.skills {  display: flex; margin-top: 10px;flex-wrap: wrap;}
+.skill {
+  border: 1px solid #DADADA;
+  border-radius: 6px;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+}
+.profile-col hr {
+  border-color: #DADADA;
+  border-width: 0.4px;
+}
+.color-1 {
+  background: rgba(255, 40, 26, 0.1);
+}
+.color-2 {
+  background: rgba(245, 200, 40, 0.1);;
+}
+.color-3 {
+  background: rgba(16, 185, 129, 0.1);
+}
+.color-4 {
+  background: rgba(26, 173, 255, 0.1);
+}
+.color-5 {
+  background: rgba(26, 98, 255, 0.1);
+}
+
+.header-bagde {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.status-container {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #DADADA;
+  justify-content: space-between;
+  flex-direction: column;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+.demo-video .skill-title {
+  font-size: 12px;
+}
+.demo-video .skill-score {
+  font-size: 18px;
+}
+.demo-video {
+  flex-direction: column;
+}
+.demo-video .skill-score {
+  margin-top: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: rgba(6, 194, 112, 0.8);;
+}
+
+.header-container .profile-title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.84);
+}

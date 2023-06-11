@@ -35,7 +35,7 @@
 
 
     <v-row>
-      <v-col cols="3">
+      <v-col cols="3" class="profile-col">
         <v-card class="rounded pa-3"  outlined>
           <div class="d-flex justify-center flex-column align-center py-8">
             <img
@@ -57,13 +57,15 @@
             </div>
           </div>
 
-          <div class="mt-4">
+          <hr class="mt-2 mb-2" />
+
+          <div >
             <div class="profilesub-heading">Subject</div>
             <div class="profileDetails mt-2">
               <v-chip>{{ 'Secondary' }}</v-chip><v-chip class="ms-2 mb-2">{{ 'test' }}</v-chip><v-chip  class="ms-2 mb-2">{{ 'sdsd' }}</v-chip>
             </div>
           </div>
-
+          <hr class="mt-2 mb-2" />
           <div class="mt-4">
             <div class="profilesub-heading">Level</div>
             <div class="profileDetails mt-2">
@@ -74,8 +76,178 @@
         </v-card>
       </v-col>
       <v-col cols="9">
-        <v-card class="rounded" outlined>
-          test
+        <v-card class="rounded pa-8" outlined>
+          <div class="status-container">
+            <div class="header-bagde">
+                <div class="header-container">
+                  <div class="success-badge"><i class="dot me-2" />Screening Passed</div>
+                  <div class="profile-title">Primary Teacher Assessment (VGOS) </div>
+                </div>
+                <div class="score">
+                  <label>Score</label>
+                  <div class="per"><span>48/</span>60</div>
+                </div>
+                <div>
+                  <v-select
+                    label="Status"
+                    :items="['Advanced To Mains Test']"
+                    v-model="screening_status"
+                    variant="underlined"
+                  ></v-select>
+                </div>
+            </div>
+
+            <div class="row skills">
+              <div class="col-6 ">
+                <div class="skill color-1">
+                  <div class="skill-title">Core Skill - Social Science</div>
+                  <div class="skill-score">6/10</div>
+                </div>
+                
+              </div>
+              <div class="col-6">
+                <div class="skill color-2">
+                  <div class="skill-title">Core Skill - Social Science</div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="status-container">
+            <div class="header-bagde">
+                <div class="header-container">
+                  <div class="success-badge"><i class="dot me-2" />Mains Passed</div>
+                  <div class="profile-title">Primary Teacher Assessment (VGOS) </div>
+                </div>
+                <div class="score">
+                  <label>Score</label>
+                  <div class="per"><span>108/</span>120</div>
+                </div>
+                <div>
+                  <v-select
+                    label="Status"
+                    :items="['Selected For Demo Video']"
+                    v-model="mains_status"
+                    variant="underlined"
+                  ></v-select>
+                </div>
+            </div>
+
+            <div class="row skills">
+              <div class="col-4">
+                <div class="skill color-1">
+                  <div class="skill-title">Core Skill - Social Science</div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="skill color-2">
+                  <div class="skill-title">Core Skill - Social Science</div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="skill color-3">
+                  <div class="skill-title">Core Skill - Social Science</div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="skill color-4">
+                  <div class="skill-title">Core Skill - Social Science</div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="skill color-5">
+                  <div class="skill-title">Core Skill - Social Science</div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+              
+            </div>
+
+          </div>
+
+          <div class="status-container">
+            <div class="header-bagde">
+                <div class="header-container">
+                  <div class="success-badge"><i class="dot me-2" />Demo Video Selected </div>
+                  <div class="profile-title">Demo Video </div>
+                </div>
+                
+                <div>
+                  <v-select
+                    label="Status"
+                    :items="['Recommended For Interview']"
+                    v-model="demo_status"
+                    variant="underlined"
+                  ></v-select>
+                </div>
+            </div>
+
+            <div class="row">
+              <v-col col="6">
+                <video width="320" >
+                  <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4">
+                </video>
+              </v-col>
+              <v-col col="6">
+
+              </v-col>
+            </div>
+
+            <div class="row skills">
+              <div class="col-3">
+                <div class="skill demo-video color-1">
+                  <div class="skill-title">Knowledge Score</div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="skill demo-video color-2">
+                  <div class="skill-title">Confidences Score </div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="skill demo-video color-3">
+                  <div class="skill-title">Behavioral Score </div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="skill demo-video color-4">
+                  <div class="skill-title">Fluency Score</div>
+                  <div class="skill-score">6/10</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="status-container">
+            <div class="header-bagde">
+                <div class="header-container">
+                  <div class="success-badge"><i class="dot me-2" />Cleared Interview</div>
+                  <div class="profile-title">Interview Details </div>
+                </div>
+               
+                <div>
+                  <v-select
+                    label="Status"
+                    :items="['Recommended For Offer Letter']"
+                    v-model="interview_status"
+                    variant="underlined"
+                  ></v-select>
+                </div>
+            </div>
+
+            
+
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -216,6 +388,10 @@ export default {
       publishDialog: false,
       subjectData: [],
       selectedSkillsFilter: [],
+      screening_status:  "Advanced To Mains Test",
+      mains_status: "Selected For Demo Video",
+      demo_status: "Recommended For Interview",
+      interview_status: "Recommended For Offer Letter",
       headers: [
         { text: "Assessment Name", value: "name" },
         { text: "Created At", value: "created_at" },
