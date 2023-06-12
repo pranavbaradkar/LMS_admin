@@ -312,7 +312,7 @@
               <v-divider></v-divider>
 
               <v-stepper-step :complete="e1 > 2" step="2">
-                SCREENING CONFIGURATION
+                {{ assessment_type == 'MAINS' ? 'MAINS' : 'SCREENING' }} CONFIGURATION
               </v-stepper-step>
 
               <v-divider></v-divider>
@@ -791,6 +791,44 @@
                             </v-card>
                           </v-expansion-panel-content>
                         </v-expansion-panel>
+
+                        <v-expansion-panel
+                          v-for="(skill, index) in mainsQuestions"
+                          :key="index"
+                        >
+                          <v-expansion-panel-header>{{
+                            skill.name
+                          }}</v-expansion-panel-header>
+                          <v-expansion-panel-content
+                            v-for="(question, i) in skill.questions"
+                            :key="i"
+                          >
+                            <v-card>
+                              <v-card-subtitle class="pb-0">
+                                {{ question.question_type }}
+                              </v-card-subtitle>
+                              <v-card-title class="pt-0">
+                                {{ question.statement }}
+                              </v-card-title>
+                              <v-card-text>
+                                <p>Options</p>
+                                <v-row justify="start">
+                                  <div
+                                    v-for="(
+                                      option, inx
+                                    ) in question.question_options"
+                                    :key="inx"
+                                  >
+                                    <v-chip class="ma-2">{{
+                                      option.option_value
+                                    }}</v-chip>
+                                  </div>
+                                </v-row>
+                              </v-card-text>
+                            </v-card>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+
                       </v-expansion-panels>
                     </v-card-text>
                   </v-card>
@@ -1617,7 +1655,8 @@ export default {
         this.getScreeningQuestions();
       }
       else if(this.assessment_type == 'MAINS') {
-        response = await AssessmentController.createMains( payload, this.assessmentId );        
+        response = await AssessmentController.createMains( payload, this.assessmentId );
+        this.getMainsQuestions();        
       }
 
       return response.data.sucess;
@@ -1653,8 +1692,7 @@ export default {
       let type = assessment.assessment_configurations[0].assessment_type;
       if(type == 'SCREENING') {
         this.fetchScreeningUsers(assessment.id);
-      }
-      else {
+      } else {
         this.fetchMainsUsers(assessment.id);
       }
     },
