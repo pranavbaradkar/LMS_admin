@@ -23,14 +23,14 @@
               class="rounded"
               v-on:click="assessmentUsers = inProgress"
             >
-              Demo Video
+              TEACHER
             </v-tab>
             <v-tab
               active-class=" white ma-1 black--text"
               class="rounded"
               v-on:click="assessmentUsers = cleared"
             >
-              Interview
+              JOB SEEKER
             </v-tab>
           </v-tabs>
         </div>
@@ -45,52 +45,37 @@
             clearable
           ></v-text-field>
         </div>
-        <div>
-          <v-btn class="primary mx-2" rounded @click="filterDialog = true"
-            ><v-icon>mdi-tune</v-icon>Filter</v-btn
-          >
-        </div>
       </v-col>
     </v-row>
 
     
     <v-data-table
-      v-if="showUsers"
       :headers="column"
-      :items="assessments"
+      :items="recommendations"
+      v-if="recommendations.length"
     >
-      <template v-slot:[`item.name`]="{}">
-        <div class="d-flex align-center" style="height: 40px;">
-          <img
-            height="30px"
-            width="30px"
-            :src="`https://knoggles-lms-assets.s3.amazonaws.com/masters/b2c/123-456-7/images/CISE_48px.svg`"
-          />
-          <span class="ml-2">Dhrumil</span>
-        </div>
-      </template>
       <template v-slot:[`item.actions`]="{}">
         <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
       </template>
-      <template v-slot:[`item.level`]="{}">
+      <template v-slot:[`item.levels`]="{item}">
         <span
-          ><v-chip>{{ 'Secondary' }}</v-chip></span
+          ><v-chip>{{ item.levels.length && item.levels[0].name }}</v-chip></span
         >
         <span
-          ><v-chip>+{{ 2 }}</v-chip></span
+          ><v-chip>+{{ item.levels.length && item.levels.length - 1 }}</v-chip></span
         >
       </template>
       <template v-slot:[`item.ai_recommendation`]="{item}">
-        <span v-if="item.ai_recommendation != 'Recommended'" :class="`${item.ai_recommendation == 'Recommended' ? 'success-reco' : 'danger'}`">{{ item.ai_recommendation }}</span>
-        <div v-if="item.ai_recommendation == 'Recommended'" :class="`${item.ai_recommendation == 'Recommended' ? 'success-reco' : 'danger'}`">
-          <div>{{ item.ai_recommendation }}</div>
-          <div class="normaltext">For <strong>Grade 3</strong></div>
+        <div v-if="item.ai_recommendation != ''" class="success-reco">
+          <div>Recommended</div>
+          <div class="normaltext">For <strong>{{ item.ai_recommendation }}</strong></div>
         </div>
+        <span v-else class="danger">Not Recommended</span>
       </template>
 
       <template v-slot:[`item.status`]="{item}">
         <div style="width: 200px"><v-select
-          label="Gender *"
+          label="Status"
           single-line
           v-model="item.status"
           item-value="Pending"
@@ -100,216 +85,6 @@
       </template>
       
     </v-data-table>
-
-    <!-- <v-dialog v-model="successDialog" max-width="366px" persistent>
-      <v-card>
-        <v-container fluid class="pa-8">
-          <v-card-text class="text-center">
-            <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
-            <p class="text-h5 py-4">New Grade Created</p>
-            <v-btn
-              class="primary"
-              large
-              width="157px"
-              rounded
-              @click="successDialog = false"
-              >OK</v-btn
-            >
-          </v-card-text>
-        </v-container>
-      </v-card>
-    </v-dialog> -->
-  
-    <!-- Success Dialog -->
-    <v-dialog v-model="successDialog" max-width="366px" persistent>
-      <v-card>
-        <v-container fluid class="pa-8">
-          <v-card-text class="text-center">
-            <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
-            <p class="text-h5 py-4">{{ successMessage }}</p>
-            <v-btn
-              class="primary"
-              large
-              width="157px"
-              rounded
-              @click="successDialog = false"
-              >OK</v-btn
-            >
-          </v-card-text>
-        </v-container>
-      </v-card>
-    </v-dialog>
-    <!-- Error Dialog -->
-    <v-dialog v-model="errorDialog" max-width="366px" persistent>
-      <v-card>
-        <v-container fluid class="pa-8">
-          <v-card-text class="text-center">
-            <v-icon color="error" size="96">mdi-close-circle-outline</v-icon>
-            <p class="text-h5 py-4">{{ errorMessage }}</p>
-            <v-btn
-              class="primary"
-              large
-              width="157px"
-              rounded
-              @click="errorDialog = false"
-              >OK</v-btn
-            >
-          </v-card-text>
-        </v-container>
-      </v-card>
-    </v-dialog>
-
-    <!-- ASSESSMENT PUBLISH CONFORMATION POP UP -->
-    <v-dialog v-model="publishDialog" max-width="366px" persistent>
-      <v-card fluid>
-        <v-container fluid class="pa-0">
-          <v-card-text class="text-center">
-            <v-avatar color="secondary" size="90"
-              ><v-icon size="65">mdi-notebook-check-outline</v-icon></v-avatar
-            >
-
-            <p class="text-h5 pt-4 pb-0">Publish Results</p>
-            <p
-              class="text-disabled grey--text text-subtitle-1 mb-4"
-              color="rgba(0, 0, 0, 0.6)"
-              disabled
-            >
-            This action will publish the assessment results. This cannot be undone
-            </p>
-
-            <div class="d-flex justify-space-between" fluid>
-              <v-btn
-                depressed
-                class="secondary black--text"
-                large
-                width="157px"
-                rounded
-                @click="publishDialog = false"
-                >CANCEL</v-btn
-              >
-              <v-btn
-                class="black white--text"
-                depressed
-                large
-                width="157px"
-                rounded
-                @click="publishResults(publishData.id,publishData.assessmentType)"
-                >Publish</v-btn
-              >
-             </div>
-          </v-card-text>
-        </v-container>
-      </v-card>
-    </v-dialog>
-
-
-    <v-dialog v-model="deleteDialog" max-width="366px" persistent>
-      <v-card fluid>
-        <v-container fluid class="pa-0">
-          <v-card-text class="text-center">
-            <v-avatar color="secondary" size="90"
-              ><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar
-            >
-
-            <p class="text-h5 pt-4 pb-0">Delete Assessment</p>
-            <p
-              class="text-disabled grey--text text-subtitle-1"
-              color="rgba(0, 0, 0, 0.6)"
-              disabled
-            >
-              This action will permanently delete the item . This cannot be
-              undone
-            </p>
-
-            <div class="d-flex justify-space-between" fluid>
-              <v-btn
-                depressed
-                class="secondary black--text"
-                large
-                width="157px"
-                rounded
-                @click="deleteDialog = false"
-                >CANCEL</v-btn
-              >
-              <v-btn
-                class="black white--text"
-                depressed
-                large
-                width="157px"
-                rounded
-                @click="deleteAssessment(selectedId)"
-                >DELETE</v-btn
-              >
-            </div>
-          </v-card-text>
-        </v-container>
-      </v-card>
-    </v-dialog>
-  
-    <v-dialog v-model="filterDialog" max-width="400px">
-      <v-card width="400px" height="100%">
-        <v-card-text class="pa-6">
-          <v-row>
-            <v-col>
-              <div class="pl-1 text-body1 font-weight-bold">FILTER</div>
-            </v-col>
-            <v-spacer></v-spacer>
-            <v-col>
-              <div
-                @click="clearFilter"
-                class="text-body1 font-weight-bold black--text cursor"
-              >
-                CLEAR FILTER
-              </div>
-            </v-col>
-          </v-row>
-          <div>
-            <v-card
-              height="450px"
-              elevation="0"
-              id="myScroll"
-              class="pt-5 ,pb-5"
-            >
-              <v-row class="pl-1">
-                <v-col>
-                  <div class="text-body1 font-weight-normal black--text">
-                    Skills
-                  </div>
-                </v-col>
-              </v-row>
-              <v-chip-group
-                v-model="selectedSkillsFilter"
-                active-class="primary"
-                column
-                :multiple="true"
-              >
-                <v-chip
-                  v-for="(skillType, index) in skillsList"
-                  :key="index"
-                  :value="skillType"
-                  elevated
-                >
-                  {{ skillType.name }}
-                </v-chip>
-              </v-chip-group>
-            </v-card>
-            <div>
-              <v-card-actions class="px-6 pb-6">
-                <v-spacer></v-spacer>
-                <v-btn
-                  rounded
-                  outlined
-                  class="pa-4"
-                  @click="filterDialog = false"
-                  >Cancel</v-btn
-                >
-                <v-btn rounded class="primary pa-4">Apply</v-btn>
-              </v-card-actions>
-            </div>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -319,6 +94,7 @@ import { required, email } from "vuelidate/lib/validators";
 import AssessmentController from "@/controllers/AssessmentController";
 import SkillsController from "@/controllers/SkillsController";
 import LevelController from "@/controllers/LevelController";
+import RecommendationController from '@/controllers/RecommendationController'
 
 export default {
   mixins: [validationMixin],
@@ -457,16 +233,17 @@ export default {
       breadData: "menu1",
       column: [
         { text: "Name", value: "name" },
-        { text: "Apply For Level", value: "level" },
+        { text: "Apply For Level", value: "levels" },
         { text: "Screening Score", value: "screening_score" },
         { text: "Main Score", value: "main_score" },
         { text: "Demo Score", value: "demo_score"},
-        { text: "Interview Score", value: "interview_score" },
         { text: "AI recommendation", value: "ai_recommendation" },
         { text: "Status", value: "status" },
+        { text: "Interview Score", value: "interview_score" },
         { text: "Actions", value: "actions" },
       ],
       assessments: [],
+      recommendations: [],
       skillsList: [],
       levels: [],
       skillQuestionsIds: [],
@@ -475,6 +252,34 @@ export default {
     };
   },
   methods: {
+    async fetchRecommendations() {
+      const response = await RecommendationController.getRecommendations();
+      this.recommendations = response.data.data.recommendation;
+      this.recommendations = this.recommendations.map(e => {
+          let scores = e.scores;
+          let screening_test_index = e.scores.findIndex((item) => item.type === 'SCREENING');
+          let main_test_index = e.scores.findIndex((item) => item.type === 'MAINS');
+          let dat = {
+            name: e.name,
+            levels: e.level_ids.map((el) => {
+              const index = this.levels.findIndex((item) => item.id === el);
+              console.log(index, el)
+              return this.levels[index];
+            }),
+            screening_score: screening_test_index != -1 ? `${scores[screening_test_index].score} / ${scores[screening_test_index].total_score}` : 'NILL',
+            main_score: main_test_index != -1 ? `${scores[main_test_index].score} / ${scores[main_test_index].total_score}` : 'NILL',
+            demo_score: `${e.demo_video.total_score} / ${e.demo_video.total_score}`,
+            interview_score: "8/10",
+            status:e.status,
+            ai_recommendation: e.recommendation,
+          }
+          let obj = {...dat};
+          console.log(obj);
+          return obj;
+        })
+      this.recommendations.reverse();
+      console.log(this.recommendations);
+    },
     screeningBtnValue(){
       return this.screenPanel.length === 0 ? "EXPAND" : "COLLAPSE";
     },
@@ -826,15 +631,20 @@ export default {
         this.assessments = this.assessments.map(e => {
           let data = ['Not Recommended', 'Recommended'];
           let oneOrZero = (Math.random()>=0.5)? 1 : 0;
+          let scores = e.scores;
+          let screening_test_index = e.scores.findIndex((item) => item.type === 'SCREENING');
+          let main_test_index = e.scores.findIndex((item) => item.type === 'MAINS');
           let dat = {
-            screening_score: "48/60",
-            main_score: "108/120",
-            demo_score: "8/10",
+            name: e.name,
+            levels: e.level_ids,
+            screening_score: screening_test_index != -1 ? `${scores[screening_test_index].score} / ${scores[screening_test_index].total_score}` : 'NILL',
+            main_score: main_test_index != -1 ? `${scores[main_test_index].score} / ${scores[main_test_index].total_score}` : 'NILL',
+            demo_score: `${e.demo_video.total_scores} / ${e.demo_video.total_score}`,
             interview_score: "8/10",
             status:'Pending',
             ai_recommendation: data[oneOrZero]
           }
-          let obj = {...e, ...dat};
+          let obj = {...dat};
           return obj;
         })
       this.assessments.reverse();
@@ -946,11 +756,11 @@ export default {
   },
 
   created() {
-    this.fetchAssessment();
     this.getAssessmentDuration();
     //this.getSubjects();
     this.getSkills();
     this.getLevels();
+    this.fetchRecommendations();
     if (this.$route.params.cdialog == true) {
       this.dialog = true;
     }
