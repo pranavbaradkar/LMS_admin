@@ -246,7 +246,7 @@
           </v-card>
           <div class="d-flex justify-end">
           
-            <v-card-title class="pa-0 cursor" @click="publishMethod(data.id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
+            <v-card-title class="pa-0 cursor" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
           </div>
           <v-divider class="mb-4 mt-2"></v-divider>
         </div>
@@ -944,8 +944,7 @@
                 width="157px"
                 rounded
                 @click="publishResults(publishData.id,publishData.assessmentType)"
-                >Publish</v-btn
-              >
+                >Publish</v-btn>
              </div>
           </v-card-text>
         </v-container>
@@ -1420,7 +1419,7 @@ export default {
       }
     },
     async publishResults(assessmentId,type) {
-      
+      console.log(assessmentId);
       const response=await AssessmentController.publishResults(assessmentId,type);
      
 
