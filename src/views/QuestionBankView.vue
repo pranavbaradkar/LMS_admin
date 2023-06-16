@@ -558,13 +558,12 @@
               <v-card class="ma-4 pa-4" elevation="0">
                 <v-row>
                   <v-col class="py-0">
-                    <div class="text-body-1 my-2">Level*</div>
+                    <div class="text-body-1 my-2">Level</div>
                     <v-select
                       label="Choose Teaching Level"
                       :items="levels"
                       outlined
                       class="rounded-xl"
-                      required
                       :rules="[
                         (v) => !!v || 'Teaching Level field is required',
                       ]"
@@ -575,13 +574,12 @@
                     </v-select>
                   </v-col>
                   <v-col class="py-0">
-                    <div class="text-body-1 my-2">Diffculty Level*</div>
+                    <div class="text-body-1 my-2">Diffculty Level</div>
                     <v-select
                       label="Choose Difficulty Level"
                       :items="difficultyLevels"
                       outlined
                       class="rounded-xl"
-                      required
                       :rules="[(v) => !!v || 'Difficulty Level is required']"
                       v-model="difficultyLevel"
                     >
@@ -590,26 +588,24 @@
                 </v-row>
                 <v-row>
                   <v-col class="py-0">
-                    <div class="text-body-1 my-2">Complexity Level*</div>
+                    <div class="text-body-1 my-2">Complexity Level</div>
                     <v-select
                       label="Choose Complexity Level"
                       :items="complexityLevels"
                       outlined
                       class="rounded-xl"
                       v-model="complexityLevel"
-                      required
                       :rules="[(v) => !!v || 'Complexity Level is required']"
                     >
                     </v-select>
                   </v-col>
                   <v-col class="py-0">
-                    <div class="text-body-1 my-2">Knowledge Level*</div>
+                    <div class="text-body-1 my-2">Knowledge Level</div>
                     <v-select
                       label="Choose Knowledge Level"
                       :items="knowledgeLevels"
                       outlined
                       class="rounded-xl"
-                      required
                       v-model="knowledgeLevel"
                       :rules="[(v) => !!v || 'Knowledge Level is required']"
                     >
@@ -619,14 +615,13 @@
 
                 <v-row>
                   <v-col class="py-0">
-                    <div class="text-body-1 my-2">Bloom's Taxonomy Level*</div>
+                    <div class="text-body-1 my-2">Bloom's Taxonomy Level</div>
                     <v-select
                       label="Choose Bloom's Taxonomy Level"
                       :items="bloomsTaxonomyLevel"
                       outlined
                       class="rounded-xl"
                       v-model="bloomsTaxonomy"
-                      required
                       :rules="[
                         (v) => !!v || ' Blooms Taxonomy Level is required',
                       ]"
@@ -667,7 +662,7 @@
                     </v-select>
                   </v-col>
                   <v-col class="py-0">
-                    <div class="text-body-1 my-2">Proficiency Level*</div>
+                    <div class="text-body-1 my-2">Proficiency Level</div>
                     <v-select
                       label="Choose Proficiency Level"
                       :items="['A1', 'A2', 'B1', 'B2', 'C1', 'C2']"
@@ -675,7 +670,6 @@
                       class="rounded-xl"
                       v-model="proficiencyLevel"
                       :rules="[(v) => !!v || 'Proficiency Level is required']"
-                      required
                     >
                     </v-select>
                   </v-col>
@@ -1645,7 +1639,7 @@ export default {
           skill_id: this.skillId,
           subject_id: this.subject,
           correct_answer_score: this.correctAnswerScore,
-          estimated_time: this.estimatedTime,
+          estimated_time: this.estimatedTime != '' ? parseInt(this.estimatedTime) : 0 ,
           blooms_taxonomy: this.bloomsTaxonomy,
           knowledge_level: this.knowledgeLevel,
           complexity_level: this.complexityLevel,
@@ -1680,15 +1674,16 @@ export default {
       this.questionType = item.question_type;
       this.skillId = item.skill_id;
       this.correctAnswerScore = item.correct_answer_score;
-      this.estimatedTime = item.estimated_time;
-      this.bloomsTaxonomy = item.blooms_taxonomy;
-      this.knowledgeLevel = item.knowledge_level;
-      this.complexityLevel = item.complexity_level;
-      this.difficultyLevel = item.difficulty_level;
+      
+      this.estimatedTime = item.estimated_time != '' ? parseInt(item.estimated_time) : 0 ;
+      this.bloomsTaxonomy = item.blooms_taxonomy != '' ? item.blooms_taxonomy : null;
+      this.knowledgeLevel = item.knowledge_level != '' ? item.knowledge_level : null;
+      this.complexityLevel = item.complexity_level != '' ? item.complexity_level : null;
+      this.difficultyLevel = item.difficulty_level != '' ? item.difficulty_level : null;
       this.correct_answer = item.correct_answer;
       this.hint = item.hint;
       this.subject = item.subject_id;
-      this.proficiencyLevel = item.proficiency_level;
+      this.proficiencyLevel = item.proficiency_level != '' ? item.proficiency_level : null;
       this.level = item.level_id;
       this.options = item.question_options;
       this.mtfAnswers = item.question_mtf_answers;
