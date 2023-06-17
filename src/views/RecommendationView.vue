@@ -57,6 +57,9 @@
       <template v-slot:[`item.actions`]="{}">
         <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
       </template>
+      <template v-slot:[`item.email`]="{item}">
+        <div>{{ item.email }}</div>
+      </template>
       <template v-slot:[`item.levels`]="{item}">
         <span
           ><v-chip>{{ item.levels.length && item.levels[0].name }}</v-chip></span
@@ -233,7 +236,8 @@ export default {
       breadData: "menu1",
       column: [
         { text: "Name", value: "name" },
-        { text: "Apply For Level", value: "levels" },
+        { text: "Email", value: "email" },
+        { text: "Applied For Level", value: "levels" },
         { text: "Screening Score", value: "screening_score" },
         { text: "Main Score", value: "main_score" },
         { text: "Demo Score", value: "demo_score"},
@@ -252,6 +256,12 @@ export default {
     };
   },
   methods: {
+    truncate (string) {
+      if (string.length < 17) return string;
+      const first_part = string.slice(0,4);
+      const last_part = string.slice(-10);
+      return first_part + '...' + last_part;
+    },
     async fetchRecommendations() {
       const response = await RecommendationController.getRecommendations();
       this.recommendations = response.data.data.recommendation;
@@ -261,6 +271,7 @@ export default {
           let main_test_index = e.scores.findIndex((item) => item.type === 'MAINS');
           let dat = {
             name: e.name,
+            email: this.truncate('admin754t4753475cjbhjdfbhjdfbvhj@gmail.com'),
             levels: e.level_ids.map((el) => {
               const index = this.levels.findIndex((item) => item.id === el);
               console.log(index, el)
