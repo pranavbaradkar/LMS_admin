@@ -23,6 +23,7 @@ import UserAssessmentView from '../views/UserAssessmentView.vue'
 import TeachersView from '../views/TeachersView.vue'
 import JobSeekersView from '../views/JobSeekersView.vue'
 import CampaignView from '../views/CampaignView.vue'
+import CandidatesFormview from '../views/CandidatesFormview.vue'
 
 Vue.use(VueRouter)
 
@@ -109,6 +110,7 @@ const routes = [
       requiresAuth: true,
     }
   },
+  
   {
     path: '/user-assessments',
     name: 'user-assessment',
@@ -201,6 +203,14 @@ const routes = [
     component: TestView,
     meta: {
       requiresAuth: false,
+    }
+  },
+  {
+    path: '/candidates/form',
+    name: 'candidates_form',
+    component: CandidatesFormview,
+    meta: {
+      requiresAuth: true,
     }
   },
 ]

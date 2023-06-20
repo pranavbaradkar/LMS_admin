@@ -32,6 +32,20 @@ export default {
             return error.response;
         }
     },
+    getUsersProfileDetail: async function (pageSize,page, search) {
+
+        try {
+            const response = await instance.get('admin/users/list?pageSize='+pageSize+'&page='+page+'&search='+search
+                , {
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
     getTeacher: async function (pageSize,page, search) {
 
         try {
