@@ -21,14 +21,14 @@
             <v-tab
               active-class=" white ma-1 black--text"
               class="rounded"
-              v-on:click="assessmentUsers = inProgress"
+              v-on:click="onClickRecommendation('TEACHER')"
             >
               TEACHER
             </v-tab>
             <v-tab
               active-class=" white ma-1 black--text"
               class="rounded"
-              v-on:click="assessmentUsers = cleared"
+              v-on:click="onClickRecommendation('JOB_SEEKER')"
             >
               JOB SEEKER
             </v-tab>
@@ -52,21 +52,18 @@
     <v-data-table
       :headers="column"
       :items="recommendations"
-      v-if="recommendations.length"
     >
       <template v-slot:[`item.actions`]="{}">
         <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
       </template>
       <template v-slot:[`item.levels`]="{item}">
         <span
-          ><v-chip>{{ item.levels.length && item.levels[0].name }}</v-chip></span
-        >
-        <span
-          ><v-chip>+{{ item.levels.length && item.levels.length - 1 }}</v-chip></span
+          ><v-chip class="mb-1" v-for="(data, index) in item.levels"
+          :key="`chip-${index}`">{{ data }}</v-chip></span
         >
       </template>
       <template v-slot:[`item.ai_recommendation`]="{item}">
-        <div v-if="item.ai_recommendation != ''" class="success-reco">
+        <div v-if="item.ai_recommendation !== 'NILL' " class="success-reco">
           <div>Recommended</div>
           <div class="normaltext">For <strong>{{ item.ai_recommendation }}</strong></div>
         </div>
@@ -79,12 +76,13 @@
           single-line
           v-model="item.status"
           item-value="Pending"
-          :items="['Pending', 'Disagreed With AI','Agreed With AI']"
+          :items="statusItems"
           variant="solo"
         ></v-select></div>
       </template>
       
     </v-data-table>
+
   </v-container>
 </template>
 <script>
@@ -193,6 +191,9 @@ export default {
       skill_questions: [],
       skillQuestions: [],
       mainsQuestions: [],
+      statusItems:[{key: 'PENDING', text: 'Pending'},
+          {key: 'DISAGREE', text: 'Disagreed With AI'},
+          {key: 'AGREE', text: 'Agreed With AI'}],
       mainsConfiguration: {
         difficultyLevel: null,
         totalNumberQuestions: null,
@@ -233,13 +234,14 @@ export default {
       breadData: "menu1",
       column: [
         { text: "Name", value: "name" },
+        { text: "Email", value: "email" },
         { text: "Apply For Level", value: "levels" },
         { text: "Screening Score", value: "screening_score" },
         { text: "Main Score", value: "main_score" },
         { text: "Demo Score", value: "demo_score"},
+        { text: "Interview Score", value: "interview_score" },
         { text: "AI recommendation", value: "ai_recommendation" },
         { text: "Status", value: "status" },
-        { text: "Interview Score", value: "interview_score" },
         { text: "Actions", value: "actions" },
       ],
       assessments: [],
@@ -252,26 +254,21 @@ export default {
     };
   },
   methods: {
-    async fetchRecommendations() {
-      const response = await RecommendationController.getRecommendations();
-      this.recommendations = response.data.data.recommendation;
+    async fetchRecommendations(type) {
+      const response = await RecommendationController.getRecommendations(type);
+      this.recommendations = response.data.data.rows;
+      console.log(this.recommendations);
       this.recommendations = this.recommendations.map(e => {
-          let scores = e.scores;
-          let screening_test_index = e.scores.findIndex((item) => item.type === 'SCREENING');
-          let main_test_index = e.scores.findIndex((item) => item.type === 'MAINS');
           let dat = {
-            name: e.name,
-            levels: e.level_ids.map((el) => {
-              const index = this.levels.findIndex((item) => item.id === el);
-              console.log(index, el)
-              return this.levels[index];
-            }),
-            screening_score: screening_test_index != -1 ? `${scores[screening_test_index].score} / ${scores[screening_test_index].total_score}` : 'NILL',
-            main_score: main_test_index != -1 ? `${scores[main_test_index].score} / ${scores[main_test_index].total_score}` : 'NILL',
-            demo_score: `${e.demo_video.total_score} / ${e.demo_video.total_score}`,
-            interview_score: "8/10",
-            status:e.status,
-            ai_recommendation: e.recommendation,
+            name: e.user.first_name,
+            email: e.user.email,
+            levels: e.levels,
+            screening_score: e.screening_score ? `${e.screening_score} / ${e.screening_score_total}` : 'NILL',
+            main_score: e.mains_score ? `${e.mains_score} / ${e.mains_score_total}` : 'NILL',
+            demo_score: e.demo_score ? `${e.demo_score} / ${e.demo_score_total}` : 'NILL',
+            interview_score:  e.interview_score ? `${e.interview_score} / ${e.interview_score_total}` : 'NILL',
+            status: this.statusItems.find(v => { return v.key == e.status}),
+            ai_recommendation: e.ai_recommendation ? e.ai_recommendation : 'NILL',
           }
           let obj = {...dat};
           console.log(obj);
@@ -753,6 +750,9 @@ export default {
     clearFilter() {
       this.selectedSkillsFilter = [];
     },
+    onClickRecommendation(type) {
+      this.fetchRecommendations(type);
+    }
   },
 
   created() {
@@ -760,7 +760,7 @@ export default {
     //this.getSubjects();
     this.getSkills();
     this.getLevels();
-    this.fetchRecommendations();
+    this.fetchRecommendations('TEACHER');
     if (this.$route.params.cdialog == true) {
       this.dialog = true;
     }

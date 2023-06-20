@@ -5,12 +5,15 @@ const instance = axios.create({
 });
 
 export default {
-    getRecommendations: async function () {
+    getRecommendations: async function (type) {
         try {
             const response = await instance.get('admin/users/recommendation',{
                 headers: {
                     'Authorization': AuthService.getToken()
-                }
+                },
+                params: {filter: {
+                    user_type: type
+                } }
             })
             return response;
         } catch (error) {
