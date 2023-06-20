@@ -56,6 +56,9 @@
       <template v-slot:[`item.actions`]="{}">
         <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
       </template>
+      <template v-slot:[`item.email`]="{item}">
+        <div>{{ item.email }}</div>
+      </template>
       <template v-slot:[`item.levels`]="{item}">
         <span
           ><v-chip class="mb-1" v-for="(data, index) in item.levels"
@@ -235,7 +238,11 @@ export default {
       column: [
         { text: "Name", value: "name" },
         { text: "Email", value: "email" },
+<<<<<<< HEAD
         { text: "Apply For Level", value: "levels" },
+=======
+        { text: "Applied For Level", value: "levels" },
+>>>>>>> e6f104eb2a35434b743d3d62cee6ee12bb7f3e54
         { text: "Screening Score", value: "screening_score" },
         { text: "Main Score", value: "main_score" },
         { text: "Demo Score", value: "demo_score"},
@@ -254,12 +261,25 @@ export default {
     };
   },
   methods: {
+<<<<<<< HEAD
     async fetchRecommendations(type) {
       const response = await RecommendationController.getRecommendations(type);
       this.recommendations = response.data.data.rows;
       console.log(this.recommendations);
+=======
+    truncate (string) {
+      if (string.length < 17) return string;
+      const first_part = string.slice(0,4);
+      const last_part = string.slice(-10);
+      return first_part + '...' + last_part;
+    },
+    async fetchRecommendations() {
+      const response = await RecommendationController.getRecommendations();
+      this.recommendations = response.data.data.recommendation;
+>>>>>>> e6f104eb2a35434b743d3d62cee6ee12bb7f3e54
       this.recommendations = this.recommendations.map(e => {
           let dat = {
+<<<<<<< HEAD
             name: e.user.first_name,
             email: e.user.email,
             levels: e.levels,
@@ -269,6 +289,21 @@ export default {
             interview_score:  e.interview_score ? `${e.interview_score} / ${e.interview_score_total}` : 'NILL',
             status: this.statusItems.find(v => { return v.key == e.status}),
             ai_recommendation: e.ai_recommendation ? e.ai_recommendation : 'NILL',
+=======
+            name: e.name,
+            email: this.truncate('admin754t4753475cjbhjdfbhjdfbvhj@gmail.com'),
+            levels: e.level_ids.map((el) => {
+              const index = this.levels.findIndex((item) => item.id === el);
+              console.log(index, el)
+              return this.levels[index];
+            }),
+            screening_score: screening_test_index != -1 ? `${scores[screening_test_index].score} / ${scores[screening_test_index].total_score}` : 'NILL',
+            main_score: main_test_index != -1 ? `${scores[main_test_index].score} / ${scores[main_test_index].total_score}` : 'NILL',
+            demo_score: `${e.demo_video.total_score} / ${e.demo_video.total_score}`,
+            interview_score: "8/10",
+            status:e.status,
+            ai_recommendation: e.recommendation,
+>>>>>>> e6f104eb2a35434b743d3d62cee6ee12bb7f3e54
           }
           let obj = {...dat};
           console.log(obj);
