@@ -238,11 +238,7 @@ export default {
       column: [
         { text: "Name", value: "name" },
         { text: "Email", value: "email" },
-<<<<<<< HEAD
-        { text: "Apply For Level", value: "levels" },
-=======
         { text: "Applied For Level", value: "levels" },
->>>>>>> e6f104eb2a35434b743d3d62cee6ee12bb7f3e54
         { text: "Screening Score", value: "screening_score" },
         { text: "Main Score", value: "main_score" },
         { text: "Demo Score", value: "demo_score"},
@@ -261,27 +257,24 @@ export default {
     };
   },
   methods: {
-<<<<<<< HEAD
+    truncate (string) {
+      if(string) {
+        if (string && string.length < 17) return string;
+        const first_part = string.slice(0,4);
+        const last_part = string.slice(-10);
+        return first_part + '...' + last_part;
+      } else {
+        return string;
+      }
+      
+    },
     async fetchRecommendations(type) {
       const response = await RecommendationController.getRecommendations(type);
       this.recommendations = response.data.data.rows;
-      console.log(this.recommendations);
-=======
-    truncate (string) {
-      if (string.length < 17) return string;
-      const first_part = string.slice(0,4);
-      const last_part = string.slice(-10);
-      return first_part + '...' + last_part;
-    },
-    async fetchRecommendations() {
-      const response = await RecommendationController.getRecommendations();
-      this.recommendations = response.data.data.recommendation;
->>>>>>> e6f104eb2a35434b743d3d62cee6ee12bb7f3e54
       this.recommendations = this.recommendations.map(e => {
           let dat = {
-<<<<<<< HEAD
             name: e.user.first_name,
-            email: e.user.email,
+            email: e.user.email ? this.truncate(e.user.email) : 'NILL',
             levels: e.levels,
             screening_score: e.screening_score ? `${e.screening_score} / ${e.screening_score_total}` : 'NILL',
             main_score: e.mains_score ? `${e.mains_score} / ${e.mains_score_total}` : 'NILL',
@@ -289,21 +282,6 @@ export default {
             interview_score:  e.interview_score ? `${e.interview_score} / ${e.interview_score_total}` : 'NILL',
             status: this.statusItems.find(v => { return v.key == e.status}),
             ai_recommendation: e.ai_recommendation ? e.ai_recommendation : 'NILL',
-=======
-            name: e.name,
-            email: this.truncate('admin754t4753475cjbhjdfbhjdfbvhj@gmail.com'),
-            levels: e.level_ids.map((el) => {
-              const index = this.levels.findIndex((item) => item.id === el);
-              console.log(index, el)
-              return this.levels[index];
-            }),
-            screening_score: screening_test_index != -1 ? `${scores[screening_test_index].score} / ${scores[screening_test_index].total_score}` : 'NILL',
-            main_score: main_test_index != -1 ? `${scores[main_test_index].score} / ${scores[main_test_index].total_score}` : 'NILL',
-            demo_score: `${e.demo_video.total_score} / ${e.demo_video.total_score}`,
-            interview_score: "8/10",
-            status:e.status,
-            ai_recommendation: e.recommendation,
->>>>>>> e6f104eb2a35434b743d3d62cee6ee12bb7f3e54
           }
           let obj = {...dat};
           console.log(obj);
