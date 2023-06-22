@@ -54,7 +54,12 @@
       :items="recommendations"
     >
       <template v-slot:[`item.actions`]="{}">
-        <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
+        <img 
+        width="30px"
+         class="pt-2 cursor"
+          to="/users" src="../assets/user.svg" />
+         <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
+
       </template>
       <template v-slot:[`item.email`]="{item}">
         <div>{{ item.email }}</div>
