@@ -734,3 +734,77 @@ margin-left: 4%;
     background-color: black !important;
     color: white !important;
 }
+.left{
+  margin-left: 35px;
+}
+.line{
+  line-height: 0px;
+  margin-left: 35px;
+}
+.line1{
+  margin-left: 42px;
+  margin-bottom: -11px
+}
+.para{
+  font-size: 14px;
+  color: gray;
+  word-spacing: 2px;
+}
+.avtar-left{
+  font-size: 18px;
+}
+.color{
+  color: #4D4D4D;
+}
+.user-tag{
+  margin-left: -10%;
+  word-spacing: 2px;
+}
+.user-tag1{
+  margin-left: -7%;
+  word-spacing: 2px;
+}
+.mb{
+  margin-bottom: -30px;
+}
+.end-btn{
+  width: 197px;
+    height: 40px !important;
+    border-radius: 70px;
+    padding: 0px 16px 0px 20px !important;
+    background-color: black !important;
+    color: white !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    line-height: 40px !important;
+}
+.recommend1{
+  color: #03C988;
+  word-spacing: 2px;
+  font-size: 14px;
+
+}
+.panel{
+  font-size: 21px;
+  font-weight: 500;
+}
+.text-feild{
+  width: 500px;
+}
+.section1{
+  margin-top: -20px !important;
+}
+.card{
+  width: 375px;
+    height: 335px;
+}
+.circle-chip{
+ width: 24px;
+height: 24px;
+padding: 0px 5px 0px 5px;
+border-radius: 40px;
+font-size: 14px !important;
+}
+.fs{
+  font-size: 14px !important;
+}

@@ -248,13 +248,21 @@
                             >
                         6
                     </v-btn> 
-                    <strong  class="d-flex  ms-3 ">Confidences Score</strong>
+                      <strong  class="d-flex  ms-3 ">Confidences Score</strong>
                     </V-col>
              </v-row>
                 
               
-          
-              
+            <v-row>
+              <v-col cols="11" class="ms-3">
+                  <v-slider
+                    v-model="value"
+                    step="10"
+                    thumb-label
+                    ticks
+                ></v-slider>
+              </v-col>
+            </v-row>
              
             </v-card>
           </v-col>
@@ -274,11 +282,16 @@
                     <strong  class="d-flex  ms-3 ">Appearance Score</strong>
                     </V-col>
              </v-row>
-                <v-row class="checkbox ms-2 ">
-                      
-                  
-                    
-                </v-row>
+             <v-row>
+              <v-col cols="11" class="ms-3">
+                  <v-slider
+                    v-model="value"
+                    step="10"
+                    thumb-label
+                    ticks
+                ></v-slider>
+              </v-col>
+            </v-row>
              
           
               
@@ -341,7 +354,16 @@
              </v-row>
                 
               
-          
+             <v-row>
+              <v-col cols="11" class="ms-3">
+                  <v-slider
+                    v-model="value"
+                    step="10"
+                    thumb-label
+                    ticks
+                ></v-slider>
+              </v-col>
+            </v-row>
               
              
             </v-card>
@@ -391,9 +413,10 @@
         </v-row>
         <v-row>
           <v-col cols="2">
-            <v-btn class="submit-btn ">Submit</v-btn>
+            <v-btn class="submit-btn ">Submit </v-btn>
           </v-col>
         </v-row>
+        
       </v-container>
     </form>
   </template>
@@ -449,6 +472,15 @@
       items: ['Grade 1', 'Grade 2'],
       value: ['Grade 1', 'Grade 2'],
     }),
+  }
+</script>
+<script>
+  export default {
+    data () {
+      return {
+        value: 0,
+      }
+    },
   }
 </script>
   

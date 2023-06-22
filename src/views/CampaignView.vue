@@ -350,23 +350,7 @@
                           </v-autocomplete>
                         </v-col>
                         <v-col cols="6">
-                          <div class="text-body-1">Clusters*</div>
-                          <v-autocomplete
-                            clearable
-                            deletable-chips
-                            label="Choose Clusters"
-                            outlined
-                            v-model="campaignData.cluster_ids"
-                            required
-                            :rules="[(v) => !!v || 'Cluster is required']"
-                            class="rounded-xl"
-                            small-chips
-                            :items="clusters"
-                            multiple
-                            item-text="name"
-                            item-value="id"
-                          >
-                          </v-autocomplete>
+                         
                         </v-col>
                       </v-row>
                       <v-row class="py-0 px-0">
