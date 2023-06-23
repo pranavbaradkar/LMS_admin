@@ -23,8 +23,8 @@ import UserAssessmentView from '../views/UserAssessmentView.vue'
 import TeachersView from '../views/TeachersView.vue'
 import JobSeekersView from '../views/JobSeekersView.vue'
 import CampaignView from '../views/CampaignView.vue'
-import CandidatesFormview from '../views/CandidatesFormview.vue'
-import InterviewPanelView from '../views/InterviewPanelView.vue'
+// import CandidatesFormview from '../views/CandidatesFormview.vue'
+// import InterviewPanelView from '../views/InterviewPanelView.vue'
 
 
 Vue.use(VueRouter)
@@ -105,7 +105,7 @@ const routes = [
     }
   },
   {
-    path: '/users/profile',
+    path: '/users/profile/:id',
     name: 'user_profile',
     component: UserProfileView,
     meta: {
@@ -207,22 +207,22 @@ const routes = [
       requiresAuth: false,
     }
   },
-  {
-    path: '/candidates/form',
-    name: 'candidates_form',
-    component: CandidatesFormview,
-    meta: {
-      requiresAuth: true,
-    }
-  },
-  {
-    path: '/interview/panel',
-    name: 'interview_panel',
-    component: InterviewPanelView,
-    meta: {
-      requiresAuth: true,
-    }
-  },
+  // {
+  //   path: '/candidates/form',
+  //   name: 'candidates_form',
+  //   component: CandidatesFormview,
+  //   meta: {
+  //     requiresAuth: true,
+  //   }
+  // },
+  // {
+  //   path: '/interview/panel',
+  //   name: 'interview_panel',
+  //   component: InterviewPanelView,
+  //   meta: {
+  //     requiresAuth: true,
+  //   }
+  // },
 ]
 
 const router = new VueRouter({

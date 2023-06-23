@@ -53,15 +53,20 @@
       :headers="column"
       :items="recommendations"
     >
-      <template v-slot:[`item.actions`]="{}">
-        <img 
-        width="30px"
-         class="pt-2 cursor"
-          to="/users" src="../assets/user.svg" />
-         <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
-
+      <template v-slot:[`item.actions`]="{item}">
+        <div style="width: 80px">
+          <a :href="`/#/users/profile/${item.id}`">
+            <img 
+              width="30px"
+              class="pt-2 cursor"
+              src="../assets/user.svg"
+              />
+          </a>
+          <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
+        </div>
       </template>
-      <template v-slot:[`item.email`]="{item}">
+      <template v-slot:[`item.name`]="{item}">
+        <div>{{ item.name }}</div>
         <div>{{ item.email }}</div>
       </template>
       <template v-slot:[`item.levels`]="{item}">
@@ -71,7 +76,7 @@
         >
       </template>
       <template v-slot:[`item.ai_recommendation`]="{item}">
-        <div v-if="item.ai_recommendation !== 'NILL' " class="success-reco">
+        <div v-if="item.ai_recommendation" class="success-reco">
           <div>Recommended</div>
           <div class="normaltext">For <strong>{{ item.ai_recommendation }}</strong></div>
         </div>
@@ -79,7 +84,7 @@
       </template>
 
       <template v-slot:[`item.status`]="{item}">
-        <div style="width: 200px"><v-select
+        <div style="width: 150px"><v-select
           label="Status"
           single-line
           v-model="item.status"
@@ -242,7 +247,6 @@ export default {
       breadData: "menu1",
       column: [
         { text: "Name", value: "name" },
-        { text: "Email", value: "email" },
         { text: "Applied For Level", value: "levels" },
         { text: "Screening Score", value: "screening_score" },
         { text: "Main Score", value: "main_score" },
@@ -278,15 +282,16 @@ export default {
       this.recommendations = response.data.data.rows;
       this.recommendations = this.recommendations.map(e => {
           let dat = {
+            id: e.user_id,
             name: e.user.first_name,
-            email: e.user.email ? this.truncate(e.user.email) : 'NILL',
+            email: e.user.email ? e.user.email : ' - ',
             levels: e.levels,
-            screening_score: e.screening_score ? `${e.screening_score} / ${e.screening_score_total}` : 'NILL',
-            main_score: e.mains_score ? `${e.mains_score} / ${e.mains_score_total}` : 'NILL',
-            demo_score: e.demo_score ? `${e.demo_score} / ${e.demo_score_total}` : 'NILL',
-            interview_score:  e.interview_score ? `${e.interview_score} / ${e.interview_score_total}` : 'NILL',
+            screening_score: e.screening_score ? `${e.screening_score} / ${e.screening_score_total}` : ' - ',
+            main_score: e.mains_score ? `${e.mains_score} / ${e.mains_score_total}` : ' - ',
+            demo_score: e.demo_score ? `${e.demo_score} / ${e.demo_score_total}` : ' - ',
+            interview_score:  e.interview_score ? `${e.interview_score} / ${e.interview_score_total}` : ' - ',
             status: this.statusItems.find(v => { return v.key == e.status}),
-            ai_recommendation: e.ai_recommendation ? e.ai_recommendation : 'NILL',
+            ai_recommendation: e.ai_recommendation,
           }
           let obj = {...dat};
           console.log(obj);

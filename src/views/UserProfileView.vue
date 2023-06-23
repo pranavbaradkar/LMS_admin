@@ -3,25 +3,11 @@
     <v-row>
       <v-col class="d-flex align-center">
         <div class="mt-2" v-if="showUsers">
-          <span class="m-4 cursor" @click="showUsers = false">Assessments</span>
+          <span class="m-4 cursor" @click="showUsers = false">Recommended</span>
           <v-icon>mdi-chevron-right</v-icon>
-          <span class="text--secondary">Assessment Name</span>
+          <span class="text--secondary">User Profile</span>
           <v-icon>mdi-chevron-right</v-icon>
-          <select
-            @change="
-              () => {
-                screeningMainsUser == 'false'
-                  ? fetchMainsUsers(selectedId)
-                  : fetchScreeningUsers(selectedId);
-              }
-            "
-            v-model="screeningMainsUser"
-          >
-            <option value="true" selected>
-              Dhrumil’s Profile page
-            </option>
-            <option value="false"> Dhrumil’s Profile pages</option>
-          </select>
+          <span class="text--secondary">{{ userData.first_name && userData.first_name }} {{ userData.last_name && userData.last_name }}</span>
         </div>
       </v-col>
       <v-col cols="4">
@@ -38,11 +24,11 @@
       <v-col cols="3" class="profile-col">
         <v-card class="rounded pa-3"  outlined>
           <div class="d-flex justify-center flex-column align-center py-8">
-            <img
-              height="80px"
-              width="80px"
-              :src="`https://knoggles-lms-assets.s3.amazonaws.com/masters/b2c/123-456-7/images/CISE_48px.svg`"
-            />
+            <v-avatar color="indigo" size="80">
+              <v-icon dark>
+                mdi-account-circle
+              </v-icon>
+            </v-avatar>
             <div class="profile-details mt-3">
               <div class="name">{{ userData.first_name && userData.first_name }} {{ userData.last_name && userData.last_name }}</div>
               <div class="email">{{ userData.email && userData.email }}</div>
@@ -53,7 +39,7 @@
           <div>
             <div class="profilesub-heading">School</div>
             <div class="profileDetails mt-2">
-              Vibgyor High (Malad East)
+             {{ userData.schoolData && userData.schoolData.join(', ') }}
             </div>
           </div>
 
@@ -62,14 +48,14 @@
           <div >
             <div class="profilesub-heading">Subject</div>
             <div class="profileDetails mt-2">
-              <v-chip>{{ 'Secondary' }}</v-chip><v-chip class="ms-2 mb-2">{{ 'test' }}</v-chip><v-chip  class="ms-2 mb-2">{{ 'sdsd' }}</v-chip>
+              <v-chip v-for="item,index in userData.subjectData" :key="index" class="me-1">{{ item }}</v-chip>
             </div>
           </div>
           <hr class="mt-2 mb-2" />
           <div class="mt-4">
             <div class="profilesub-heading">Level</div>
             <div class="profileDetails mt-2">
-              <v-chip>{{ 'Secondary' }}</v-chip><v-chip  class="ms-2 mb-2">{{ 'Secondary' }}</v-chip><v-chip  class="ms-2 mb-2">{{ 'Secondary' }}</v-chip><v-chip  class="ms-2 mb-2">{{ 'Secondary' }}</v-chip>
+              <v-chip v-for="item,index in userData.levelData" :key="index" class="me-1 mb-1" >{{ item }}</v-chip>
             </div>
           </div>
           
@@ -77,18 +63,21 @@
       </v-col>
       <v-col cols="9">
         <v-card class="rounded pa-8" outlined>
-          <div class="status-container">
+          <div class="status-container"  v-if="screeningData && screeningData.result">
             <div class="header-bagde">
                 <div class="header-container">
-                  <div class="success-badge"><i class="dot me-2" />Screening Passed</div>
-                  <div class="profile-title">Primary Teacher Assessment (VGOS) </div>
+                 
+                  <div v-if="screeningData.result == 'PASSED'" class="success-badge"><i class="dot me-2" />Screening Passed</div>
+                  <div v-if="screeningData.result == 'FAILED'" class="failed-badge"><i class="dot me-2" />Screening Failed</div>
+                  <div class="profile-title">{{ (screeningData.assessment && screeningData.assessment.name) && screeningData.assessment.name }} </div>
                 </div>
                 <div class="score">
                   <label>Score</label>
-                  <div class="per"><span>48/</span>60</div>
+                  <div class="per"><span>{{screeningData.total_scored}}/</span>{{screeningData.total}}</div>
                 </div>
                 <div>
                   <v-select
+                    v-if="screeningData.result == 'PASSED'"
                     label="Status"
                     :items="['Advanced To Mains Test']"
                     v-model="screening_status"
@@ -98,35 +87,32 @@
             </div>
 
             <div class="row skills">
-              <div class="col-6 ">
-                <div class="skill color-1">
-                  <div class="skill-title">Core Skill - Social Science</div>
-                  <div class="skill-score">6/10</div>
-                </div>
-                
-              </div>
-              <div class="col-6">
-                <div class="skill color-2">
-                  <div class="skill-title">Core Skill - Social Science</div>
-                  <div class="skill-score">6/10</div>
+              <div  
+                v-for="(value, key, index) of screeningData.skill_scores" 
+                :key="`${key}-scr`" class="col-6">
+                <div class="skill" :class="`color-${index+1}`">
+                  <div class="skill-title">{{ key }} </div>
+                  <div class="skill-score">{{value}}/10</div>
                 </div>
               </div>
             </div>
 
           </div>
 
-          <div class="status-container">
+          <div class="status-container" v-if="mainsData && mainsData.result">
             <div class="header-bagde">
                 <div class="header-container">
-                  <div class="success-badge"><i class="dot me-2" />Mains Passed</div>
-                  <div class="profile-title">Primary Teacher Assessment (VGOS) </div>
+                  <div v-if="mainsData.result == 'PASSED'" class="success-badge"><i class="dot me-2" />Mains Passed</div>
+                  <div v-if="mainsData.result == 'FAILED'" class="failed-badge"><i class="dot me-2" />Mains Failed</div>
+                  <div class="profile-title">{{ (mainsData.assessment && mainsData.assessment.name) && mainsData.assessment.name }}</div>
                 </div>
                 <div class="score">
                   <label>Score</label>
-                  <div class="per"><span>108/</span>120</div>
+                  <div class="per"><span>{{mainsData.total_scored}}/</span>{{mainsData.total}}</div>
                 </div>
                 <div>
                   <v-select
+                    v-if="mainsData.result == 'PASSED'"
                     label="Status"
                     :items="['Selected For Demo Video']"
                     v-model="mains_status"
@@ -136,34 +122,12 @@
             </div>
 
             <div class="row skills">
-              <div class="col-4">
-                <div class="skill color-1">
-                  <div class="skill-title">Core Skill - Social Science</div>
-                  <div class="skill-score">6/10</div>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="skill color-2">
-                  <div class="skill-title">Core Skill - Social Science</div>
-                  <div class="skill-score">6/10</div>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="skill color-3">
-                  <div class="skill-title">Core Skill - Social Science</div>
-                  <div class="skill-score">6/10</div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="skill color-4">
-                  <div class="skill-title">Core Skill - Social Science</div>
-                  <div class="skill-score">6/10</div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="skill color-5">
-                  <div class="skill-title">Core Skill - Social Science</div>
-                  <div class="skill-score">6/10</div>
+              <div  
+                v-for="(value, key, index) of mainsData.skill_scores" 
+                :key="`${key}-scr`" class="col-4">
+                <div class="skill" :class="`color-${index+1}`">
+                  <div class="skill-title">{{ key }} </div>
+                  <div class="skill-score">{{value}}/10</div>
                 </div>
               </div>
               
@@ -171,11 +135,14 @@
 
           </div>
 
-          <div class="status-container">
+          <div class="status-container"  
+          v-for="(value, key) of demoVideos"
+          :key="`${key}-ddd`"
+          >
             <div class="header-bagde">
                 <div class="header-container">
                   <div class="success-badge"><i class="dot me-2" />Demo Video Selected </div>
-                  <div class="profile-title">Demo Video </div>
+                  <div class="profile-title">{{ value.assessment.name }} </div>
                 </div>
                 
                 <div>
@@ -191,7 +158,7 @@
             <div class="row">
               <v-col col="6">
                 <video width="320" >
-                  <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4">
+                  <source :src="value.video_link" type="video/mp4">
                 </video>
               </v-col>
               <v-col col="6">
@@ -199,29 +166,13 @@
               </v-col>
             </div>
 
-            <div class="row skills">
-              <div class="col-3">
-                <div class="skill demo-video color-1">
-                  <div class="skill-title">Knowledge Score</div>
-                  <div class="skill-score">6/10</div>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="skill demo-video color-2">
-                  <div class="skill-title">Confidences Score </div>
-                  <div class="skill-score">6/10</div>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="skill demo-video color-3">
-                  <div class="skill-title">Behavioral Score </div>
-                  <div class="skill-score">6/10</div>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="skill demo-video color-4">
-                  <div class="skill-title">Fluency Score</div>
-                  <div class="skill-score">6/10</div>
+            <div class="row skills" >
+              <div class="col-3"   
+              v-for="(val, k) of value.scores"
+              :key="`${k}-ddd`">
+                <div class="skill demo-video" :class="`color-${k+1}`">
+                  <div class="skill-title">{{ Object.keys(val)[0] ? Object.keys(val)[0].split("_").join(" ") : ' - ' }}</div>
+                  <div class="skill-score">{{ val[Object.keys(val)[0]] }}/{{ val.total }}</div>
                 </div>
               </div>
             </div>
@@ -272,62 +223,8 @@ export default {
       rules: {
         required: (value) => !!value || "Field is required",
       },
+      showUsers:true,
       successMessage:'New Assessment Created',
-      selectedSkillSubjects: [],
-      selectedSkillSubjectsMains: [],
-      MainsDialog: false,
-      selectedSubjects: [
-        {
-          subject_id: 0,
-          no_of_questions: 0,
-        },
-      ],
-      selectedSubjectsMains: [
-        {
-          subject_id: 0,
-          no_of_questions: 0,
-        },
-      ],
-      screenPanel:[],
-      e1: 1,
-      showUsers: true,
-      cleared: [],
-      inProgress: [],
-      notCleared: [],
-      yetToAttempt: [],
-      search: null, 
-      name: "",
-      scrBtnShow:false,
-      screeningItem:0,
-      mainItem:0,
-      assessmentUsers: [],
-      screeningMainsUser: "true",
-      instructions: "",
-      filterDialog: false,
-      mainPanel:[],
-      mainBtnShow:false,
-      assessment_type: 'SCREENING',
-      screeningConfiguration: {
-        difficultyLevel: null,
-        totalNumberQuestions: null,
-        assessmentId: null,
-        teachingLevel: null,
-        searchSubjects: null,
-        correctAnswerScore: 1,
-        assessmentDuration: 0,
-        negativeMarking: "NO",
-        randomizeQuestions: "NO",
-        shuffleOptions: "NO",
-        displayCorrectAnswer: "NO",
-        displayResult: "NO",
-        selectedId: null,
-        passingCriteria: 40,
-        timeUpFirstReminder: null,
-        timeUpLastReminder: null,
-        assessmentType: "SCREENING",
-        skillsFields: [{ skill_id: null, no_of_questions: 10 }],
-        
-      },
       breadItems: [
         {
           text: "Dashboard",
@@ -350,93 +247,72 @@ export default {
           href: "",
         },
       ],
-      publishData: {
-          id: null,
-          assessmentType: null,
-        },
-      skill_questions: [],
-      skillQuestions: [],
-      mainsQuestions: [],
-      mainsConfiguration: {
-        difficultyLevel: null,
-        totalNumberQuestions: null,
-        teachingLevel: null,
-        correctAnswerScore: 1,
-        assessmentDuration: null,
-        negativeMarking: "NO",
-        randomizeQuestions: "NO",
-        shuffleOptions: "NO",
-        displayCorrectAnswer: "NO",
-        displayResult: "NO",
-        passingCriteria: 40,
-        timeUpFirstReminder: null,
-        timeUpLastReminder: null,
-        assessmentType: "MAINS",
-        skillsFields: [{ skill_id: null, no_of_questions: 10 }],
-      },
-      screeningUsers: [],
-      errorMessage: "Failed",
-      dialog: false,
-      subjectDialog: false,
-      singleSelect: true,
-      selected: [],
-      successDialog: false,
-      errorDialog: false,
-      deleteDialog: false,
-      publishDialog: false,
-      subjectData: [],
-      selectedSkillsFilter: [],
+      screeningMainsUser: "true",
+      userId: null,
       screening_status:  "Advanced To Mains Test",
       mains_status: "Selected For Demo Video",
       demo_status: "Recommended For Interview",
       interview_status: "Recommended For Offer Letter",
-      headers: [
-        { text: "Assessment Name", value: "name" },
-        { text: "Created At", value: "created_at" },
-        { text: "Instructions", value: "instructions" },
-        { text: "Score Type", value: "score_type" },
-        { text: "Actions", value: "actions" },
-      ],
-      breadMenu: ["menu1", "menu2", "menu3"],
-      breadData: "menu1",
-      column: [
-        { text: "Name", value: "name" },
-        { text: "Apply For Level", value: "level" },
-        { text: "Screening Score", value: "screening_score" },
-        { text: "Main Score", value: "main_score" },
-        { text: "Demo Score", value: "demo_score"},
-        { text: "Interview Score", value: "interview_score" },
-        { text: "AI recommendation", value: "ai_recommendation" },
-        { text: "Status", value: "status" },
-        { text: "Actions", value: "actions" },
-      ],
-      assessments: [],
-      skillsList: [],
-      levels: [],
-      skillQuestionsIds: [],
-      mainsQuestionsIds: [],
-      editedSkill: null,
       userData: {},
+      demoVideos: [],
       screeningData: {},
       mainsData: {}
     };
   },
   methods: {
-    async userDetails() {
-        const response = await UsersController.getUserDetails(3675);
+    async userDetails(user_id) {
+        const response = await UsersController.getUserDetails(user_id);
        
         if(response && response.data && response.data.data) {
           this.userData = response.data.data;
-          this.screeningData = response.data.data && response.data.data.user_assessments ? response.data.data.user_assessments.find(ele => ele.type == 'SCREENING') : {}; 
-          this.mainsData = response.data.data && response.data.data.user_assessments ? response.data.data.user_assessments.find(ele => ele.type == '"MAINS"') : {}; 
+          this.screeningData = response.data.data && response.data.data.assessment_results ? response.data.data.assessment_results.find(ele => ele.type == 'SCREENING') : {}; 
+
+          this.demoVideos = response.data.data && response.data.data.demo_video ? response.data.data.demo_video : []; 
+
+          this.mainsData = response.data.data && response.data.data.assessment_results ? response.data.data.assessment_results.find(ele => ele.type == 'MAINS') : {}; 
+          if(this.screeningData && this.screeningData.skill_scores) {
+            let issubjectexist = Object.keys(this.screeningData.skill_scores);
+            if(issubjectexist.indexOf('Core Skill') >= 0) {
+              delete this.screeningData.skill_scores['Core Skill'];
+
+              if(this.screeningData.subject_scores) {
+                let objeUpdate = {};
+                Object.keys(this.screeningData.subject_scores).forEach(el => {
+                  if(el != 'null') {
+                    objeUpdate[`Core Skill - ${el}`] = this.screeningData.subject_scores[el];
+                  }
+                });
+                this.screeningData.skill_scores = {...objeUpdate, ...this.screeningData.skill_scores}
+              }
+            }
+            
+          }
+
+          if(this.mainsData && this.mainsData.skill_scores) {
+            let issubjectexist = Object.keys(this.mainsData.skill_scores);
+            if(issubjectexist.indexOf('Core Skill') >= 0) {
+              delete this.mainsData.skill_scores['Core Skill'];
+
+              if(this.mainsData.subject_scores) {
+                let objeUpdate = {};
+                Object.keys(this.mainsData.subject_scores).forEach(el => {
+                  if(el != 'null') {
+                    objeUpdate[`Core Skill - ${el}`] = this.mainsData.subject_scores[el];
+                  }
+                });
+                this.mainsData.skill_scores = {...objeUpdate, ...this.mainsData.skill_scores}
+              }
+            }
+            
+          }
         }
-        console.log(this.userData);
+        console.log(this.userData,this.screeningData, this.mainsData);
 
     },
   },
 
   created() {
-    this.userDetails();
+    this.userDetails(this.$route.params.id);
   },
 };
 </script>
