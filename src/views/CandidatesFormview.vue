@@ -367,7 +367,7 @@
              <v-row>
               <v-col cols="11" class="ms-3">
                   <v-slider
-                    v-model="value"
+                    v-model="overall_rating"
                     step="10"
                     thumb-label
                     ticks
@@ -413,11 +413,7 @@
                     ></v-radio>
                   </v-radio-group>
                 </v-row>
-             
-          
-              
-             
-            </v-card>
+           </v-card>
           </v-col>
           
         </v-row>
@@ -426,8 +422,7 @@
             <v-btn class="submit-btn">Submit </v-btn>
           </v-col>
         </v-row>
-        
-      </v-container>
+     </v-container>
     </form>
   </template>
   
@@ -440,57 +435,22 @@
     components: {
     
     },
-    
-  
+    data () {
+      return {
+        value: 0,
+        items: ['Grade 1', 'Grade 2'],
+      chip1: true,
+        chip2: true,
+        chip3: true,
+        chip4: true,
+        includeFiles: true,
+      enabled: false,
+      radioGroup: 1,
+      }
+    },
     created() {
       this.getDashboardData();
     },
   };
   </script>
-  <script>
-  export default {
-    data () {
-      return {
-        chip1: true,
-        chip2: true,
-        chip3: true,
-        chip4: true,
-      }
-    },
-  }
-</script>
-<script>
-  export default {
-    data: () => ({
-      includeFiles: true,
-      enabled: false,
-    }),
-  }
-</script>
-<script>
-  export default {
-    data () {
-      return {
-        radioGroup: 1,
-      }
-    },
-  }
-</script>
-<script>
-  export default {
-    data: () => ({
-      items: ['Grade 1', 'Grade 2'],
-      value: ['Grade 1', 'Grade 2'],
-    }),
-  }
-</script>
-<script>
-  export default {
-    data () {
-      return {
-        value: 0,
-      }
-    },
-  }
-</script>
   
