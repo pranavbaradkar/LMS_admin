@@ -1,5 +1,5 @@
 <template>
-    <form class="form">
+    <form >
       <v-container>
         <!-- VGOS -->
         <v-row>
@@ -140,12 +140,22 @@
               
               <v-row>
                 <v-col cols="6">
-                <span class="ms-5 gray">Current CTC- <strong class="ms-3 me-3">12</strong>LPA</span>
-                <v-divider class="mx-5 mt-1"></v-divider>
+                  <v-text-field
+                    v-model="first"
+                    color="primary"
+                    label=""
+                    variant="underlined"
+                    class="underline"
+                  ></v-text-field>
               </v-col>
               <v-col cols="6">
-                <span class="ms-5 gray">Expected CTC- <strong class="ms-3 me-3">15</strong>LPA</span>
-                <v-divider class="mx-5 mt-1"></v-divider>
+                <v-text-field
+                    v-model="first"
+                    color="primary"
+                    label=""
+                    variant="underlined"
+                    class="underline1"
+                  ></v-text-field>
               </v-col>
               </v-row>
             </v-card>
@@ -413,7 +423,7 @@
         </v-row>
         <v-row>
           <v-col cols="2">
-            <v-btn class="submit-btn ">Submit </v-btn>
+            <v-btn class="submit-btn">Submit </v-btn>
           </v-col>
         </v-row>
         

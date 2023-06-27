@@ -123,7 +123,7 @@
                 </v-row>
                 <v-row class="">
                     <v-col cols="2" class="ms-5 mb-4 ">
-                        <v-btn class=" end-btn ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
+                        <v-btn class="end-btn" to="/candidates/form">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
                     </v-col>
                 </v-row>
             </div>    
@@ -211,7 +211,7 @@
                 </v-row>
                 <v-row class="">
                     <v-col cols="2" class="ms-5 mb-4 ">
-                        <v-btn class="end-btn ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
+                        <v-btn class="end-btn "    >start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
                     </v-col>
                 </v-row>
             </div>    
