@@ -584,6 +584,17 @@ color: #4D4D4D;
   display: inline-block;
 }
 
+.warning-badge {
+  color: rgb(255 193 7);
+  padding: 4px 8px;
+  font-size: 14px;
+  background: rgb(255 193 7 / 10%);
+  border-radius: 68px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
 .failed-badge {
   color: rgb(255 3 3 / 80%);
   padding: 4px 8px;
@@ -667,6 +678,10 @@ color: #4D4D4D;
 }
 .failed-badge .dot {
   background-color: rgb(255 7 7 / 80%)
+}
+
+.warning-badge .dot {
+  background-color: rgb(255 193 7);
 }
 
 .header-container .profile-title {
