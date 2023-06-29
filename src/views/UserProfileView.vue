@@ -160,7 +160,7 @@
 
               <div class="row">
                 <v-col col="6">
-                  <video width="320" >
+                  <video width="320" controls>
                     <source :src="value.video_link" type="video/mp4">
                   </video>
                 </v-col>
