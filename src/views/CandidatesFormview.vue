@@ -274,26 +274,19 @@
                 ></v-slider>
               </v-col>
             </v-row>
-             
-            </v-card>
-          </v-col>
-          <v-col cols="6">
-            <v-card class="rounded-xl cross-card " outlined>
-                <v-row class="mt-2">
-                   <V-col cols="" class="four  ms-3">
-                        <v-btn
-                                class="mx-2 btn-gray"
-                                fab
-                                disable
-                                small
-                            color=""
-                            >
-                        7
-                    </v-btn> 
-                    <strong  class="d-flex  ms-3 ">Appearance Score</strong>
-                    </V-col>
-             </v-row>
-             <v-row>
+          </v-card>
+        </v-col>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <v-row class="mt-2">
+              <V-col cols="" class="four ms-3">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  7
+                </v-btn>
+                <strong class="d-flex ms-3">Appearance Score</strong>
+              </V-col>
+            </v-row>
+            <v-row>
               <v-col cols="11" class="ms-3">
                   <v-slider
                   v-model="appearence_score"
