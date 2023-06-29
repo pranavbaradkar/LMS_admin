@@ -2,7 +2,7 @@
     <div class="container ">
       <v-container>
         <!-- VGOS -->
-        <v-row justify="space-between" class="my-8 mt-0 mb-2" v-if="showUsers">
+        <v-row justify="space-between" class="my-8 mt-0 mb-2">
       <v-col cols="4" sm="4" md="4">
         <div class="text-h5 ml-0"></div>
       </v-col>
@@ -42,7 +42,7 @@
      </v-row>    
         <v-row class="section1">
 
-          <v-col cols="3">
+          <v-col v-for="(item,index) in this.interviewData" :key="index" cols="4">
             <v-card class="rounded-xl card" cols="3"  outlined>
                 <v-row>
                     <V-col cols="2">
@@ -55,25 +55,22 @@
                     </V-col>
                     
                     <v-col cols="10" class="mt-2 avtar-left">
-                        <span  class=" ms-1  ">Dhrumil Mankodiya</span>
+                        <span  class=" ms-1  ">{{ item.user.first_name + ' ' + item.user.last_name}}</span>
                     <div class="">
                         <v-chip
+                            v-for="level in item.levels.slice(0,3)"
+                            :key="level"
                             class="ma-1 fs"
                             small
                             >
-                            Primary
+                            {{level}}
                         </v-chip>
                         <v-chip
-                            class="ma-1 fs"
-                            small
-                            >
-                            Secondary
-                        </v-chip>
-                        <v-chip
+                           v-if="item.levels.length > 3"
                             class="ma-1 circle-chip"
                             small
                             >
-                            1+
+                            +{{ item.levels.length - 3}}
                         </v-chip>
                     </div>
                     </v-col>
@@ -85,678 +82,52 @@
                     <v-col cols="2" class="ms-5 mt-1">
                      <img src="../assets/user-tag.svg" cols="" alt="">  
                     </v-col>
-                    <v-col class="user-tag"> <span class="color" cols="10">Assessed to  </span><strong>Kristin Watson</strong></v-col>
+                    <v-col class="user-tag"> <span class="color" cols="10">Assessed to  </span><strong>{{ item.interviewer }}</strong></v-col>
                   
                 </v-row>
                 <v-row  class="mb">
                     <v-col cols="2" class="ms-5 mt-1 ">
                      <img src="../assets/Vector.svg" cols="" alt="">  
                     </v-col>
-                    <v-col class="user-tag"> <span class="color" cols="10">Mathematics, Science, English  </span></v-col>
+                    <v-col class="user-tag"> <span class="color" cols="10" v-for="(subject, index) in item.subjects" :key="subject">{{ subject }}{{ index != item.subjects.length - 1 ? ',' : ''}}</span></v-col>
                   
                 </v-row>
                 <v-row  class="mb">
                     <v-col cols="2" class="ms-5 mt-1">
                      <img src="../assets/Vector (8).svg" cols="" alt="">  
                     </v-col>
-                    <v-col class="user-tag1 "> <span class="color" cols="">16/04/2023 (14:00-15:00)</span></v-col>
+                    <v-col class="user-tag1 pl-0"> <span class="color" cols="">{{ new Date(item.interview_slot).toLocaleDateString() }} {{ '(' }} {{ new Date(item.interview_slot).toLocaleTimeString('en',{hour12:false,hour:'numeric',minute:'numeric'})}} - {{ new Date(new Date(item.interview_slot).setHours(new Date(item.interview_slot).getHours() + 1)).getHours() + ':' + new Date(new Date(item.interview_slot).setHours(new Date(item.interview_slot).getHours() + 1)).getMinutes()}} {{ ')' }}</span></v-col>
                   
                 </v-row>
                 <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1 ">
+                    <v-col cols="2" class="ms-5 mt-1 "> 
                      <img src="../assets/Vector (9).svg" cols="" alt="">  
                     </v-col>
                     <v-col cols="" class="user-tag">
-                        <span>Vibgyor High- Borivali </span>
-                        <p class="para ">Motilal Nagar - 1, Srirang Sabde Marg,Off Li...</p>
+                        <span>{{ item.exam_location}}</span>
+                        <!-- <p class="para ">Motilal Nagar - 1, Srirang Sabde Marg,Off Li...</p> -->
                     </v-col>
                   
                 </v-row>
-                <v-row class="mb">
+                <v-row class="mb" v-if="item.recommended_level">
                     <v-col cols="2" class="ms-5  mt-1">
                      <img src="../assets/Vector (10).svg" cols="" alt="">  
                     </v-col>
                     <v-col cols="8" class="user-tag">
-                 <p> <span class="recommend1 ">Recommended</span> <span>For</span> <strong>Grade 7</strong></p>
+                 <p> <span class="recommend1 ">Recommended</span> <span>For</span> <strong>{{ item.recommended_level}}</strong></p>
                 </v-col>
                   
                 </v-row>
                 <v-row class="">
-                    <v-col cols="2" class="ms-5 mb-4 ">
-                        <v-btn class=" end-btn ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
+                    <v-col cols="2" class="ms-5 mt-2 ">
+                        <v-btn @click="startInterview(item.user_id, item.recommended_level, item.levels, item.user.first_name + ' ' + item.user.last_name)" class=" end-btn ">{{item.status === 'PENDING' ? 'Start Interview' : 'Response Submitted'}} <span v-if="item.status === 'PENDING'" class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
                     </v-col>
                 </v-row>
             </div>    
                 
             </v-card>
           </v-col>
-          <v-col cols="3">
-            <v-card class="rounded-xl card " cols="3"  outlined>
-                <v-row>
-                    <V-col cols="2">
-                    <v-avatar class="mt-3 ms-3">
-                            <img
-                                src="../assets/Ellipse 95.svg"
-                                alt="John"
-                            >
-                        </v-avatar>   
-                    </V-col>
-                    
-                    <v-col cols="10" class="mt-2 avtar-left">
-                        <span  class=" ms-1  ">Dhrumil Mankodiya</span>
-                    <div class="">
-                        <v-chip
-                            class="ma-1 fs"
-                            small
-                            >
-                            Primary
-                        </v-chip>
-                        <v-chip
-                            class="ma-1 fs"
-                            small
-                            >
-                            Secondary
-                        </v-chip>
-                        <v-chip
-                            class="ma-1 circle-chip"
-                            small
-                            >
-                            1+
-                        </v-chip>
-                    </div>
-                    </v-col>
-                  
-                
-                </v-row> 
-              <div class="information">
-                <v-row class="mb"> 
-                    <v-col cols="2" class="ms-5 mt-1">
-                     <img src="../assets/user-tag.svg" cols="" alt="">  
-                    </v-col>
-                    <v-col class="user-tag"> <span class="color" cols="10">Assessed to  </span><strong>Kristin Watson</strong></v-col>
-                  
-                </v-row>
-                <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1 ">
-                     <img src="../assets/Vector.svg" cols="" alt="">  
-                    </v-col>
-                    <v-col class="user-tag"> <span class="color" cols="10">Mathematics, Science, English  </span></v-col>
-                  
-                </v-row>
-                <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1">
-                     <img src="../assets/Vector (8).svg" cols="" alt="">  
-                    </v-col>
-                    <v-col class="user-tag1 "> <span class="color" cols="">16/04/2023 (14:00-15:00)</span></v-col>
-                  
-                </v-row>
-                <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1 ">
-                     <img src="../assets/Vector (9).svg" cols="" alt="">  
-                    </v-col>
-                    <v-col cols="" class="user-tag">
-                        <span>Vibgyor High- Borivali </span>
-                        <p class="para ">Motilal Nagar - 1, Srirang Sabde Marg,Off Li...</p>
-                    </v-col>
-                  
-                </v-row>
-                <v-row class="mb">
-                    <v-col cols="2" class="ms-5  mt-1">
-                     <img src="../assets/Vector (10).svg" cols="" alt="">  
-                    </v-col>
-                    <v-col cols="8" class="user-tag">
-                 <p> <span class="recommend1 ">Recommended</span> <span>For</span> <strong>Grade 7</strong></p>
-                </v-col>
-                  
-                </v-row>
-                <v-row class="">
-                    <v-col cols="2" class="ms-5 mb-4 ">
-                        <v-btn class="end-btn ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
-                    </v-col>
-                </v-row>
-            </div>    
-                
-            </v-card>
-          </v-col>
-          <v-col cols="3">
-            <v-card class="rounded-xl card" cols="3"  outlined>
-                <v-row>
-                    <V-col cols="2">
-                    <v-avatar class="mt-3 ms-3">
-                            <img
-                                src="../assets/Ellipse 95.svg"
-                                alt="John"
-                            >
-                        </v-avatar>   
-                    </V-col>
-                    
-                    <v-col cols="10" class="mt-2 avtar-left">
-                        <span  class=" ms-1  ">Dhrumil Mankodiya</span>
-                    <div class="">
-                        <v-chip
-                            class="ma-1 fs"
-                            small
-                            >
-                            Primary
-                        </v-chip>
-                        <v-chip
-                            class="ma-1 fs"
-                            small
-                            >
-                            Secondary
-                        </v-chip>
-                        <v-chip
-                            class="ma-1 circle-chip"
-                            small
-                            >
-                            1+
-                        </v-chip>
-                    </div>
-                    </v-col>
-                  
-                
-                </v-row> 
-              <div class="information">
-                <v-row class="mb"> 
-                    <v-col cols="2" class="ms-5 mt-1">
-                     <img src="../assets/user-tag.svg" cols="" alt="">  
-                    </v-col>
-                    <v-col class="user-tag"> <span class="color" cols="10">Assessed to  </span><strong>Kristin Watson</strong></v-col>
-                  
-                </v-row>
-                <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1 ">
-                     <img src="../assets/Vector.svg" cols="" alt="">  
-                    </v-col>
-                    <v-col class="user-tag"> <span class="color" cols="10">Mathematics, Science, English  </span></v-col>
-                  
-                </v-row>
-                <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1">
-                     <img src="../assets/Vector (8).svg" cols="" alt="">  
-                    </v-col>
-                    <v-col class="user-tag1 "> <span class="color" cols="">16/04/2023 (14:00-15:00)</span></v-col>
-                  
-                </v-row>
-                <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1 ">
-                     <img src="../assets/Vector (9).svg" cols="" alt="">  
-                    </v-col>
-                    <v-col cols="" class="user-tag">
-                        <span>Vibgyor High- Borivali </span>
-                        <p class="para ">Motilal Nagar - 1, Srirang Sabde Marg,Off Li...</p>
-                    </v-col>
-                  
-                </v-row>
-                <v-row class="mb">
-                    <v-col cols="2" class="ms-5  mt-1">
-                     <img src="../assets/Vector (10).svg" cols="" alt="">  
-                    </v-col>
-                    <v-col cols="8" class="user-tag">
-                 <p> <span class="recommend1 ">Recommended</span> <span>For</span> <strong>Grade 7</strong></p>
-                </v-col>
-                  
-                </v-row>
-                <v-row class="">
-                    <v-col cols="2" class="ms-5  ">
-                        <v-btn class=" end-btn ms-5 ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
-                    </v-col>
-                </v-row>
-            </div>    
-                
-            </v-card>
-          </v-col>
-          <v-col cols="3">
-            <v-card class="rounded-xl card" cols="3"  outlined>
-                <v-row>
-                    <V-col cols="2">
-                    <v-avatar class="mt-3 ms-3">
-                            <img
-                                src="../assets/Ellipse 95.svg"
-                                alt="John"
-                            >
-                        </v-avatar>   
-                    </V-col>
-                    
-                    <v-col cols="10" class="mt-2 avtar-left">
-                        <span  class=" ms-1  ">Dhrumil Mankodiya</span>
-                    <div class="">
-                        <v-chip
-                            class="ma-1 fs"
-                            small
-                            >
-                            Primary
-                        </v-chip>
-                        <v-chip
-                            class="ma-1 fs"
-                            small
-                            >
-                            Secondary
-                        </v-chip>
-                        <v-chip
-                            class="ma-1 circle-chip"
-                            small
-                            >
-                            1+
-                        </v-chip>
-                    </div>
-                    </v-col>
-                  
-                
-                </v-row> 
-              <div class="information">
-                <v-row class="mb"> 
-                    <v-col cols="2" class="ms-5 mt-1">
-                     <img src="../assets/user-tag.svg" cols="" alt="">  
-                    </v-col>
-                    <v-col class="user-tag"> <span class="color" cols="10">Assessed to  </span><strong>Kristin Watson</strong></v-col>
-                  
-                </v-row>
-                <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1 ">
-                     <img src="../assets/Vector.svg" cols="" alt="">  
-                    </v-col>
-                    <v-col class="user-tag"> <span class="color" cols="10">Mathematics, Science, English  </span></v-col>
-                  
-                </v-row>
-                <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1">
-                     <img src="../assets/Vector (8).svg" cols="" alt="">  
-                    </v-col>
-                    <v-col class="user-tag1 "> <span class="color" cols="">16/04/2023 (14:00-15:00)</span></v-col>
-                  
-                </v-row>
-                <v-row  class="mb">
-                    <v-col cols="2" class="ms-5 mt-1 ">
-                     <img src="../assets/Vector (9).svg" cols="" alt="">  
-                    </v-col>
-                    <v-col cols="" class="user-tag">
-                        <span>Vibgyor High- Borivali </span>
-                        <p class="para ">Motilal Nagar - 1, Srirang Sabde Marg,Off Li...</p>
-                    </v-col>
-                  
-                </v-row>
-                <v-row class="mb">
-                    <v-col cols="2" class="ms-5  mt-1">
-                     <img src="../assets/Vector (10).svg" cols="" alt="">  
-                    </v-col>
-                    <v-col cols="8" class="user-tag">
-                 <p> <span class="recommend1 ">Recommended</span> <span>For</span> <strong>Grade 7</strong></p>
-                </v-col>
-                  
-                </v-row>
-                <v-row class="">
-                    <v-col cols="2" class="ms-5  ">
-                        <v-btn class=" end-btn ms-5 ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
-                    </v-col>
-                </v-row>
-            </div>    
-                
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row class="section1 mt-2">
-
-        <v-col cols="3">
-          <v-card class="rounded-xl card" cols="3"  outlined>
-              <v-row>
-                  <V-col cols="2">
-                  <v-avatar class="mt-3 ms-3">
-                          <img
-                              src="../assets/Ellipse 95.svg"
-                              alt="John"
-                          >
-                      </v-avatar>   
-                  </V-col>
-                  
-                  <v-col cols="10" class="mt-2 avtar-left">
-                      <span  class=" ms-1  ">Dhrumil Mankodiya</span>
-                  <div class="">
-                      <v-chip
-                          class="ma-1 fs"
-                          small
-                          >
-                          Primary
-                      </v-chip>
-                      <v-chip
-                          class="ma-1 fs"
-                          small
-                          >
-                          Secondary
-                      </v-chip>
-                      <v-chip
-                          class="ma-1 circle-chip"
-                          small
-                          >
-                          1+
-                      </v-chip>
-                  </div>
-                  </v-col>
-                
-              
-              </v-row> 
-            <div class="information">
-              <v-row class="mb"> 
-                  <v-col cols="2" class="ms-5 mt-1">
-                  <img src="../assets/user-tag.svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag"> <span class="color" cols="10">Assessed to  </span><strong>Kristin Watson</strong></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1 ">
-                  <img src="../assets/Vector.svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag"> <span class="color" cols="10">Mathematics, Science, English  </span></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1">
-                  <img src="../assets/Vector (8).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag1 "> <span class="color" cols="">16/04/2023 (14:00-15:00)</span></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1 ">
-                  <img src="../assets/Vector (9).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col cols="" class="user-tag">
-                      <span>Vibgyor High- Borivali </span>
-                      <p class="para ">Motilal Nagar - 1, Srirang Sabde Marg,Off Li...</p>
-                  </v-col>
-                
-              </v-row>
-              <v-row class="mb">
-                  <v-col cols="2" class="ms-5  mt-1">
-                  <img src="../assets/Vector (10).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col cols="8" class="user-tag">
-              <p> <span class="recommend1 ">Recommended</span> <span>For</span> <strong>Grade 7</strong></p>
-              </v-col>
-                
-              </v-row>
-              <v-row class="">
-                  <v-col cols="2" class="ms-5 mb-4 ">
-                      <v-btn class=" end-btn ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
-                  </v-col>
-              </v-row>
-          </div>    
-              
-          </v-card>
-        </v-col>
-        <v-col cols="3">
-          <v-card class="rounded-xl card " cols="3"  outlined>
-              <v-row>
-                  <V-col cols="2">
-                  <v-avatar class="mt-3 ms-3">
-                          <img
-                              src="../assets/Ellipse 95.svg"
-                              alt="John"
-                          >
-                      </v-avatar>   
-                  </V-col>
-                  
-                  <v-col cols="10" class="mt-2 avtar-left">
-                      <span  class=" ms-1  ">Dhrumil Mankodiya</span>
-                  <div class="">
-                      <v-chip
-                          class="ma-1 fs"
-                          small
-                          >
-                          Primary
-                      </v-chip>
-                      <v-chip
-                          class="ma-1 fs"
-                          small
-                          >
-                          Secondary
-                      </v-chip>
-                      <v-chip
-                          class="ma-1 circle-chip"
-                          small
-                          >
-                          1+
-                      </v-chip>
-                  </div>
-                  </v-col>
-                
-              
-              </v-row> 
-            <div class="information">
-              <v-row class="mb"> 
-                  <v-col cols="2" class="ms-5 mt-1">
-                  <img src="../assets/user-tag.svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag"> <span class="color" cols="10">Assessed to  </span><strong>Kristin Watson</strong></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1 ">
-                  <img src="../assets/Vector.svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag"> <span class="color" cols="10">Mathematics, Science, English  </span></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1">
-                  <img src="../assets/Vector (8).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag1 "> <span class="color" cols="">16/04/2023 (14:00-15:00)</span></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1 ">
-                  <img src="../assets/Vector (9).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col cols="" class="user-tag">
-                      <span>Vibgyor High- Borivali </span>
-                      <p class="para ">Motilal Nagar - 1, Srirang Sabde Marg,Off Li...</p>
-                  </v-col>
-                
-              </v-row>
-              <v-row class="mb">
-                  <v-col cols="2" class="ms-5  mt-1">
-                  <img src="../assets/Vector (10).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col cols="8" class="user-tag">
-              <p> <span class="recommend1 ">Recommended</span> <span>For</span> <strong>Grade 7</strong></p>
-              </v-col>
-                
-              </v-row>
-              <v-row class="">
-                  <v-col cols="2" class="ms-5 mb-4 ">
-                      <v-btn class="end-btn ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
-                  </v-col>
-              </v-row>
-          </div>    
-              
-          </v-card>
-        </v-col>
-        <v-col cols="3">
-          <v-card class="rounded-xl card" cols="3"  outlined>
-              <v-row>
-                  <V-col cols="2">
-                  <v-avatar class="mt-3 ms-3">
-                          <img
-                              src="../assets/Ellipse 95.svg"
-                              alt="John"
-                          >
-                      </v-avatar>   
-                  </V-col>
-                  
-                  <v-col cols="10" class="mt-2 avtar-left">
-                      <span  class=" ms-1  ">Dhrumil Mankodiya</span>
-                  <div class="">
-                      <v-chip
-                          class="ma-1 fs"
-                          small
-                          >
-                          Primary
-                      </v-chip>
-                      <v-chip
-                          class="ma-1 fs"
-                          small
-                          >
-                          Secondary
-                      </v-chip>
-                      <v-chip
-                          class="ma-1 circle-chip"
-                          small
-                          >
-                          1+
-                      </v-chip>
-                  </div>
-                  </v-col>
-                
-              
-              </v-row> 
-            <div class="information">
-              <v-row class="mb"> 
-                  <v-col cols="2" class="ms-5 mt-1">
-                  <img src="../assets/user-tag.svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag"> <span class="color" cols="10">Assessed to  </span><strong>Kristin Watson</strong></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1 ">
-                  <img src="../assets/Vector.svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag"> <span class="color" cols="10">Mathematics, Science, English  </span></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1">
-                  <img src="../assets/Vector (8).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag1 "> <span class="color" cols="">16/04/2023 (14:00-15:00)</span></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1 ">
-                  <img src="../assets/Vector (9).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col cols="" class="user-tag">
-                      <span>Vibgyor High- Borivali </span>
-                      <p class="para ">Motilal Nagar - 1, Srirang Sabde Marg,Off Li...</p>
-                  </v-col>
-                
-              </v-row>
-              <v-row class="mb">
-                  <v-col cols="2" class="ms-5  mt-1">
-                  <img src="../assets/Vector (10).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col cols="8" class="user-tag">
-              <p> <span class="recommend1 ">Recommended</span> <span>For</span> <strong>Grade 7</strong></p>
-              </v-col>
-                
-              </v-row>
-              <v-row class="">
-                  <v-col cols="2" class="ms-5  ">
-                      <v-btn class=" end-btn ms-5 ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
-                  </v-col>
-              </v-row>
-          </div>    
-              
-          </v-card>
-        </v-col>
-        <v-col cols="3">
-          <v-card class="rounded-xl card" cols="3"  outlined>
-              <v-row>
-                  <V-col cols="2">
-                  <v-avatar class="mt-3 ms-3">
-                          <img
-                              src="../assets/Ellipse 95.svg"
-                              alt="John"
-                          >
-                      </v-avatar>   
-                  </V-col>
-                  
-                  <v-col cols="10" class="mt-2 avtar-left">
-                      <span  class=" ms-1  ">Dhrumil Mankodiya</span>
-                  <div class="">
-                      <v-chip
-                          class="ma-1 fs"
-                          small
-                          >
-                          Primary
-                      </v-chip>
-                      <v-chip
-                          class="ma-1 fs"
-                          small
-                          >
-                          Secondary
-                      </v-chip>
-                      <v-chip
-                          class="ma-1 circle-chip"
-                          small
-                          >
-                          1+
-                      </v-chip>
-                  </div>
-                  </v-col>
-                
-              
-              </v-row> 
-            <div class="information">
-              <v-row class="mb"> 
-                  <v-col cols="2" class="ms-5 mt-1">
-                  <img src="../assets/user-tag.svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag"> <span class="color" cols="10">Assessed to  </span><strong>Kristin Watson</strong></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1 ">
-                  <img src="../assets/Vector.svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag"> <span class="color" cols="10">Mathematics, Science, English  </span></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1">
-                  <img src="../assets/Vector (8).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col class="user-tag1 "> <span class="color" cols="">16/04/2023 (14:00-15:00)</span></v-col>
-                
-              </v-row>
-              <v-row  class="mb">
-                  <v-col cols="2" class="ms-5 mt-1 ">
-                  <img src="../assets/Vector (9).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col cols="" class="user-tag">
-                      <span>Vibgyor High- Borivali </span>
-                      <p class="para ">Motilal Nagar - 1, Srirang Sabde Marg,Off Li...</p>
-                  </v-col>
-                
-              </v-row>
-              <v-row class="mb">
-                  <v-col cols="2" class="ms-5  mt-1">
-                  <img src="../assets/Vector (10).svg" cols="" alt="">  
-                  </v-col>
-                  <v-col cols="8" class="user-tag">
-              <p> <span class="recommend1 ">Recommended</span> <span>For</span> <strong>Grade 7</strong></p>
-              </v-col>
-                
-              </v-row>
-              <v-row class="">
-                  <v-col cols="2" class="ms-5  ">
-                      <v-btn class=" end-btn ms-5 ">start interview <span class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols="" alt="">  </span></v-btn>
-                  </v-col>
-      </v-row>
-  </div>    
-      
-  </v-card>
-</v-col>
-        </v-row>
-        
-
-                
-          
-       
-        <!-- Job Seekers -->
-        
+          </v-row>  
       </v-container>
     </div>
   </template>
@@ -765,62 +136,39 @@
   // @ is an alias to /src
   
   import "../styles.css";
+  import InterviewController from '@/controllers/InterviewController'
   export default {
     name: "CandidatesFormview",
-    components: {
-    
+    data() {
+        return {
+        search: "",
+        filterDialog: false,
+        interviewData: [],
+        }
     },
-    
-  
+    methods: {
+        async getInterviewDetail () {
+            const response = await InterviewController.getInterviewDetails();
+            if (response.data.success) {
+               this.interviewData = response.data.data;
+            }
+            else {
+              alert('No data found')
+            }
+        },
+        startInterview (user_id, recommended_level, levels, name) {
+          this.$router.push({path: '/candidates/form',query:{
+            user_id: user_id,
+            recommended_level: recommended_level,
+            levels: levels,
+            name: name,
+          }})
+        }
+    },
     created() {
-      this.getDashboardData();
+        this.getInterviewDetail();
     },
   };
   </script>
-  <script>
-  export default {
-    data () {
-      return {
-        chip1: true,
-        chip2: true,
-        chip3: true,
-        chip4: true,
-      }
-    },
-  }
-</script>
-<script>
-  export default {
-    data: () => ({
-      includeFiles: true,
-      enabled: false,
-    }),
-  }
-</script>
-<script>
-  export default {
-    data () {
-      return {
-        radioGroup: 1,
-      }
-    },
-  }
-</script>
-<script>
-  export default {
-    data: () => ({
-      items: ['Grade 1', 'Grade 2'],
-      value: ['Grade 1', 'Grade 2'],
-    }),
-  }
-</script>
-<script>
-  export default {
-    data () {
-      return {
-        value: 0,
-      }
-    },
-  }
-</script>
+
   
