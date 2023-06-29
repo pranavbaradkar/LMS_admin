@@ -105,7 +105,7 @@ const routes = [
     }
   },
   {
-    path: '/users/profile',
+    path: '/users/profile/:id',
     name: 'user_profile',
     component: UserProfileView,
     meta: {

@@ -188,4 +188,17 @@ export default {
             return error.response;
         }
     },
+    getUserDetails: async function (user_id) {
+        try {
+            const response = await instance.get(`admin/users/details/${user_id}`
+                , {
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
 }

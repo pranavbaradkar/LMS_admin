@@ -584,6 +584,28 @@ color: #4D4D4D;
   display: inline-block;
 }
 
+.warning-badge {
+  color: rgb(255 193 7);
+  padding: 4px 8px;
+  font-size: 14px;
+  background: rgb(255 193 7 / 10%);
+  border-radius: 68px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.failed-badge {
+  color: rgb(255 3 3 / 80%);
+  padding: 4px 8px;
+  font-size: 14px;
+  background: rgb(255 4 4 / 10%);
+  border-radius: 68px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
 .skill-title, .skill-score {
   font-size: 14px;
   line-height: 15px;
@@ -635,6 +657,7 @@ color: #4D4D4D;
 }
 .demo-video .skill-title {
   font-size: 12px;
+  text-transform: capitalize;
 }
 .demo-video .skill-score {
   font-size: 18px;
@@ -652,6 +675,13 @@ color: #4D4D4D;
   border-radius: 50%;
   display: inline-block;
   background-color: rgba(6, 194, 112, 0.8);;
+}
+.failed-badge .dot {
+  background-color: rgb(255 7 7 / 80%)
+}
+
+.warning-badge .dot {
+  background-color: rgb(255 193 7);
 }
 
 .header-container .profile-title {
