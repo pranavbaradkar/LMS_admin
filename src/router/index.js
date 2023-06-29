@@ -23,6 +23,7 @@ import UserAssessmentView from '../views/UserAssessmentView.vue'
 import TeachersView from '../views/TeachersView.vue'
 import JobSeekersView from '../views/JobSeekersView.vue'
 import CampaignView from '../views/CampaignView.vue'
+import CreateQuestionView from '../views/CreateQuestionView.vue'
 // import CandidatesFormview from '../views/CandidatesFormview.vue'
 // import InterviewPanelView from '../views/InterviewPanelView.vue'
 
@@ -84,6 +85,14 @@ const routes = [
     path: '/question-bank',
     name: 'question bank',
     component: QuestionBankView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/create-question',
+    name: 'create question',
+    component: CreateQuestionView,
     meta: {
       requiresAuth: true,
     }
