@@ -32,4 +32,16 @@ export default {
             return error.response;
         }
     },
+    setToInterview: async function (data, user_id) {
+        try {
+            const response = await instance.post(`admin/user/${user_id}/interview`,data ,{
+                headers: {
+                    'Authorization': AuthService.getToken()
+                },
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
 }
