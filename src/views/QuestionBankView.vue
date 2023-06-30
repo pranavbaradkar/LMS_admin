@@ -758,9 +758,9 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item @click="createQuestionDialog = true">
+              <v-list-item @click="createQuestionDialog = false">
                 <v-list-item-title>
-                  <v-icon>mdi-book-open-variant </v-icon> CREATE NEW QUESTION
+                  <a href="/#/create-question"><v-icon >mdi-book-open-variant </v-icon>CREATE NEW QUESTION</a>
                 </v-list-item-title>
               </v-list-item>
 
