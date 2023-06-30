@@ -20,4 +20,16 @@ export default {
             return error.response;
         }
     },
+    setAIRecommendations: async function (data, user_id) {
+        try {
+            const response = await instance.put(`admin/user/${user_id}/recommend/status`,data,{
+                headers: {
+                    'Authorization': AuthService.getToken()
+                },
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
 }

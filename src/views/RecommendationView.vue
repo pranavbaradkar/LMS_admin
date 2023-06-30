@@ -54,7 +54,7 @@
       :items="recommendations"
     >
       <template v-slot:[`item.actions`]="{item}">
-        <div style="width: 80px">
+        <div style="width: 120px" class="d-flex">
           <a :href="`/#/users/profile/${item.id}`">
             <img 
               width="30px"
@@ -62,7 +62,27 @@
               src="../assets/user.svg"
               />
           </a>
-          <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
+          <div @click="() => {}" class="ml-2">
+            <img 
+              width="30px"
+              class="pt-2 cursor"
+              src="../assets/thumbs-up.svg"
+              />
+          </div>
+          <div class="ml-2">
+            <img 
+              width="30px"
+              class="pt-2 cursor"
+              src="../assets/thumbs-down.svg"
+              />
+          </div>
+          <div class="ml-2">
+            <img 
+              width="30px"
+              class="pt-2 cursor"
+              src="../assets/iv-grey.svg"
+              />
+          </div>
         </div>
       </template>
       <template v-slot:[`item.name`]="{item}">
