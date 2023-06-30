@@ -76,19 +76,66 @@
                     </v-col>
                     <v-col class="py-0" cols="6">
                       <div class="text-body-1 my-2">Psychometric*</div>
+                      <v-checkbox v-model="checkbox">
+                      <template v-slot:label>
+                        <div>
+                          I agree that
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                              <a
+                                target="_blank"
+                                @click.stop
+                                v-on="on"
+                              >
+                              
+                              </a>
+                            </template>
+                            Opens in new window
+                          </v-tooltip>
+                          is awesome
+                        </div>
+                      </template>
+                    </v-checkbox>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="6">
+                      <div class="text-body-1 my-2">Strand</div>
                       <v-select
-                        v-model="favorites"
-                        checkbox
-                        label="Choose Question Type"
-                        :items="box"
-                        multiple
-                        outlined
-                        class="rounded-xl"
-                        :rules="[(v) => !!v || 'Please select question type']"
-                        required
-                        
-                      >
-                      </v-select>
+                      :items="items"
+                      label="Outlined style"
+                      class="rounded-xl"
+                      outlined
+                    ></v-select>
+                    </v-col>
+                    <v-col cols="6">
+                      <div class="text-body-1 my-2">Sub Strand</div>
+                      <v-select
+                      :items="items"
+                      label="Outlined style"
+                      class="rounded-xl"
+                      outlined
+                    ></v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="6">
+                      <div class="text-body-1 my-2">Topic</div>
+                      <v-select
+                      :items="items"
+                      label="Outlined style"
+                      class="rounded-xl"
+                      outlined
+                    ></v-select>
+                    </v-col>
+                    <v-col cols="6">
+                      <div class="text-body-1 my-2">Grade</div>
+                      <v-select
+                      :items="items"
+                      label="Outlined style"
+                      class="rounded-xl"
+                      outlined
+                    ></v-select>
                     </v-col>
                   </v-row>
                   <v-row>
