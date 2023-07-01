@@ -446,13 +446,6 @@ export default {
       let findOj = this.recommendations.find(ele => ele.r_id == this.recommendations_id);
       let payload = {
         "recommended_level": findOj.levels[0],
-        "interview_slot": "2023-07-09T11:44:37.298Z",
-        "exam_location": "Vibgyor High - Borivali, Motilal Nagar - 1, Srirang Sabde Marg, Mumbai 400001",
-        "room_no": "500",
-        "status": "PENDING",
-        "interviewer": "Interview Name",
-        "interview_notes": "",
-        "interview_remark": ""
       }
       const response = await RecommendationController.setToInterview(payload, this.user_id);
       console.log(response);
