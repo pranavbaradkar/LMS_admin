@@ -131,7 +131,7 @@
                     <v-col cols="6">
                       <div class="text-body-1 my-2">Grade</div>
                       <v-select
-                      :items="items"
+                      :items="data"
                       label="Outlined style"
                       class="rounded-xl"
                       outlined
@@ -1439,11 +1439,20 @@
           "TRUE_FALSE",
           "MATCH_THE_FOLLOWING",
         ],
-        data () {
-      return {
-        checkbox: false,
-      }
-    },
+        
+            data: {
+              gradeData: []
+            },
+            mounted() {
+            fetch('/meta/grades')
+            .then(response => response.json())
+            .then(data => {
+              this.gradeData = data.map(grade => grade. getGrades);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        },
         selectedQuestionTypeFilter: [],
         levels: [],
         singleSelectCorrectAnswer: null,
