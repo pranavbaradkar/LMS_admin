@@ -7,7 +7,7 @@ const instance = axios.create({
 export default {
     postCandidateData: async function (formData,id) {
         try {
-            const response = await instance.post(`admin/user/${id}/interview/`, formData, {
+            const response = await instance.post(`admin/user/${id}/interview-feedback`, formData, {
                 headers: {
                     'Authorization': AuthService.getToken()
                 }

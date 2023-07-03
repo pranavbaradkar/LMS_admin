@@ -96,8 +96,9 @@
             <v-row class="mb-4">
               <v-col cols="2" class="ms-5 mt-2 ms-5 pb-0 mb-0 mt-1 ">
                 <v-btn variant="tonal"
-                  @click="startInterview(item.user_id, item.recommended_level, item.levels, item.user.first_name + ' ' + item.user.last_name, 0)"
-                  class=" end-btn start-interview">{{ item.status === 'PENDING' ? 'Start Interview' : 'Response Submitted' }} <span
+                  @click="startInterview(item, item.user_id, item.recommended_level, item.levels_string.join(','), item.user.first_name + ' ' + item.user.last_name, 0)"
+
+                  class=" end-btn start-interview">  {{ item.interview_feedback != '' ? 'Response Submitted' : 'Start Interview' }} <span
                     v-if="item.status === 'PENDING'" class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols=""
                       alt=""> </span></v-btn>
               </v-col>
@@ -142,16 +143,19 @@ export default {
         alert('No data found')
       }
     },
-    startInterview(user_id, recommended_level, levels, name, school_id) {
-      this.$router.push({
-        path: '/candidates/form', query: {
-          user_id: user_id,
-          recommended_level: recommended_level,
-          levels: levels,
-          name: name,
-          school_id: school_id
-        }
-      })
+    startInterview(item, user_id, recommended_level, levels, name, school_id) {
+      if(item.interview_feedback == '') {
+        this.$router.push({
+          path: '/candidates/form', query: {
+            user_id: user_id,
+            recommended_level: recommended_level,
+            levels: levels,
+            name: name,
+            school_id: school_id
+          }
+        })
+      }
+      
     }
   },
   created() {

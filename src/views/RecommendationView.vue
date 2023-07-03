@@ -214,7 +214,7 @@
 
       <template v-slot:[`item.status`]="{item}">
         <div style="width: 120px;" class="d-flex justify-content-center">
-          <div class="white-with-text" :class="`${item.status.toLocaleLowerCase() == 'interview' ? 'interview' : ''}`">{{ item.status ? item.status : 'PENDING'  }}</div>
+          <div class="white-with-text" :class="`${item.status.toLocaleLowerCase() == 'interview' ? 'interview' : (item.status.toLocaleLowerCase() == 'selected' ? 'can-selected' : '')}`">{{ item.status ? item.status : 'PENDING'  }}</div>
           <!-- <div class="white-with-text interview">{{ item.status && item.status.text ? item.status.text: 'NO'  }}</div>
           <div class="white-with-text can-selected">{{ item.status && item.status.text ? item.status.text: 'NO'  }}</div> -->
         </div>
@@ -427,8 +427,8 @@ export default {
             interview_score:  e.interview_score ? `${e.interview_score} / ${e.interview_score_total}` : ' - ',
             status:  e.status ? e.status.split('_').join(' ') : 'PENDING',
             ai_recommendation: e.ai_recommendation,
-            is_show_icon: e.demo_score > 0 ? true : false,
-            is_interview_icon: e.status == "DEMO_SUBMITTED" || e.recommendation_status == 'AGREE' ? true : false,
+            is_show_icon: e.demo_score > 0 && (e.status == 'DEMO_SUBMITTED' || e.status == 'INTERVIEW') ? true : false,
+            is_interview_icon: (e.status == "DEMO_SUBMITTED" && e.recommendation_status == 'AGREE') || (e.demo_score > 0 && e.status == "DEMO_SUBMITTED" && e.recommendation_status == 'DISAGREE') ? true : false,
             r_id: e.id
           }
           let obj = {...dat};

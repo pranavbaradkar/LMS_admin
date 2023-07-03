@@ -8,16 +8,24 @@
             <v-card-text>
               <div>
                 <v-row>
-                  <v-col cols="3">
-                    <span style="font-size: 18px;">{{ this.name }}</span>
-                    <div class="badge">
-                      <v-chip v-for="level in levels" :key="level" class="ma-1 fs" small>
-                        {{ level }}
-                      </v-chip>
+                  <v-col cols="3" class="d-flex">
+                    <div >
+                       <v-avatar class="mt-0 ms-0">
+                        <img src="../assets/user.svg" alt="John">
+                      </v-avatar>
+
+                    </div>
+                    <div>
+                      <span style="font-size: 18px;">{{ this.name }}</span>
+                      <div class="badge">
+                        <v-chip v-for="level in levels" :key="level" class="ma-1 fs" small>
+                          {{ level }}
+                        </v-chip>
+                      </div>
                     </div>
                   </v-col>
-                  <v-col v-if="this.recommended_level" cols="8" class="endsec mt-4 me-3">
-                    <p> <span class="recommend">Recommended</span> <span>For</span> <strong>{{ this.recommended_level
+                  <v-col v-if="this.recommended_level" cols="9" class="endsec justify-end d-flex mt-0 me-0 align-center">
+                    <p> <img src="../assets/Vector (10).svg" cols="" alt="" class="pe-2" /> <strong class="recommend text-color-green">Recommended</strong> <span>For</span> <strong>{{ this.recommended_level
                     }}</strong></p>
                   </v-col>
                 </v-row>
@@ -94,16 +102,16 @@
               <v-col cols="6">
                 <v-row>
                   <v-col cols="6" class="d-flex flex-row">
-                    <span class="ms-5 gray">Current CTC- </span>
-                    <v-text-field style="width: 20px;" v-model="ctc_current" color="primary" variant="underlined"
+                    <span class="ms-6 gray">Current CTC- </span>
+                    <v-text-field style="width: 20px;    padding-top: 0px;margin-top: 0px;" v-model="ctc_current" color="primary" variant="underlined"
                       class="underline" maxLength="4" @keypress="isNumber($event)"></v-text-field>
                     <span>LPA</span>
                   </v-col>
                 </v-row>
               </v-col>
               <v-col cols="3" class="d-flex flex-row">
-                <span class="ms-5 gray">Expected CTC- </span>
-                <v-text-field style="width: 20px;" v-model="ctc_expected" color="primary" variant="underlined"
+                <span class="ms-6 gray">Expected CTC- </span>
+                <v-text-field style="width: 20px;  padding-top: 0px;margin-top: 0px;" v-model="ctc_expected" color="primary" variant="underlined"
                   class="underline" maxLength="4" @keypress="isNumber($event)"></v-text-field>
                 <span>LPA</span>
               </v-col>
@@ -186,7 +194,7 @@
 
 
             <v-row>
-              <v-col cols="11" class="ms-3">
+              <v-col cols="11" class="ms-5 mt-10">
                 <v-slider v-model="confidence_score" step="1" ticks max="10" show-ticks="always" tick-size="4"
                   thumb-label="always" track-color="grey" color="#277BC0"></v-slider>
               </v-col>
@@ -206,7 +214,7 @@
               </v-col>
             </div>
             <v-row>
-              <v-col cols="11" class="ms-3">
+              <v-col cols="11" class="ms-5 mt-10">
                 <v-slider v-model="appearence_score" step="1" ticks max="10" show-ticks="always" tick-size="4"
                   thumb-label="always" track-color="grey" color="#277BC0"></v-slider>
               </v-col>
@@ -259,7 +267,7 @@
 
 
             <v-row>
-              <v-col cols="11" class="ms-3">
+              <v-col cols="11" class="ms-5 mt-8">
                 <v-slider v-model="overall_rating" step="1" ticks max="10" show-ticks="always" tick-size="4"
                   thumb-label="always" track-color="grey" color="#277BC0"></v-slider>
               </v-col>
@@ -373,8 +381,10 @@ export default {
     getUserData() {
       const { user_id, name, levels, recommended_level } = this.$route.query;
       this.user_id = user_id,
-        this.name = name;
-      this.levels = levels.split(", ");
+      this.name = name;
+      console.log(levels);
+      this.levels = levels.split(",");
+
       this.recommended_level = recommended_level;
     },
     async submitForm() {
@@ -393,13 +403,11 @@ export default {
           overall_rating: this.overall_rating,
           offer_selection: this.offer_selection,
         }
-        console.log(formData)
         const response = await InterviewController.postCandidateData(formData, this.user_id);
-        if (response.success) {
+        if (response.data.success) {
           this.$route.push('/interview/panel');
-        }
-        else {
-          alert(response.error)
+        } else {
+          alert("Something went wrong could you please check with admin");
         }
       }
     },
@@ -432,6 +440,14 @@ export default {
   
 
 <style>
+.v-slider__track-background.grey {
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px
+}
+.v-slider__track-fill {
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px
+}
 .v-slider--horizontal .v-slider__track-container {
   height: 25px;
 }
