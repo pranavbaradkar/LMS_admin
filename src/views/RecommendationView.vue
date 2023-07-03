@@ -163,14 +163,14 @@
           </div>
           <div class="ml-2">
             <img
-             v-if="item.status == 'INTERVIEW' && item.is_interview_icon" 
+             v-if="!item.is_interview_icon" 
               width="30px"
               class="pt-2 cursor"
               src="../assets/iv-grey.svg"
               />
 
               <img
-              v-if="item.is_show_icon && !item.is_interview_icon" 
+              v-if="item.is_interview_icon" 
                 width="30px"
                 class="pt-2 cursor"
                 src="../assets/iv-black.svg"
@@ -205,8 +205,15 @@
         <span v-else class="danger">Not Recommended</span>
       </template>
 
+      
+      <template v-slot:[`item.demo_score`]="{item}">
+        <div style="width: 90px;" class="d-flex justify-content-center">
+          {{ item.demo_score ? item.demo_score : ' - '  }}
+        </div>
+      </template>
+
       <template v-slot:[`item.status`]="{item}">
-        <div style="width: 130px;" class="d-flex justify-content-center">
+        <div style="width: 120px;" class="d-flex justify-content-center">
           <div class="white-with-text" :class="`${item.status.toLocaleLowerCase() == 'interview' ? 'interview' : ''}`">{{ item.status ? item.status : 'PENDING'  }}</div>
           <!-- <div class="white-with-text interview">{{ item.status && item.status.text ? item.status.text: 'NO'  }}</div>
           <div class="white-with-text can-selected">{{ item.status && item.status.text ? item.status.text: 'NO'  }}</div> -->
@@ -408,6 +415,7 @@ export default {
       const response = await RecommendationController.getRecommendations(type);
       this.recommendations = response.data.data.rows;
       this.recommendations = this.recommendations.map(e => {
+        console.log(e);
           let dat = {
             id: e.user_id,
             name: e.user.first_name,
@@ -420,7 +428,7 @@ export default {
             status:  e.status ? e.status.split('_').join(' ') : 'PENDING',
             ai_recommendation: e.ai_recommendation,
             is_show_icon: e.demo_score > 0 ? true : false,
-            is_interview_icon: e.interview_score > 0 ? true : false,
+            is_interview_icon: e.status == "DEMO_SUBMITTED" || e.recommendation_status == 'AGREE' ? true : false,
             r_id: e.id
           }
           let obj = {...dat};
@@ -469,7 +477,7 @@ export default {
 </script>
 <style>
 .white-with-text {
-  font-size: 16px;
+  font-size: 11px;
   font-weight: 400;
   line-height: 11px;
   letter-spacing: 0.02em;
@@ -478,7 +486,7 @@ export default {
   background-color: #F6F6F6;
   width: auto;
   height: auto;
-  padding: 8px 15px 8px 15px;
+  padding: 8px 8px 8px 8px;
   border-radius: 68px;
   justify: space-between;
 

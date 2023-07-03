@@ -80,7 +80,7 @@
         >
           <v-list-item-icon class="ma-4 rounded-xl" slider>
             <v-icon size="25px" color="grey lighten-4"
-              >mdi-star-outline</v-icon
+              >mdi-clipboard-account</v-icon
             >
           </v-list-item-icon>
 

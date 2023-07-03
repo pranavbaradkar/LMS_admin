@@ -34,17 +34,17 @@
           <v-row>
             <V-col cols="2">
               <v-avatar class="mt-3 ms-3">
-                <img :src="`${ item && item.user && item.user.profile_pic ? item.user.profile_pic : '../assets/user.svg' }`" alt="John">
+                <img src="../assets/user.svg" alt="John">
               </v-avatar>
             </V-col>
 
             <v-col cols="10" class="mt-2 avtar-left">
-              <span class=" ms-1  ">{{ item.user.first_name + ' ' + item.user.last_name }}</span>
+              <span class=" ms-1  ">{{ item.user.first_name + ' ' + item.user.last_name }} / {{ item.user.email }}</span>
               <div class="">
-                <v-chip v-for="level in item.levels.slice(0, 3)" :key="level" class="ma-1 fs" small>
+                <v-chip v-for="level in item.levels_string.slice(0, 3)" :key="level" class="ma-1 fs" small>
                   {{ level }}
                 </v-chip>
-                <v-chip v-if="item.levels.length > 3" class="ma-1 circle-chip" small>
+                <v-chip v-if="item.levels_string.length > 3" class="ma-1 circle-chip" small>
                   +{{ item.levels.length - 3 }}
                 </v-chip>
               </div>
@@ -59,7 +59,7 @@
 
             </v-row>
             <v-row>
-              <v-col class="user-tag pb-0 ms-5 pb-0 mb-0 mt-1"> <img src="../assets/Vector.svg" cols="" alt="" class="pe-2" /> <span class="color" cols="10" >{{ item.subjects.join(', ') }}</span></v-col>
+              <v-col class="user-tag pb-0 ms-5 pb-0 mb-0 mt-1"> <img src="../assets/Vector.svg" cols="" alt="" class="pe-2" /> <span class="color" cols="10" >{{ item.subjects_string.join(', ') }}</span></v-col>
 
             </v-row>
             <v-row>
@@ -87,7 +87,7 @@
 
             </v-row>
             <v-row v-if="item.recommended_level">
-              <v-col cols="8" class="user-tag pb-0 ms-5 pb-0 mb-0 mt-1 ">
+              <v-col cols="12" class="user-tag pb-0 ms-5 pb-0 mb-0 mt-1 ">
                 <img src="../assets/Vector (10).svg" cols="" alt="" class="pe-2"> <span class="recommend1 "><strong class="text-color-green">Recommended</strong> For <strong>{{
                   item.recommended_level }}</strong></span>
               </v-col>
@@ -96,7 +96,7 @@
             <v-row class="mb-4">
               <v-col cols="2" class="ms-5 mt-2 ms-5 pb-0 mb-0 mt-1 ">
                 <v-btn variant="tonal"
-                  @click="startInterview(item.user_id, item.recommended_level, item.levels, item.user.first_name + ' ' + item.user.last_name)"
+                  @click="startInterview(item.user_id, item.recommended_level, item.levels, item.user.first_name + ' ' + item.user.last_name, 0)"
                   class=" end-btn start-interview">{{ item.status === 'PENDING' ? 'Start Interview' : 'Response Submitted' }} <span
                     v-if="item.status === 'PENDING'" class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols=""
                       alt=""> </span></v-btn>
@@ -123,13 +123,20 @@ export default {
       search: "",
       filterDialog: false,
       interviewData: [],
+      
     }
   },
   methods: {
     async getInterviewDetail() {
       const response = await InterviewController.getInterviewDetails();
       if (response.data.success) {
-        this.interviewData = response.data.data;
+        this.interviewData = response.data.data.map(ele => {
+          console.log(ele.levels);
+          ele.levels_string = ele.levels.map(e =>  { return e.name });
+          ele.subjects_string = ele.subjects.map(e =>  { return e.name });
+          return ele;
+        });
+        
       }
       else {
         alert('No data found')
