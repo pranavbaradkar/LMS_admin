@@ -98,46 +98,7 @@
                     </v-checkbox>
                     </v-col>
                   </v-row>
-                  <v-row>
-                    <v-col cols="6">
-                      <div class="text-body-1 my-2">Strand</div>
-                      <v-select
-                      :items="items"
-                      label="Outlined style"
-                      class="rounded-xl"
-                      outlined
-                    ></v-select>
-                    </v-col>
-                    <v-col cols="6">
-                      <div class="text-body-1 my-2">Sub Strand</div>
-                      <v-select
-                      :items="items"
-                      label="Outlined style"
-                      class="rounded-xl"
-                      outlined
-                    ></v-select>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="6">
-                      <div class="text-body-1 my-2">Topic</div>
-                      <v-select
-                      :items="items"
-                      label="Outlined style"
-                      class="rounded-xl"
-                      outlined
-                    ></v-select>
-                    </v-col>
-                    <v-col cols="6">
-                      <div class="text-body-1 my-2">Grade</div>
-                      <v-select
-                      :items="data"
-                      label="Outlined style"
-                      class="rounded-xl"
-                      outlined
-                    ></v-select>
-                    </v-col>
-                  </v-row>
+                
                   <v-row>
                     <v-col class="py-0">
                       <v-row align="center" class="d-flex flex-row justify-space-between">
@@ -565,6 +526,55 @@
                         v-model="hint"
                       >
                       </v-textarea>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="6">
+                      <div class="text-body-1 my-2">Strand</div>
+                      <v-select
+                      :items="strandList"
+                      label="Choose "
+                      outlined
+                      class="rounded-xl"
+                      v-model="grade"
+                      item-text="name"
+                      item-value="id"
+                    ></v-select>
+                    </v-col>
+                    <v-col cols="6">
+                      <div class="text-body-1 my-2">Sub Strand</div>
+                      <v-select
+                      :items="items"
+                      label="Outlined style"
+                      class="rounded-xl"
+                      outlined
+                    ></v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="6">
+                      <div class="text-body-1 my-2">Topic</div>
+                      <v-select
+                      :items="strandList"
+                      label="Choose Grade"
+                      outlined
+                      class="rounded-xl"
+                      v-model="grade"
+                      item-text="name"
+                      item-value="id"
+                    ></v-select>
+                    </v-col>
+                    <v-col cols="6">
+                      <div class="text-body-1 my-2">Grade</div>
+                      <v-select
+                      :items="gradeList"
+                      label="Choose Grade"
+                      outlined
+                      class="rounded-xl"
+                      v-model="grade"
+                      item-text="name"
+                      item-value="id"
+                    ></v-select>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -1313,7 +1323,10 @@
   import LoBankController from "@/controllers/LoBankController";
   import SubjectController from "@/controllers/SubjectController";
   import SkillsController from "@/controllers/SkillsController";
+  import GradeController from "@/controllers/GradeController";
   import LevelController from "@/controllers/LevelController";
+  import BoardController from "@/controllers/BoardController";
+
   import { v4 as uuidv4 } from 'uuid';
   export default {
     name: "QuestionBankView",
@@ -1439,22 +1452,10 @@
           "TRUE_FALSE",
           "MATCH_THE_FOLLOWING",
         ],
-        
-            data: {
-              gradeData: []
-            },
-            mounted() {
-            fetch('/meta/grades')
-            .then(response => response.json())
-            .then(data => {
-              this.gradeData = data.map(grade => grade. getGrades);
-            })
-            .catch(error => {
-              console.error('Error:', error);
-            });
-        },
         selectedQuestionTypeFilter: [],
         levels: [],
+        gradeList: [],
+        strandList: [],
         singleSelectCorrectAnswer: null,
         trueFalseCorrectAnswer: null,
         selectedLevelFilter: [],
@@ -2085,10 +2086,40 @@
         this.count = response.data.data.count;
         this.filterData = true;
       },
+      async getGrades() {
+        const response = await GradeController.getAllGradesByPagination(
+          this.pageSize,
+          this.page);
+          if (response.data.success) {
+            console.log("",response);
+            this.gradeData = response.data.data;
+            this.gradeList = this.gradeData.rows;
+            this.count = response.data.data.count;
+        }
+        else {
+          alert(response.data.error)
+        }
+      
+
+      },
+      async getBoards() {
+      const response = await BoardController.getBoards();
+      if (response.data.success) {
+        this.strandList = response.data.data.rows;
+
+      }
+      else {
+        alert(response.data.error)
+      }
     },
+      
+    },
+    
     created() {
       this.fetchQuestions();
       this.getLO();
+      this.getGrades();
+      this.getBoards();
       this.getSubjects();
       this.getSkills();
       this.getLevels();
