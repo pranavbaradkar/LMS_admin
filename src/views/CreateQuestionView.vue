@@ -506,61 +506,7 @@
                     </v-textarea>
                   </v-col>
                 </v-row>
-                <v-row>
-                  <v-col cols="6">
-                    <div class="text-body-1 my-2">Strand</div>
-                    <v-select
-                    :items="strandList"
-                    label="Choose "
-                    outlined
-                    class="rounded-xl"
-                    v-model="strand_id"
-                    item-text="name"
-                    item-value="id"
-                  ></v-select>
-                  </v-col>
-                  <v-col cols="6">
-                    <div class="text-body-1 my-2">Sub Strand</div>
-                    <v-select
-                    v-model="sub_strand_id"
-                    :items="strandList"
-                    label="Outlined style"
-                    class="rounded-xl"
-                    outlined
-                  ></v-select>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="6">
-                    <div class="text-body-1 my-2">Topic</div>
-                    <v-select
-                    :items="strandList"
-                    label="Choose Grade"
-                    outlined
-                    class="rounded-xl"
-                    v-model="topic_id"
-                    item-text="name"
-                    item-value="id"
-                  ></v-select>
-                  </v-col>
-                  <v-col cols="6">
-                    <div class="text-body-1 my-2">Grade*</div>
-                    <v-select
-                    :items="gradeList"
-                    label="Choose Grade"
-                    outlined
-                    :rules="[
-                      (v) =>  {
-                        return !!v || 'Grade is required'
-                      },
-                    ]"
-                    class="rounded-xl"
-                    v-model="grade_id"
-                    item-text="name"
-                    item-value="id"
-                  ></v-select>
-                  </v-col>
-                </v-row>
+               
                 <v-row>
                   <v-col class="py-0" cols="6">
                     <div class="text-body-1 my-2">
@@ -627,6 +573,7 @@
                       v-model="level"
                       item-text="name"
                       item-value="id"
+                      @change="dependApi()"
                     >
                     </v-select>
                   </v-col>
@@ -715,6 +662,7 @@
                       v-model="subject"
                       item-text="name"
                       item-value="id"
+                      @change="dependApi()"
                     >
                     </v-select>
                   </v-col>
@@ -731,6 +679,67 @@
                     </v-select>
                   </v-col>
                 </v-row>
+                <v-row>
+                  <v-col cols="6">
+                    <div class="text-body-1 my-2">Grade*</div>
+                    <v-select
+                      :items="gradeList"
+                      label="Choose Grade"
+                      outlined
+                      :rules="[
+                        (v) =>  {
+                          return !!v || 'Grade is required'
+                        },
+                      ]"
+                      class="rounded-xl"
+                      v-model="grade_id"
+                      item-text="name"
+                      item-value="id"
+                      @change="dependApi()"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="6">
+                    <div class="text-body-1 my-2">Strand</div>
+                      <v-select
+                      :items="strandList"
+                      label="Choose Strand"
+                      outlined
+                      class="rounded-xl"
+                      v-model="strand_id"
+                      item-text="strand_text"
+                      item-value="id"
+                      @change="dependApi()"
+                    ></v-select>
+                  </v-col>
+                 
+                </v-row>
+                <v-row>
+                  <v-col cols="6">
+                    <div class="text-body-1 my-2">Sub Strand</div>
+                    <v-select
+                    v-model="sub_strand_id"
+                    :items="subStrandList"
+                    label="Choose Strand Id"
+                    class="rounded-xl"
+                    outlined
+                    item-text="sub_strand_text"
+                    item-value="id"
+                  ></v-select>
+                  </v-col>
+                  <v-col cols="6">
+                    <div class="text-body-1 my-2">Topic</div>
+                    <v-select
+                    :items="topicList"
+                    label="Choose Topic"
+                    outlined
+                    class="rounded-xl"
+                    v-model="topic_id"
+                    item-text="topic_text"
+                    item-value="id"
+                  ></v-select>
+                  </v-col>
+                </v-row>
+
                 <v-row align="center">
                   <v-col col="6" class="py-0">
                     <div class="text-body-1 my-2">Learning Objective</div>
@@ -1308,8 +1317,8 @@ import LoBankController from "@/controllers/LoBankController";
 import SubjectController from "@/controllers/SubjectController";
 import SkillsController from "@/controllers/SkillsController";
 import GradeController from "@/controllers/GradeController";
+import MetaController from "@/controllers/MetaController";
 import LevelController from "@/controllers/LevelController";
-import BoardController from "@/controllers/BoardController";
 
 import { v4 as uuidv4 } from 'uuid';
 export default {
@@ -1348,6 +1357,7 @@ export default {
       editId: null,
       formbtnBool: false,
       subjectData: [],
+      topicList: [],
       selectedAnswersForMultitpleTypeQuestions: [],
       searchLOs: "",
       singleSelect: false,
@@ -1606,6 +1616,7 @@ export default {
         (this.formbtnBool = false);
     },
     checkSubjects(id) {
+      console.log("checkSubjects", id);
       if (id == null) {
         this.subjectShowBool = false;
       } else {
@@ -1622,6 +1633,7 @@ export default {
           this.subjectShowBool = true;
         }
       }
+      this.dependApi();
     },
     async searchData(search) {
       const response = await QuestionsController.searchQuestion(
@@ -1716,6 +1728,9 @@ export default {
           mime_type:this.questionAssetType,
           lo_ids: this.selectedLOs,
           skill_id: this.skillId,
+          topic_id: this.topic_id,
+          strand_id: this.strand_id,
+          sub_strand_id: this.sub_strand_id,
           subject_id: this.subject  == null ? -1 : this.subject,
           correct_answer_score: this.correctAnswerScore,
           estimated_time: this.estimatedTime,
@@ -1764,9 +1779,13 @@ export default {
       this.grade_id = item.grade_id  == -1 ? null : item.grade_id;
       this.correct_answer = item.correct_answer;
       this.hint = item.hint;
-      this.subject = item.subject_id == -1 ? item.subject_id : null;
+     
+      this.subject = item.subject_id == -1 ? null : item.subject_id;
       this.proficiencyLevel = item.proficiency_level != '' ? item.proficiency_level : null;
       this.level = item.level_id;
+      this.strand_id = item.strand_id;
+      this.sub_strand_id = item.sub_strand_id;
+      this.topic_id = item.topic_id;
       this.options = item.question_options;
       this.mtfAnswers = item.question_mtf_answers.length > 0 ? item.question_mtf_answers : this.mtfAnswers;
       this.questionAssetType = item.mime_type;
@@ -1781,9 +1800,16 @@ export default {
           this.singleSelectCorrectAnswer = ele.option_key;
         }
       });
+      this.dependApi(item.topic_id, item.strand_id, item.sub_strand_id);
+
+     
+
+      if(this.subject > 0) {
+        this.subjectShowBool = true;
+      }
 
 
-      console.log("tetststst",this.selectedAnswersForMultitpleTypeQuestions, this.questionAssetUrl, item);
+      console.log("tetststst",this.subject,this.selectedAnswersForMultitpleTypeQuestions, this.questionAssetUrl, item);
       
       // this.selectedLOs = item.lo_ids data not comming
       this.answerExplanation = item.answer_explanation;
@@ -1962,6 +1988,9 @@ export default {
           correct_answer: this.getCorrectAnswer(), 
           question_mtf_answers: this.questionType == 'MATCH_THE_FOLLOWING' ? this.mtfAnswers : null,
           level_id: this.level,
+          strand_id: this.strand_id,
+          sub_strand_id: this.sub_strand_id,
+          topic_id: this.topic_id,
           hint: this.hint,
           tags: selectTags,
           grade_id: this.grade_id  == null ? -1 : this.grade_id,
@@ -1973,7 +2002,7 @@ export default {
           this.isCreatingQuestion = false;
           this.successDialog = true;
           this.createQuestionDialog = false;
-          this.fetchQuestions();
+          window.location.href = "/#/question-bank";
         } else {
           this.isCreatingQuestion = false;
           this.errorDialog = true;
@@ -2123,31 +2152,61 @@ export default {
     
 
     },
-    async getBoards() {
-      const response = await BoardController.getBoards();
+    dependApi(topic_id = null, strand_id = null, sub_strand_id = null) {
+      this.getTopics(topic_id);
+      this.getStrands(strand_id);
+      this.getSubStrand(sub_strand_id)
+    },
+    async getTopics(topic_id) {
+      const response = await MetaController.getTopics({level_id: this.level, skill_id: this.skillId > 0 ? this.skillId : undefined, grade_id: this.grade_id > 0 ? this.grade_id : undefined, subject_id: this.subject > 0 ? this.subject : undefined, strand_id: this.strand_id, sub_strand_id: this.sub_strand_id});
       if (response.data.success) {
-        this.strandList = response.data.data.rows;
-
+        this.topicList = response.data.data.rows;
+        if(topic_id) {
+          this.topic_id = topic_id;
+        }
       }
       else {
         alert(response.data.error)
       }
     },
-    
+    async getStrands(strand_id) {
+      const response = await MetaController.getStrands({level_id: this.level,  grade_id: (this.grade_id > 0 ? this.grade_id : undefined)});
+      if (response.data.success) {
+        this.strandList = response.data.data.rows;
+        if(strand_id) {
+          this.strand_id = strand_id;
+        }
+      }
+    },
+
+    async getSubStrand(sub_strand_id) {
+      const response = await MetaController.getSubStrand({strand_id: (this.strand_id > 0 ? this.strand_id : undefined) });
+      if (response.data.success) {
+        this.subStrandList = response.data.data.rows;
+        if(sub_strand_id) {
+          this.sub_strand_id = sub_strand_id;
+        }
+      }
+    }
   },
   
   created() {
     // this.fetchQuestions();
     this.getLO();
     this.getGrades();
-    this.getBoards();
+    // this.getBoards();
     this.getSubjects();
     this.getSkills();
     this.getLevels();
+    
+    
     this.questionUuid=uuidv4();
 
     if (this.$route.params.id) {
       this.fetchQuestions(this.$route.params.id);
+    } else {
+      this.getTopics();
+      this.getStrands();
     }
 
   },
