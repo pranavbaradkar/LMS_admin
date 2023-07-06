@@ -18,13 +18,16 @@ export default {
             return error.response;
         }
     },
-    getQuestions: async function (pageSize,page) {
-
+    getQuestions: async function (pageSize,page, question_id = null) {
+        let paramsObj = "";
+        if(question_id) {
+            paramsObj = "&filter[id]="+question_id;
+        }
         try {
-            const response = await instance.get('admin/questions?pageSize='+pageSize+'&page='+page, {
+            const response = await instance.get('admin/questions?pageSize='+pageSize+'&page='+page+paramsObj, {
                 headers: {
                     'Authorization': AuthService.getToken()
-                }
+                },
             })
             return response;
         } catch (error) {

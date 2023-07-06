@@ -90,8 +90,16 @@ const routes = [
     }
   },
   {
-    path: '/create-question',
+    path: '/create/question',
     name: 'create question',
+    component: CreateQuestionView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/edit/question/:id',
+    name: 'Edit question',
     component: CreateQuestionView,
     meta: {
       requiresAuth: true,
