@@ -36,7 +36,7 @@
             >
             <v-spacer></v-spacer>
             <v-row align="center" justify="end">
-              <v-btn text @click="createQuestionDialog = false">Cancel</v-btn>
+              <v-btn text @click="() => {this.$router.replace('/question-bank')}">Cancel</v-btn>
               <v-progress-circular
                 v-if="isCreatingQuestion"
                 indeterminate
@@ -1451,6 +1451,7 @@ export default {
         "TRUE_FALSE",
         "MATCH_THE_FOLLOWING",
       ],
+      correctTrueFalse: null,
       selectedQuestionTypeFilter: [],
       levels: [],
       gradeList: [],
@@ -1791,7 +1792,7 @@ export default {
       this.questionAssetType = item.mime_type;
       this.questionAssetUrl = item.s3url;
       this.selectedFile = null;
-
+      this.trueFalseCorrectAnswer = this.questionType == 'TRUE_FALSE' ? item.correct_answer : null;
       this.selectedAnswersForMultitpleTypeQuestions = [];
       this.singleSelectCorrectAnswer = null;
       item.question_options.forEach(ele => {
