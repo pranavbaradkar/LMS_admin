@@ -533,7 +533,7 @@
                       <div class="text-body-1 my-2">Strand</div>
                       <v-select
                       :items="strandList"
-                      label="Choose "
+                      label="Choose"
                       outlined
                       class="rounded-xl"
                       v-model="grade"

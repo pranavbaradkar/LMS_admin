@@ -24,6 +24,7 @@ import TeachersView from '../views/TeachersView.vue'
 import JobSeekersView from '../views/JobSeekersView.vue'
 import CampaignView from '../views/CampaignView.vue'
 import CreateQuestionView from '../views/CreateQuestionView.vue'
+import AllAssessmentView from '../views/AllAssessmentView.vue'
 // import CandidatesFormview from '../views/CandidatesFormview.vue'
 // import InterviewPanelView from '../views/InterviewPanelView.vue'
 
@@ -193,14 +194,16 @@ const routes = [
     meta: {
       requiresAuth: true,
     }
-  },{
+  },
+  {
     path: '/skills',
     name: 'skills',
     component: SkillsView,
     meta: {
       requiresAuth: true,
     }
-  },{
+  },
+  {
     path: '/subjects',
     name: 'subjects',
     component: SubjectsView,
@@ -232,6 +235,14 @@ const routes = [
   //     requiresAuth: true,
   //   }
   // },
+  {
+    path: '/all-assessment',
+    name: 'all assessment',
+    component: AllAssessmentView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
 ]
 
 const router = new VueRouter({
