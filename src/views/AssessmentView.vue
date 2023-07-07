@@ -177,7 +177,10 @@
         <div
           v-for="data in assessment.assessment_configurations"
           :key="data.id"
+          class="d-flex justify-space-between flex-column"
+          style="height: 85%;"
         >
+      <div>
         <div class="my-2 text-subtitle-1">
           <!-- Assessment title -->
           {{ data.level.name}}
@@ -262,13 +265,13 @@
               </v-card>
             </v-card>
           </v-card>
+      </div>
           <div class="d-flex justify-end">
           
             <v-card-title class="pa-0 cursor" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
           </div>
-          <v-divider class="mb-4 mt-2"></v-divider>
         </div>
-
+        <v-divider class="mb-4 mt-2"></v-divider>
         <!-- Assessment type -->
       </v-card>
     </div>
@@ -324,7 +327,10 @@
         <div
           v-for="data in assessment.assessment_configurations"
           :key="data.id"
+          class="d-flex justify-space-between flex-column"
+          style="height: 80%;"
         >
+        <div>
         <div class="my-2 text-subtitle-1">
           <!-- Assessment title -->
           {{ data.level.name}}
@@ -335,7 +341,7 @@
           <span style="font-weight: 500" v-for="subject in data.subjects" :key="subject">{{ subject + ' '}}</span>
         </div>
           <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
-          <div
+        <div
             class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 " 
           >
             <div class="assessmentIconColor">
@@ -350,14 +356,13 @@
               <v-icon class="pr-0 pl-4">mdi-alpha-a-circle-outline</v-icon
               >{{ data.correct_score_answer }} marks
             </div>
-          </div>
-          <div class="d-flex justify-end">          
-            <v-card-title class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : ApproveAssessment(data.assessment_id)">{{assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE'}}</v-card-title>
-          </div>
-          <v-divider class="mb-4 mt-2"></v-divider>
         </div>
-
-
+        </div>
+        <div class="d-flex justify-end">          
+            <v-card-title class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : ApproveAssessment(data.assessment_id)">{{assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE'}}</v-card-title>
+        </div>
+        </div>
+        <v-divider class="mb-4 mt-2"></v-divider>
         <!-- Assessment type -->
       </v-card>
     </div>
