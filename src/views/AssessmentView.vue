@@ -133,7 +133,7 @@
     <v-row justify="space-between" class="mb-4 mt-0" v-if="!showUsers">
       <v-col cols="4" sm="4" md="4">
         <div class="text-h5 ml-4">
-          Live Assessments ({{ assessments.length }})
+          Live Assessments ({{ assessments.filter((item) => item.status == 'PUBLISHED').length }})
         </div>
       </v-col>
 
@@ -154,21 +154,42 @@
         min-width="427px"
         height="auto"
         class="pa-5 ml-4 pb-8"
-        v-for="assessment in assessments"
+        v-for="assessment in assessments.filter((item) => item.status == 'PUBLISHED')"
         
         :key="assessment.id"
       >
-        <v-card-title @click="fetchAssessmentUsers(assessment)" class="pa-0 cursor">{{ assessment.name }}</v-card-title>
-        <div class="my-2 text-subtitle-1">
-          <!-- Assessment title -->
-          Senior Secondary
+        <v-card-title class="pa-0">
+        <div style="width: 100%;" class="d-flex justify-space-between">
+          <div>
+            {{ assessment.name }}
+          </div>
+          <v-btn
+          outlined
+          fab
+          color="black"
+          style="width: 24px; height: 24px;"
+          @click="fetchAssessmentUsers(assessment)" depressed>
+          <v-icon>mdi-information-symbol</v-icon>
+          </v-btn>
         </div>
+        </v-card-title>
         <!-- assessment type -->
-
         <div
           v-for="data in assessment.assessment_configurations"
           :key="data.id"
+          class="d-flex justify-space-between flex-column"
+          style="height: 85%;"
         >
+      <div>
+        <div class="my-2 text-subtitle-1">
+          <!-- Assessment title -->
+          {{ data.level.name}}
+        </div>
+
+        <div class="my-2 text-subtitle-1">
+          <!-- Assessment title -->
+          <span style="font-weight: 500;" v-for="subject in data.subjects" :key="subject">{{ subject + ' '}}</span>
+        </div>
           <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
           <div
             class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 " 
@@ -244,13 +265,104 @@
               </v-card>
             </v-card>
           </v-card>
+      </div>
           <div class="d-flex justify-end">
           
             <v-card-title class="pa-0 cursor" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
           </div>
-          <v-divider class="mb-4 mt-2"></v-divider>
+        </div>
+        <v-divider class="mb-4 mt-2"></v-divider>
+        <!-- Assessment type -->
+      </v-card>
+    </div>
+
+    <v-row justify="space-between" class="mb-4 mt-0" v-if="!showUsers">
+      <v-col cols="4" sm="4" md="4">
+        <div class="text-h5 ml-4">
+          Draft Assessments ({{ assessments.filter((item) => item.status != 'PUBLISHED').length }})
+        </div>
+      </v-col>
+    </v-row>
+
+    <!------------------------------------------ Assessment card here---------------------------- -->
+    <div class="d-flex flex-row pb-4" id="myScroll-x" v-if="!showUsers">
+      <v-card
+        width="427px"
+        min-width="427px"
+        height="auto"
+        class="pa-5 ml-4 pb-8"
+        v-for="assessment in assessments.filter((item) => item.status != 'PUBLISHED')"
+        
+        :key="assessment.id"
+      >
+      <v-card-title class="pa-0">
+        <div style="width: 100%;" class="d-flex justify-space-between">
+          <div>
+            {{ assessment.name }}
+          </div>
+          <div>
+          <v-btn
+          fab
+          color="white"
+          style="width: 32px; height: 32px;"
+          @click="getAssesmentDetails(assessment ,assessment.id)" depressed>
+          <v-icon>mdi-pencil</v-icon>
+          </v-btn>
+
+          <v-btn
+          class="ml-4"
+          fab
+          color="#ff000059"
+          style="width: 32px; height: 32px;"
+          @click="() => {
+            deleteDialog = true
+            selectedId = assessment.id;
+            }" depressed>
+          <v-icon color="red">mdi-delete-outline</v-icon>
+          </v-btn>
+         </div>
+        </div>
+        </v-card-title>
+        <!-- assessment type -->
+        <div
+          v-for="data in assessment.assessment_configurations"
+          :key="data.id"
+          class="d-flex justify-space-between flex-column"
+          style="height: 80%;"
+        >
+        <div>
+        <div class="my-2 text-subtitle-1">
+          <!-- Assessment title -->
+          {{ data.level.name}}
         </div>
 
+        <div class="my-2 text-subtitle-1">
+          <!-- Assessment title -->
+          <span style="font-weight: 500" v-for="subject in data.subjects" :key="subject">{{ subject + ' '}}</span>
+        </div>
+          <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
+        <div
+            class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 " 
+          >
+            <div class="assessmentIconColor">
+              <v-icon  class="pr-0 ">mdi-help-circle-outline</v-icon
+              >{{ data.total_no_of_questions }} Questions
+            </div>
+            <div class="assessmentIconColor">
+              <v-icon class="pr-0 pl-4">mdi-clock-outline</v-icon
+              >{{ formatTime(data.duration_of_assessment)  }}
+            </div>
+            <div class="assessmentIconColor">
+              <v-icon class="pr-0 pl-4">mdi-alpha-a-circle-outline</v-icon
+              >{{ data.correct_score_answer }} marks
+            </div>
+        </div>
+        </div>
+        <div class="d-flex justify-end">          
+            <v-card-title class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : ApproveAssessment(data.assessment_id)">{{assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE'}}</v-card-title>
+        </div>
+        </div>
+        <v-divider class="mb-4 mt-2"></v-divider>
         <!-- Assessment type -->
       </v-card>
     </div>
@@ -291,7 +403,7 @@
             <v-toolbar-title class="text-h5">Create Assessment</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-row align="center" justify="end">
-              <v-btn text @click="dialog = false">Cancel</v-btn>
+              <v-btn text @click="cancelClicked">Cancel</v-btn>
               <!-- <v-btn outlined rounded v-if="e1 > 1" @click="e1--" class="mr-4"
                 >Back</v-btn
               > -->
@@ -1299,9 +1411,9 @@ export default {
         timeUpFirstReminder: null,
         timeUpLastReminder: null,
         assessmentType: "SCREENING",
-        skillsFields: [{ skill_id: null, no_of_questions: 10 }],
-        
+        skillsFields: [{ skill_id: null, no_of_questions: 10 }],  
       },
+      deleteId: null,
       breadItems: [
         {
           text: "Dashboard",
@@ -1398,6 +1510,29 @@ export default {
     mainExpandAndCollMethod(){
       return this.mainPanel.length === 0 ? this.mainPanel = [...Array(this.mainItem).keys()].map((k, i) => i):this.mainPanel = [];
     },
+
+    async getAssesmentDetails (data) {
+      console.log(data);
+      this.name = data.name;
+      this.instructions = data.instructions;
+      this.screeningConfiguration.skillsFields = data.assessment_configurations[0].skill_distributions;
+      this.screeningConfiguration.difficultyLevel = data.assessment_configurations[0].difficulty_level
+      this.screeningConfiguration.totalNumberQuestions = data.assessment_configurations[0].total_no_of_questions
+      this.screeningConfiguration.teachingLevel = data.assessment_configurations[0].level_id
+      this.screeningConfiguration.correctAnswerScore = data.assessment_configurations[0].correct_score_answer
+      this.screeningConfiguration.negativeMarking = data.assessment_configurations[0].negative_marking
+      this.screeningConfiguration.assessmentDuration =  data.assessment_configurations[0].duration_of_assessment
+      this.screeningConfiguration.randomizeQuestions = data.assessment_configurations[0].randomize_questions
+      this.screeningConfiguration.shuffleOptions = data.assessment_configurations[0].shuffle_questions
+      this.screeningConfiguration.displayCorrectAnswer = data.assessment_configurations[0].display_correct_answer
+      this.screeningConfiguration.displayResult = data.assessment_configurations[0].display_result
+      this.screeningConfiguration.passingCriteria = data.assessment_configurations[0].passing_criteria
+      this.screeningConfiguration.timeUpFirstReminder = data.assessment_configurations[0].time_up_first_remainder
+      this.screeningConfiguration.timeUpLastReminder = data.assessment_configurations[0].time_up_last_remainder
+      this.assessment_type = data.assessment_configurations[0].assessment_type
+      this.assessmentId = data.assessment_configurations[0].assessment_id
+      this.dialog = true;
+    },
     publishMethod(id,type){
       this.publishData.id = id; 
       this.publishData.assessmentType = type;
@@ -1421,15 +1556,12 @@ export default {
     async publishResults(assessmentId,type) {
       console.log(assessmentId);
       const response=await AssessmentController.publishResults(assessmentId,type);
-     
-
       if(response.data.success){
         this.successMessage='Results Published Successfully';
         this.successDialog=true;
       }
       else{
         this.errorDialog=true;
-
       }
       this.publishDialog = false;
 
@@ -1446,7 +1578,6 @@ export default {
       this.yetToAttempt = this.assessmentUsers.filter(
         (item) => item.screening_status == "PENDING"
       );
-
       console.log("yet to attemp", this.yetToAttempt);
       this.cleared = this.assessmentUsers.filter(
         (item) => item.screening_status == "FINISHED"
@@ -1616,6 +1747,7 @@ export default {
       this.getAssessmentDuration();
     },
     async createAssessment() {
+      if (this.assessmentId == null) {
       const response = await AssessmentController.createAssessment({
         name: this.name,
         score_type: "ASSESSMENT",
@@ -1624,6 +1756,15 @@ export default {
       
       this.assessmentId = response.data.data.id;
       return response.data.success;
+     }
+     else {
+      const response = await AssessmentController.updateAssessments({
+        name: this.name,
+        instructions: this.instructions,
+      }, this.assessmentId)
+
+      return response.data.success;
+     }
     },
 
     async createConfigurations() {
@@ -1712,13 +1853,32 @@ export default {
         alert(response.data.error)
       }
     },
+    cancelClicked () {
+      // this.fetchAssessment();
+      // this.name = "";
+      // this.instructions = "";
+      // this.screeningConfiguration.skillsFields = [{ skill_id: null, no_of_questions: 10 }];
+      // this.screeningConfiguration.difficultyLevel = null;
+      // this.screeningConfiguration.totalNumberQuestions = 40
+      // this.screeningConfiguration.teachingLevel = null
+      // this.screeningConfiguration.correctAnswerScore = 1
+      // this.screeningConfiguration.negativeMarking = 'NO'
+      // this.screeningConfiguration.assessmentDuration =  0
+      // this.screeningConfiguration.randomizeQuestions = 'NO'
+      // this.screeningConfiguration.shuffleOptions = 'NO'
+      // this.screeningConfiguration.displayCorrectAnswer = 'NO'
+      // this.screeningConfiguration.displayResult = 'NO'
+      // this.screeningConfiguration.passingCriteria = 40
+      // this.screeningConfiguration.timeUpFirstReminder = null
+      // this.screeningConfiguration.timeUpLastReminder = null
+      // this.assessment_type = 'SCREENING'
+      // this.assessmentId = null
+      // this.dialog = false;
+      window.location.reload()
+    },
     async deleteAssessment(id) {
       const response = await AssessmentController.deleteAssessment(id);
-      //console.log(response.data);
-   
-      
-
-
+      console.log(response.data);
       if(response.data.success){
         this.deleteDialog = false;
         this.selected = [];
@@ -1816,12 +1976,30 @@ export default {
       console.log("mains questions", this.mainsQuestionsIds);
     },
 
+    async ApproveAssessment (assessment_id) {
+      const response = await AssessmentController.updateAssessments(
+        {
+          status: 'PUBLISHED',
+        },
+        assessment_id
+      );
+
+      if(response.data.success){
+        this.fetchAssessment();
+      }
+      else {
+        alert(response.data.error)        
+        return false;
+      }
+    },
+
     async Assessmentsupdate() {
       const response = await AssessmentController.updateAssessments(
         {
           name: this.name,
           screening_question_ids: this.skillQuestionsIds,
           mains_question_ids: this.mainsQuestionsIds,
+          status: 'DRAFT',
         },
         this.assessmentId
       );

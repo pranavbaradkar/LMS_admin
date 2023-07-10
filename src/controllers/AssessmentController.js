@@ -173,6 +173,19 @@ export default {
             return error.response;
         }
     },
+
+    getAssessmentData: async function (id) {
+        try {
+            const response = await instance.get(`admin/assessments/${id}/configurations`,{
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
     deleteAssessment: async function (id) {
 
         try {
