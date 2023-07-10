@@ -880,7 +880,12 @@
                           >
                             <v-card>
                               <v-card-subtitle class="pb-0">
-                                {{ question.question_type }}
+                                <div class="d-flex justify-space-between flex-row">
+                                  <div>
+                                    {{ question.question_type }}
+                                  </div>
+                                  <v-btn elevation="0" @click="replaceQuestion(question)">Replace</v-btn>
+                                </div>
                               </v-card-subtitle>
                               <v-card-title class="pt-0">
                                 {{ question.statement }}
@@ -1346,6 +1351,7 @@ import { required, email } from "vuelidate/lib/validators";
 import AssessmentController from "@/controllers/AssessmentController";
 import SkillsController from "@/controllers/SkillsController";
 import LevelController from "@/controllers/LevelController";
+import QuestionsController from '@/controllers/QuestionsController';
 
 export default {
   mixins: [validationMixin],
@@ -1675,10 +1681,34 @@ export default {
       else{
         alert(response.data.error)
       }
-
-      
-
       //console.log("screening request", response);
+    },
+    async replaceQuestion (question) {
+      const response = await QuestionsController.replaceQuestion(question.id, this.assessmentId);
+      if (response.data.success) {
+        if (response.data.data) {
+        this.skillQuestions = this.skillQuestions.map((skill_q) => {
+          return {...skill_q, questions : skill_q.questions.map((q) => {
+            if (question.id == q.id) {
+              return response.data.data;
+            }
+            else {
+              return q;
+            }
+          })}
+        })
+        const index = this.skillQuestionsIds.findIndex((q) => {
+          q.id == question.id;
+        })
+        this.skillQuestionsIds[index] = response.data.data.id;
+        }
+        else {
+          alert('Not found any question to replace');
+        }
+      }
+      else {
+        alert(response.data.error);
+      }
     },
     addSubjectField() {
       this.selectedSubjects.push({

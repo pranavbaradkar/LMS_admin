@@ -73,6 +73,19 @@ export default {
             return error.response;
         }
     },
+    replaceQuestion: async function (q_id,assessment_id) {
+     
+        try {
+            const response = await instance.get(`admin/question/${q_id}/assessments/${assessment_id}`,{
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
     filterQuestion : async function (questionTypeIds,levelIds,diffLevelIds,complexityLevelIds,knowledgeLevelIds,bloomsTaxonomy,skillIds,subjectIds,pageSize,page){
         //console.log("filter function called");
         try{
