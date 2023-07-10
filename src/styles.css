@@ -773,5 +773,126 @@ color: #4D4D4D;
 }
 .img-heading{
   font-size: 14px !important;
-  
+}
+/* scholarship page */
+.all-content{
+  background-color: #F8FAFC !important;
+  margin-top: 20px;
+}
+.nav-user{
+  display: inline-flex !important;
+}
+.nav{
+  display: contents !important;
+}
+.nav-div{
+  background-color: #E2E8F0;
+  width: 77px;
+  height: 44px;
+  border-radius: 5px;
+  display: flex;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
+}
+.nav-div1{
+  background-color: #FFFFFF;
+  width: 260px;
+  height: 71px;
+  border-radius: 8px;
+  display: flex;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #EBEBEB;
+}
+.div-heading{
+  font-size: 14px !important;
+}
+.timer{
+  font-size: 16px;
+}
+.timer-heading{
+  font-size: 26px;
+}
+.scholarship-red-btn{
+  width: 59px !important;
+  height: 42px !important;
+  border-radius: 5px !important;
+  background-color: #ED2B2A !important;
+  color: #FFFFFF !important;
+  font-size: 18px !important;
+  margin-top: -4px !important;
+}
+.scholarship-orange-btn{
+  width: 88px !important;
+  height: 42px !important;
+  border-radius: 5px !important;
+  background-color: #FF6000 !important;
+  color: #FFFFFF !important;
+  font-size: 18px !important;
+  margin-top: -4px !important;
+}
+.scholarship-green-btn{
+  width: px !important;
+  height: 42px !important;
+  border-radius: 5px !important;
+  background-color: #03C988 !important;
+  color: #FFFFFF !important;
+  font-size: 18px !important;
+  margin-top: -4px !important;
+}
+.logo-name{
+  margin-left: -12%;
+}
+.cameron{
+  font-size: 18px;
+  color: #000000;
+}
+.hash{
+  font-size: 14px;
+  color: #4D4D4D;
+}
+.chip{
+  width: 59px !important;
+    height: 24px !important;
+}
+.orange-chip{
+  background-color: #FF6000!important;
+  width: 59px !important;
+  height: 24px !important;
+}
+.green-chip{
+  background-color: #CBD5E1 !important;
+  width: 59px !important;
+  height: 24px !important;
+}
+.user-card{
+  border-radius: 9px !important;
+}
+.outer-border{
+  border: 2px solid;
+    width: 408px;
+    height: 581px;
+    border-radius: 14px;
+    border-color: #ED2B2A;
+}
+.orange-border{
+  border: 2px solid;
+  width: 408px;
+  height: 581px;
+  border-radius: 14px;
+  border-color: #FF6000;
+}
+.green-border{
+  border: 2px solid;
+  width: 408px;
+  height: 581px;
+  border-radius: 14px;
+  border-color: #03C988;
+}
+.main-outer{
+  background-color: #E2E8F0;
+    border-radius: 14px;
+    height: 601px;
 }

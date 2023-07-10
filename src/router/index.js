@@ -25,6 +25,8 @@ import JobSeekersView from '../views/JobSeekersView.vue'
 import CampaignView from '../views/CampaignView.vue'
 import CreateQuestionView from '../views/CreateQuestionView.vue'
 import AllAssessmentView from '../views/AllAssessmentView.vue'
+import NationalScholarshipView from '../views/NationalScholarshipView.vue'
+
 // import CandidatesFormview from '../views/CandidatesFormview.vue'
 // import InterviewPanelView from '../views/InterviewPanelView.vue'
 
@@ -239,6 +241,14 @@ const routes = [
     path: '/all-assessment',
     name: 'all assessment',
     component: AllAssessmentView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/national-scholarship',
+    name: 'national scholarship',
+    component: NationalScholarshipView,
     meta: {
       requiresAuth: true,
     }
