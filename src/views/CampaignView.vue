@@ -586,7 +586,8 @@
             <!-- Assessment title -->
             <div
               v-if="data.levels.length > 0"
-              class="d-flex flex-row w-100 flex-wrap"
+              class="d-flex flex-row w-100 h-300 flex-wrap"
+              style="height: 68px;"
             >
               <div
                 v-for="(item, index) in data.levels"
