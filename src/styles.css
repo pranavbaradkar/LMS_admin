@@ -896,3 +896,24 @@ color: #4D4D4D;
     border-radius: 14px;
     height: 601px;
 }
+/* create role page css */
+.teacher-onboarding{
+  display: flex;
+  align-items: center;
+  margin-top: -33px !important;
+}
+.black{
+  background-color: black;
+    margin-left: 0px;
+    border-top-left-radius: 9px;
+    width: 100%;
+    border-top-right-radius: 9px;
+    color: white;
+}
+.user-management{
+  font-weight: 500;
+}
+.card{
+  border-radius: 9px !important;
+  height: 15%;
+}

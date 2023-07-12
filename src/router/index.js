@@ -26,6 +26,8 @@ import CampaignView from '../views/CampaignView.vue'
 import CreateQuestionView from '../views/CreateQuestionView.vue'
 import AllAssessmentView from '../views/AllAssessmentView.vue'
 import NationalScholarshipView from '../views/NationalScholarshipView.vue'
+import CreateRolesView from '../views/CreateRolesView.vue'
+
 
 // import CandidatesFormview from '../views/CandidatesFormview.vue'
 // import InterviewPanelView from '../views/InterviewPanelView.vue'
@@ -252,6 +254,16 @@ const routes = [
     meta: {
       requiresAuth: true,
     }
+    
+  },
+  {
+    path: '/create-roles',
+    name: 'create roles',
+    component: CreateRolesView,
+    meta: {
+      requiresAuth: true,
+    }
+    
   },
 ]
 
