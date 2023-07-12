@@ -360,7 +360,10 @@
         </div>
         </div>
         <div class="d-flex justify-end">          
-            <v-card-title class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : ApproveAssessment(data.assessment_id)">{{assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE'}}</v-card-title>
+            <v-card-title class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : 
+            showDialog(data.assessment_id)">
+              {{assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE'}}
+            </v-card-title>
         </div>
         </div>
         <v-divider class="mb-4 mt-2"></v-divider>
@@ -1007,6 +1010,7 @@
         </v-container>
       </v-card>
     </v-dialog>
+
     <!-- Error Dialog -->
     <v-dialog v-model="errorDialog" max-width="366px" persistent>
       <v-card>
@@ -1062,6 +1066,47 @@
                 width="157px"
                 rounded
                 @click="publishResults(publishData.id,publishData.assessmentType)"
+                >Publish</v-btn>
+             </div>
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="approveDialog" max-width="366px" persistent>
+      <v-card fluid>
+        <v-container fluid class="pa-0">
+          <v-card-text class="text-center">
+            <v-avatar color="secondary" size="90"
+              ><v-icon size="65">mdi-notebook-check-outline</v-icon></v-avatar
+            >
+
+            <p class="text-h5 pt-4 pb-0">Publish Assessment</p>
+            <p
+              class="text-disabled grey--text text-subtitle-1 mb-4"
+              color="rgba(0, 0, 0, 0.6)"
+              disabled
+            >
+            This action will make the assessment live. This cannot be undone
+            </p>
+
+            <div class="d-flex justify-space-between" fluid>
+              <v-btn
+                depressed
+                class="secondary black--text"
+                large
+                width="157px"
+                rounded
+                @click="approveDialog = false"
+                >CANCEL</v-btn
+              >
+              <v-btn
+                class="black white--text"
+                depressed
+                large
+                width="157px"
+                rounded
+                @click="ApproveAssessment(current_assessment)"
                 >Publish</v-btn>
              </div>
           </v-card-text>
@@ -1366,6 +1411,8 @@ export default {
       rules: {
         required: (value) => !!value || "Field is required",
       },
+      approveDialog: false,
+      current_assessment: null,
       successMessage:'New Assessment Created',
       isEdit: false,
       selectedSkillSubjects: [],
@@ -1506,6 +1553,10 @@ export default {
     };
   },
   methods: {
+    showDialog(assessment_id) {
+      this.current_assessment = assessment_id;
+      this.approveDialog = true;
+    },
     screeningBtnValue(){
       return this.screenPanel.length === 0 ? "EXPAND" : "COLLAPSE";
     },
@@ -2018,6 +2069,7 @@ export default {
       );
 
       if(response.data.success){
+        this.approveDialog = false;
         this.fetchAssessment();
       }
       else {
