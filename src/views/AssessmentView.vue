@@ -8,6 +8,7 @@
             () => {
               dialog = true;
               e1 = 1;
+              isEdit = false;
             }
           "
           class="primary"
@@ -409,7 +410,7 @@
               > -->
               <v-btn width="111px" height="48px" rounded class="primary" @click="nextStep(e1)">
                 <v-icon v-if="e1 == 4">mdi-book-open-variant</v-icon
-                >{{ e1 == 4 ? "Create" : "Next" }}
+                >{{ e1 == 4 ? isEdit ? "Update":"Create" : "Next" }}
               </v-btn>
             </v-row>
           </v-toolbar>
@@ -1366,6 +1367,7 @@ export default {
         required: (value) => !!value || "Field is required",
       },
       successMessage:'New Assessment Created',
+      isEdit: false,
       selectedSkillSubjects: [],
       selectedSkillSubjectsMains: [],
       MainsDialog: false,
@@ -1538,6 +1540,7 @@ export default {
       this.assessment_type = data.assessment_configurations[0].assessment_type
       this.assessmentId = data.assessment_configurations[0].assessment_id
       this.dialog = true;
+      this.isEdit =  true;
     },
     publishMethod(id,type){
       this.publishData.id = id; 
@@ -1904,7 +1907,7 @@ export default {
       // this.assessment_type = 'SCREENING'
       // this.assessmentId = null
       // this.dialog = false;
-      window.location.reload()
+      window.location.reload();
     },
     async deleteAssessment(id) {
       const response = await AssessmentController.deleteAssessment(id);
@@ -2033,8 +2036,9 @@ export default {
         },
         this.assessmentId
       );
+
       console.log(response);
-      this.dialog = false;
+      window.location.reload();
       if(response.data.success){
         this.fetchAssessment();
          return response.data.success;
