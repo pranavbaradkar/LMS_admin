@@ -926,7 +926,12 @@
                           >
                             <v-card>
                               <v-card-subtitle class="pb-0">
-                                {{ question.question_type }}
+                                <div class="d-flex justify-space-between flex-row">
+                                  <div>
+                                    {{ question.question_type }}
+                                  </div>
+                                  <v-btn elevation="0" @click="replaceQuestion(question)">Replace</v-btn>
+                                </div>
                               </v-card-subtitle>
                               <v-card-title class="pt-0">
                                 {{ question.statement }}
@@ -1795,7 +1800,7 @@ export default {
       console.log("mains questions", this.mainsQuestions);
       this.storingMainsQuestionIds();
       this.mainItem=this.mainsQuestions.length
-      this.mainBtnShow=true
+      this.scrBtnShow=true
       }
       else{
         alert(response.data.error)
