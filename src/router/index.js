@@ -31,6 +31,8 @@ import CreateRolesView from '../views/CreateRolesView.vue'
 
 // import CandidatesFormview from '../views/CandidatesFormview.vue'
 // import InterviewPanelView from '../views/InterviewPanelView.vue'
+import CandidatesFormview from '../views/CandidatesFormview.vue'
+import InterviewPanelView from '../views/InterviewPanelView.vue'
 
 
 Vue.use(VueRouter)
@@ -95,8 +97,16 @@ const routes = [
     }
   },
   {
-    path: '/create-question',
+    path: '/create/question',
     name: 'create question',
+    component: CreateQuestionView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/edit/question/:id',
+    name: 'Edit question',
     component: CreateQuestionView,
     meta: {
       requiresAuth: true,
@@ -248,6 +258,14 @@ const routes = [
     }
   },
   {
+    path: '/candidates/form',
+    name: 'candidates_form',
+    component: CandidatesFormview,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
     path: '/national-scholarship',
     name: 'national scholarship',
     component: NationalScholarshipView,
@@ -263,8 +281,15 @@ const routes = [
     meta: {
       requiresAuth: true,
     }
-    
   },
+  {
+    path: '/interview/panel',
+    name: 'interview_panel',
+    component: InterviewPanelView,
+    meta: {
+      requiresAuth: true,
+    }
+  }
 ]
 
 const router = new VueRouter({

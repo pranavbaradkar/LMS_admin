@@ -70,6 +70,25 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item
+          color="grey lighten-2"
+          key="Home"
+          to="/interview/panel"
+          style="border-radius: 16px"
+          active-class="grey darken-4 slider"
+          class="ma-2 px-2"
+        >
+          <v-list-item-icon class="ma-4 rounded-xl" slider>
+            <v-icon size="25px" color="grey lighten-4"
+              >mdi-clipboard-account</v-icon
+            >
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title class="white--text">Interview</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-group no-action>
           <template v-slot:activator>
             <v-list-item

@@ -48,13 +48,90 @@
       </v-col>
     </v-row>
 
+    <!--diolog for delete academic and professional array-->
+    <v-dialog v-model="statusRecomm" max-width="366px" persistent>
+      <v-card fluid>
+        <v-container fluid class="pa-0">
+          <v-card-text class="text-center">
+            <v-avatar color="#db44371f" size="90"
+              ><v-icon size="65" color="#32CD32"
+                >mdi-check-circle-outline</v-icon
+              ></v-avatar
+            >
+
+            <p class="text-h5 pt-4 pb-0">
+              You are "{{ isAgreeText.toLocaleLowerCase() }}" with ai recommendation?
+            </p>
+           
+            <div class="d-flex justify-space-between" fluid>
+              <v-btn
+                class="black--text"
+                color="#0000001a"
+                large
+                width="157px"
+                rounded
+                @click="statusRecomm = false"
+                >CANCEL</v-btn
+              >
+              <v-btn
+                class="primary"
+                large
+                width="157px"
+                rounded
+                @click="recommendedUpdate(isAgreeText)"
+                >YES</v-btn
+              >
+            </div>
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogInterview" max-width="366px" persistent>
+      <v-card fluid>
+        <v-container fluid class="pa-0">
+          <v-card-text class="text-center">
+            <v-avatar color="#db44371f" size="90"
+              ><v-icon size="65" color="#32CD32"
+                >mdi-check-circle-outline</v-icon
+              ></v-avatar
+            >
+
+            <p class="text-h5 pt-4 pb-0">
+              You are procedding "{{ user_name }}" candidate for interview
+            </p>
+           
+            <div class="d-flex justify-space-between" fluid>
+              <v-btn
+                class="black--text"
+                color="#0000001a"
+                large
+                width="157px"
+                rounded
+                @click="dialogInterview = false"
+                >CANCEL</v-btn
+              >
+              <v-btn
+                class="primary"
+                large
+                width="157px"
+                rounded
+                @click="sendForInterview()"
+                >YES</v-btn
+              >
+            </div>
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog>
+
     
     <v-data-table
       :headers="column"
       :items="recommendations"
     >
       <template v-slot:[`item.actions`]="{item}">
-        <div style="width: 80px">
+        <div style="width: 140px" class="d-flex">
           <a :href="`/#/users/profile/${item.id}`">
             <img 
               width="30px"
@@ -62,7 +139,52 @@
               src="../assets/user.svg"
               />
           </a>
-          <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
+          <div v-if="item.is_show_icon" @click="() => {
+              user_id = item.id;
+              isAgreeText = 'AGREE';
+              statusRecomm = true;
+            }" class="ml-2">
+            <img 
+              width="30px"
+              class="pt-2 cursor"
+              src="../assets/thumbs-up.svg"
+              />
+          </div>
+          <div v-if="item.is_show_icon" @click="() => {
+              user_id = item.id;
+              statusRecomm = true;
+              isAgreeText = 'DISAGREE';
+            }"  class="ml-2">
+            <img 
+              width="30px"
+              class="pt-2 cursor"
+              src="../assets/thumbs-down.svg"
+              />
+          </div>
+          <div class="ml-2">
+            <img
+             v-if="!item.is_interview_icon" 
+              width="30px"
+              class="pt-2 cursor"
+              src="../assets/iv-grey.svg"
+              />
+
+              <img
+              v-if="item.is_interview_icon" 
+                width="30px"
+                class="pt-2 cursor"
+                src="../assets/iv-black.svg"
+
+                @click="() => {
+                  user_id = item.id;
+                  user_name = item.name;
+                  dialogInterview = true;
+                  recommendations_id = item.r_id
+                }" 
+              />
+
+
+          </div>
         </div>
       </template>
       <template v-slot:[`item.name`]="{item}">
@@ -83,15 +205,19 @@
         <span v-else class="danger">Not Recommended</span>
       </template>
 
+      
+      <template v-slot:[`item.demo_score`]="{item}">
+        <div style="width: 90px;" class="d-flex justify-content-center">
+          {{ item.demo_score ? item.demo_score : ' - '  }}
+        </div>
+      </template>
+
       <template v-slot:[`item.status`]="{item}">
-        <div style="width: 150px"><v-select
-          label="Status"
-          single-line
-          v-model="item.status"
-          item-value="Pending"
-          :items="statusItems"
-          variant="solo"
-        ></v-select></div>
+        <div style="width: 120px;" class="d-flex justify-content-center">
+          <div class="white-with-text" :class="`${item.status.toLocaleLowerCase() == 'interview' ? 'interview' : (item.status.toLocaleLowerCase() == 'selected' ? 'can-selected' : '')}`">{{ item.status ? item.status : 'PENDING'  }}</div>
+          <!-- <div class="white-with-text interview">{{ item.status && item.status.text ? item.status.text: 'NO'  }}</div>
+          <div class="white-with-text can-selected">{{ item.status && item.status.text ? item.status.text: 'NO'  }}</div> -->
+        </div>
       </template>
       
     </v-data-table>
@@ -102,9 +228,9 @@
 import "../styles.css";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
-import AssessmentController from "@/controllers/AssessmentController";
-import SkillsController from "@/controllers/SkillsController";
-import LevelController from "@/controllers/LevelController";
+// import AssessmentController from "@/controllers/AssessmentController";
+// import SkillsController from "@/controllers/SkillsController";
+// import LevelController from "@/controllers/LevelController";
 import RecommendationController from '@/controllers/RecommendationController'
 
 export default {
@@ -116,6 +242,13 @@ export default {
   name: "RecommendationView",
   data() {
     return {
+      isAgreeText: 'agree',
+      user_id: 0,
+      recommendations_id: 0,
+      user_name: null,
+      dialogInterview: false,
+      user_type: 'TEACHER',
+      statusRecomm: false,
       rules: {
         required: (value) => !!value || "Field is required",
       },
@@ -278,9 +411,11 @@ export default {
       
     },
     async fetchRecommendations(type) {
+      this.user_type = type;
       const response = await RecommendationController.getRecommendations(type);
       this.recommendations = response.data.data.rows;
       this.recommendations = this.recommendations.map(e => {
+        console.log(e);
           let dat = {
             id: e.user_id,
             name: e.user.first_name,
@@ -290,8 +425,11 @@ export default {
             main_score: e.mains_score ? `${e.mains_score} / ${e.mains_score_total}` : ' - ',
             demo_score: e.demo_score ? `${e.demo_score} / ${e.demo_score_total}` : ' - ',
             interview_score:  e.interview_score ? `${e.interview_score} / ${e.interview_score_total}` : ' - ',
-            status: this.statusItems.find(v => { return v.key == e.status}),
+            status:  e.status ? e.status.split('_').join(' ') : 'PENDING',
             ai_recommendation: e.ai_recommendation,
+            is_show_icon: e.demo_score > 0 && (e.status == 'DEMO_SUBMITTED' || e.status == 'INTERVIEW') ? true : false,
+            is_interview_icon: (e.status == "DEMO_SUBMITTED" && e.recommendation_status == 'AGREE') || (e.demo_score > 0 && e.status == "DEMO_SUBMITTED" && e.recommendation_status == 'DISAGREE') ? true : false,
+            r_id: e.id
           }
           let obj = {...dat};
           console.log(obj);
@@ -300,489 +438,34 @@ export default {
       this.recommendations.reverse();
       console.log(this.recommendations);
     },
-    screeningBtnValue(){
-      return this.screenPanel.length === 0 ? "EXPAND" : "COLLAPSE";
-    },
-    expandAndCollMethod(){
-      return this.screenPanel.length === 0 ? this.screenPanel = [...Array(this.screeningItem).keys()].map((k, i) => i):this.screenPanel = [];
-    },
-    mainBtnValue(){
-      return this.mainPanel.length === 0 ? "EXPAND" : "COLLAPSE";
-    },
-    mainExpandAndCollMethod(){
-      return this.mainPanel.length === 0 ? this.mainPanel = [...Array(this.mainItem).keys()].map((k, i) => i):this.mainPanel = [];
-    },
-    publishMethod(id,type){
-      this.publishData.id = id; 
-      this.publishData.assessmentType = type;
-      this.publishDialog = true;
-    },
-    formatTime(seconds) {
-      const hours = Math.floor(seconds / 3600);
-      const minutes = Math.floor((seconds % 3600) / 60);
-      //const remainingSeconds = seconds % 60;
-      if (hours == 0) {
-        return String(minutes).padStart(2, "0") + " mins";
-      } else {
-        return (
-          String(hours).padStart(2, "0") +
-          " h and " +
-          String(minutes).padStart(2, "0") +
-          " mins"
-        );
-      }
-    },
-    async publishResults(assessmentId,type) {
-      
-      const response=await AssessmentController.publishResults(assessmentId,type);
-     
-
-      if(response.data.success){
-        this.successMessage='Results Published Successfully';
-        this.successDialog=true;
-      }
-      else{
-        this.errorDialog=true;
-
-      }
-      this.publishDialog = false;
-
-    },
-    filterData() {
-      this.notCleared = this.assessmentUsers.filter(
-        (item) => item.screening_status == "FAILED"
-      );
-      console.log("not cleared", this.notCleared);
-      this.inProgress = this.assessmentUsers.filter(
-        (item) => item.screening_status == "STARTED"
-      );
-      console.log("inprogress", this.inProgress);
-      this.yetToAttempt = this.assessmentUsers.filter(
-        (item) => item.screening_status == "PENDING"
-      );
-
-      console.log("yet to attemp", this.yetToAttempt);
-      this.cleared = this.assessmentUsers.filter(
-        (item) => item.screening_status == "FINISHED"
-      );
-      console.log("cleared", this.cleared);
-    },
-
-    async nextStep(step) {
-      if (this.e1 == 4) {
-        if (this.Assessmentsupdate()) {
-          this.successDialog = true;
-        } else {
-          alert("Failed");
-        }
-      } else {
-        //console.log("current step is = ", step);
-        switch (step) {
-          case 1:
-            if (this.$refs.step1.validate()) {
-              //console.log("step1", this.step1);
-              if (this.createAssessment()) {
-                this.e1++;
-              } else {
-                alert("Invalid Data");
-              }
-            }
-            break;
-          case 2:
-            if (this.$refs.step2.validate()) {
-              console.log("step2 value", this.step2);
-              // console.log("Selected Assessment type", this.assessment_type);
-              if (this.createConfigurations()) {
-                this.e1++;
-              } else {
-                alert("Invalid Data");
-              }
-            }
-            break;
-          // case 4:
-          //   if (this.$refs.step4.validate()) {
-          //     //console.log("step2 value", this.step2);
-          //     const response =await this.createMains()
-          //     if (response.data.success) {              
-          //       this.e1++;
-          //       this.getMainsQuestions();
-          //     } else {
-          //       alert(response.data.error);
-          //     }
-          //   }
-          //   break;
-
-          default:
-            this.e1++;
-        }
-      }
-    },
-    addSubjectsToSkill() {
-      //console.log(this.editedSkill);
-      this.editedSkill.subject_ids = this.selectedSubjects;
-      // this.selectedSubjects = [];
-      this.subjectDialog = false;
-      console.log(this.mainsConfiguration.skillsFields);
-    },
-    addSubjectsToSkillMains() {
-      this.MainsDialog = false;
-      console.log(this.editedSkill);      
-      this.editedSkill.subject_ids = this.selectedSubjectsMains;
-      // this.selectedSubjects = [];      
-      console.log(this.mainsConfiguration.skillsFields);
-    },
-    openSubjectDialog(skill, skillsField) {
-      this.selectedSkillSubjects = skill.subject_skills;
-      this.subjectDialog = true;
-      console.log(skill.subject_skills);
-      this.editedSkill = skillsField;
-      console.log("skill field",skillsField)
-    },
-    openSubjectDialogMains(skill, skillsField) {
-      this.selectedSkillSubjectsMains = skill.subject_skills;
-      this.MainsDialog = true;
-      console.log(skill.subject_skills);
-      this.editedSkill = skillsField;
-    },
-    async getScreeningQuestions() {
-      const response = await AssessmentController.screeningQuestions(
-        this.assessmentId
-      );
-      if(response.data.success){
-        this.skillQuestions = response.data.data.skill_questions;
-      console.log("skill questions", this.skillQuestions);
-      this.storingSkillsQuestionIds();
-      this.screeningItem = this.skillQuestions.length;
-      this.scrBtnShow=true
-      }
-      else{
-        alert(response.data.error)
-      }
-
-      
-
-      //console.log("screening request", response);
-    },
-    addSubjectField() {
-      this.selectedSubjects.push({
-        subject_id: 0,
-        no_of_questions: 0,
-      });
-    },
-    addSubjectFieldMains() {
-      this.selectedSubjectsMains.push({
-        subject_id: 0,
-        no_of_questions: 0,
-      });
-    },
-    deleteSubjectField(index) {
-      this.selectedSubjects.splice(index, 1);
-    },
-    deleteSubjectFieldMains(index) {
-      this.selectedSubjectsMains.splice(index, 1);
-    },
-
-    async getMainsQuestions() {
-      const response = await AssessmentController.mainsQuestions(
-        this.assessmentId
-       
-      );
-    
-      //console.log("screening request", response);
-      if(response.data.success){
-        this.mainsQuestions = response.data.data.skill_questions;
-      console.log("mains questions", this.mainsQuestions);
-      this.storingMainsQuestionIds();
-      this.mainItem=this.mainsQuestions.length
-      this.mainBtnShow=true
-      }
-      else{
-        alert(response.data.error)
-      }
-    },
-    addScreeningSkillsField() {
-      this.screeningConfiguration.skillsFields.push({
-        skill_id: null,
-        no_of_questions: 10,
-      });
-      console.log("list", this.editedSkill);
-      this.getAssessmentDuration();
-    },
-    deleteScreeningSkillField(index) {
-      this.screeningConfiguration.skillsFields.splice(index, 1);
-      this.getAssessmentDuration();
-    },
-    addMainsSkillsField() {
-      this.mainsConfiguration.skillsFields.push({
-        skill_id: null,
-        no_of_questions: 10,
-      });
-      this.getAssessmentDuration();
-    },
-    getAssessmentDuration() {
-      this.screeningConfiguration.assessmentDuration =
-        this.screeningConfiguration.skillsFields.length * 20 * 10;
-      this.mainsConfiguration.assessmentDuration =
-        this.mainsConfiguration.skillsFields.length * 20 * 10;
-    },
-    deleteMainsSkillField(index) {
-      this.mainsConfiguration.skillsFields.splice(index, 1);
-      this.getAssessmentDuration();
-    },
-    async createAssessment() {
-      const response = await AssessmentController.createAssessment({
-        name: this.name,
-        score_type: "ASSESSMENT",
-        instructions: this.instructions,
-      });
-      
-      this.assessmentId = response.data.data.id;
-      return response.data.success;
-    },
-
-    async createConfigurations() {
-      let response;
-      let payload = {
-          skill_distributions: this.screeningConfiguration.skillsFields,
-          difficulty_level: this.screeningConfiguration.difficultyLevel,
-          total_no_of_questions:
-            this.screeningConfiguration.totalNumberQuestions,
-          level_id: this.screeningConfiguration.teachingLevel,
-          correct_score_answer: this.screeningConfiguration.correctAnswerScore,
-          negative_marking: this.screeningConfiguration.negativeMarking,
-          duration_of_assessment:
-            this.screeningConfiguration.assessmentDuration,
-          randomize_questions: this.screeningConfiguration.randomizeQuestions,
-          shuffle_questions: this.screeningConfiguration.shuffleOptions,
-          display_correct_answer:
-            this.screeningConfiguration.displayCorrectAnswer,
-          display_result: this.screeningConfiguration.displayResult,
-          passing_criteria: this.screeningConfiguration.passingCriteria,
-          time_up_first_remainder:
-            this.screeningConfiguration.timeUpFirstReminder,
-          time_up_last_remainder:
-            this.screeningConfiguration.timeUpLastReminder,
-        };
-      if(this.assessment_type == 'SCREENING') {
-        response = await AssessmentController.createScreening( payload, this.assessmentId );
-        this.getScreeningQuestions();
-      }
-      else if(this.assessment_type == 'MAINS') {
-        response = await AssessmentController.createMains( payload, this.assessmentId );        
-      }
-
-      return response.data.sucess;
-      //console.log(response);
-    },
-
-    async createMains() {
-      const response = await AssessmentController.createMains(
-        {
-          skill_distributions: this.mainsConfiguration.skillsFields,
-          difficulty_level: this.mainsConfiguration.difficultyLevel,
-          total_no_of_questions: this.mainsConfiguration.totalNumberQuestions,
-          level_id: this.mainsConfiguration.teachingLevel,
-          correct_score_answer: this.mainsConfiguration.correctAnswerScore,
-          negative_marking: this.mainsConfiguration.negativeMarking,
-          duration_of_assessment: this.mainsConfiguration.assessmentDuration,
-          randomize_questions: this.mainsConfiguration.randomizeQuestions,
-          shuffle_questions: this.mainsConfiguration.shuffleOptions,
-          display_correct_answer: this.mainsConfiguration.displayCorrectAnswer,
-          display_result: this.mainsConfiguration.displayResult,
-          passing_criteria: this.mainsConfiguration.passingCriteria,
-          time_up_first_remainder: this.mainsConfiguration.timeUpFirstReminder,
-          time_up_last_remainder: this.mainsConfiguration.timeUpLastReminder,
-        },
-        this.assessmentId
-      );
-
-      
-      console.log(response);
-      return response;
-    },
-    fetchAssessmentUsers(assessment){
-      let type = assessment.assessment_configurations[0].assessment_type;
-      if(type == 'SCREENING') {
-        this.fetchScreeningUsers(assessment.id);
-      }
-      else {
-        this.fetchMainsUsers(assessment.id);
-      }
-    },
-
-    // async getSubjects() {
-    //   const response = await SubjectController.getSubject();
-    //   this.subjectData = response.data.data.rows;
-    //   //console.log("surbject responser", this.subjectData);
-    // },
-    async getSkills() {
-      const response = await SkillsController.getSkills();
-      //console.log(response);
-     
-      if(response.data.success){
-        this.skillsList = response.data.data.rows;
-      }
-      else{
-        alert(response.data.error)
-      }
-    },
-    async deleteAssessment(id) {
-      const response = await AssessmentController.deleteAssessment(id);
-      //console.log(response.data);
    
-      
-
-
-      if(response.data.success){
-        this.deleteDialog = false;
-        this.selected = [];
-        this.fetchAssessment();
-      }
-      else{
-        alert(response.data.error)
-      }
-    },
-
-    async fetchAssessment() {
-      const response = await AssessmentController.getAssessments();
-      // console.log("response from ", response);   
-      if(response.data.success){
-        this.assessments = response.data.data.rows;
-        this.assessments = this.assessments.map(e => {
-          let data = ['Not Recommended', 'Recommended'];
-          let oneOrZero = (Math.random()>=0.5)? 1 : 0;
-          let scores = e.scores;
-          let screening_test_index = e.scores.findIndex((item) => item.type === 'SCREENING');
-          let main_test_index = e.scores.findIndex((item) => item.type === 'MAINS');
-          let dat = {
-            name: e.name,
-            levels: e.level_ids,
-            screening_score: screening_test_index != -1 ? `${scores[screening_test_index].score} / ${scores[screening_test_index].total_score}` : 'NILL',
-            main_score: main_test_index != -1 ? `${scores[main_test_index].score} / ${scores[main_test_index].total_score}` : 'NILL',
-            demo_score: `${e.demo_video.total_scores} / ${e.demo_video.total_score}`,
-            interview_score: "8/10",
-            status:'Pending',
-            ai_recommendation: data[oneOrZero]
-          }
-          let obj = {...dat};
-          return obj;
-        })
-      this.assessments.reverse();
-      }
-      else{
-        alert(response.data.error)
-      }
-       console.log(response.data.data);
-    },
-    async fetchMainsUsers(id) {
-      console.log("mains user clicked");
-      this.showUsers = true;
-      this.selectedId = id;
-      const response = await AssessmentController.getMainsUser(id);
-      
-      if(response.data.success){
-              this.assessmentUsers = [];
-            this.assessmentUsers = response.data.data.user_assessments;
-            if (this.assessmentUsers != undefined) {
-              this.filterData();
-            }
-            console.log("filter data", this.assessmentUsers);
-      }
-      else{
-        alert(response.data.error)
-      }
-    },
-    async fetchScreeningUsers(id) {
-      console.log("screening clicked");
-      this.showUsers = true;
-      this.selectedId = id;
-      const response = await AssessmentController.getScreeningUser(id);
-     
-      if(response.data.success){
-        this.assessmentUsers = response.data.data.user_assessments;
-      this.filterData();
-
-      // console.log(this.assessmentUsers);
-      }
-      else{
-        alert(response.data.error)
-      }
-    },
-
-    async getLevels() {
-      const response = await LevelController.getLevel();
-   
-      if(response.data.success){
-        this.levels = response.data.data.rows;
-      // console.log(this.assessmentUsers);
-      }
-      else{
-        alert(response.data.error)
-      }
-      // console.log("level data", this.levelData.rows);
-    },
-    checkSubjects(id) {
-      if (id == null) {
-        return false;
-      } else {
-        //console.log(id);
-        const skill = this.skillsList.find((skill) => skill.id == id);
-        //console.log(skill);
-        return skill.subject_skills.length == 0 ? false : true;
-      }
-    },
-    storingSkillsQuestionIds() {
-      this.skillQuestions.forEach((Questions_) => {
-        Questions_.questions.forEach((question_) => {
-          this.skillQuestionsIds.push(question_.id);
-        });
-      });
-      console.log("skills questions", this.skillQuestionsIds);
-    },
-
-    storingMainsQuestionIds() {
-      this.mainsQuestions.forEach((Questions_) => {
-        Questions_.questions.forEach((question_) => {
-          this.mainsQuestionsIds.push(question_.id);
-        });
-      });
-      console.log("mains questions", this.mainsQuestionsIds);
-    },
-
-    async Assessmentsupdate() {
-      const response = await AssessmentController.updateAssessments(
-        {
-          name: this.name,
-          screening_question_ids: this.skillQuestionsIds,
-          mains_question_ids: this.mainsQuestionsIds,
-        },
-        this.assessmentId
-      );
-      console.log(response);
-      this.dialog = false;
-      if(response.data.success){
-        this.fetchAssessment();
-         return response.data.success;
-      }
-      else {
-        alert(response.data.error)        
-        return false;
-      }
-      
-    },
-    clearFilter() {
-      this.selectedSkillsFilter = [];
-    },
     onClickRecommendation(type) {
       this.fetchRecommendations(type);
+    },
+    async recommendedUpdate(status) {
+      const response = await RecommendationController.setAIRecommendations({
+        recommendation_status: status
+      }, this.user_id );
+      this.statusRecomm = false;
+      console.log(response);
+      this.fetchRecommendations(this.user_type);
+    },
+    async sendForInterview() {
+      let findOj = this.recommendations.find(ele => ele.r_id == this.recommendations_id);
+      let payload = {
+        "recommended_level": findOj.levels[0],
+      }
+      const response = await RecommendationController.setToInterview(payload, this.user_id);
+      console.log(response);
+      window.location.href = "/#/interview/panel";
     }
   },
 
   created() {
-    this.getAssessmentDuration();
-    //this.getSubjects();
-    this.getSkills();
-    this.getLevels();
+    // this.getAssessmentDuration();
+    // //this.getSubjects();
+    // this.getSkills();
+    // this.getLevels();
     this.fetchRecommendations('TEACHER');
     if (this.$route.params.cdialog == true) {
       this.dialog = true;
@@ -792,4 +475,31 @@ export default {
   },
 };
 </script>
-  
+<style>
+.white-with-text {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 11px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  color: #2D2D2D;
+  background-color: #F6F6F6;
+  width: auto;
+  height: auto;
+  padding: 8px 8px 8px 8px;
+  border-radius: 68px;
+  justify: space-between;
+
+}
+
+.interview {
+  background-color:  #CBD5E1;
+  color: #475569;
+}
+
+.can-selected {
+  background-color: #03C988;
+  color: #fff;
+ 
+}
+</style>

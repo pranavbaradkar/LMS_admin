@@ -18,13 +18,16 @@ export default {
             return error.response;
         }
     },
-    getQuestions: async function (pageSize,page) {
-
+    getQuestions: async function (pageSize,page, question_id = null) {
+        let paramsObj = "";
+        if(question_id) {
+            paramsObj = "&filter[id]="+question_id;
+        }
         try {
-            const response = await instance.get('admin/questions?pageSize='+pageSize+'&page='+page, {
+            const response = await instance.get('admin/questions?pageSize='+pageSize+'&page='+page+paramsObj, {
                 headers: {
                     'Authorization': AuthService.getToken()
-                }
+                },
             })
             return response;
         } catch (error) {
@@ -61,6 +64,19 @@ export default {
      
         try {
             const response = await instance.put('admin/questions/'+id, data, {
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
+    replaceQuestion: async function (q_id,assessment_id) {
+     
+        try {
+            const response = await instance.get(`admin/question/${q_id}/assessments/${assessment_id}`,{
                 headers: {
                     'Authorization': AuthService.getToken()
                 }

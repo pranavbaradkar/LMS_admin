@@ -586,7 +586,8 @@
             <!-- Assessment title -->
             <div
               v-if="data.levels.length > 0"
-              class="d-flex flex-row w-100 flex-wrap"
+              class="d-flex flex-row w-100 h-300 flex-wrap"
+              style="height: 68px;"
             >
               <div
                 v-for="(item, index) in data.levels"
@@ -1109,8 +1110,8 @@ export default {
       this.campaignData.audience_type = data.audience_type;
       this.updateFlag=true;
       this.campaignData=data
-      this.campaignData.start_date = this.convertDateFormatForUpdate(data.start_date)
-      this.campaignData.end_date = this.convertDateFormatForUpdate(data.end_date)
+      // this.campaignData.start_date = this.convertDateFormatForUpdate(data.start_date)
+      // this.campaignData.end_date = this.convertDateFormatForUpdate(data.end_date)
       this.getAssessmentsIds(data);
       this.convertStartTimeFormatForUpdate(data.start_time)
       this.convertEndTimeFormatForUpdate(data.end_time)
@@ -1152,6 +1153,8 @@ export default {
     async createCampaign() {
       this.campaignData.start_time = this.startHH + ":" + this.startMM;
       this.campaignData.end_time = this.endHH + ":" + this.endMM
+      const start_date = this.campaignData.start_date;
+      const end_date = this.campaignData.end_date;
       this.campaignData.start_date = this.convertDateFormat(this.campaignData.start_date)
       this.campaignData.end_date = this.convertDateFormat(this.campaignData.end_date)
       if(this.updateFlag==false){
@@ -1175,7 +1178,9 @@ export default {
       alert(response.data.error)
       this.campaignId =null    }
       }
-
+      this.campaignData.start_date = start_date
+      this.campaignData.end_date = end_date
+      
     },
     async getSchool() {
       const response = await SchoolController.getSchool();

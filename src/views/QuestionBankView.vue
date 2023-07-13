@@ -758,11 +758,12 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item @click="createQuestionDialog = false">
+              <a href="/#/create/question" target="_blank"> <v-list-item >
                 <v-list-item-title>
-                  <a href="/#/create-question"><v-icon >mdi-book-open-variant </v-icon>CREATE NEW QUESTION</a>
+                  <!-- <a href="/#/create-question"> -->
+                    <v-icon >mdi-book-open-variant </v-icon>CREATE NEW QUESTION
                 </v-list-item-title>
-              </v-list-item>
+              </v-list-item></a>
 
               <v-list-item>
                 <v-list-item-title>
@@ -882,7 +883,7 @@
             <img
               width="36px"
               height="36px"
-              @click="updateData(item)"
+              @click="editQuestion(item.id)"
               class="cursor"
               src="../assets/edit.svg"
             />
@@ -1937,6 +1938,9 @@ export default {
       this.fetchQuestions();
       this.filterDialog = false;
       this.filterData = false;
+    },
+    editQuestion (id) {
+      window.location.href = `/#/edit/question/${id}`
     },
     async filterQuestions(
       questionTypeIds,
