@@ -358,19 +358,19 @@
                     >
                       <v-list-item
                         :class="
-                          trueFalseCorrectAnswer == option.title
+                          trueFalseCorrectAnswer == option.title || trueFalseCorrectAnswer == option.option
                             ? 'green lighten-4 rounded-xl my-2'
                             : 'secondary rounded-xl my-2'
                         "
                         min-height="72"
                         v-for="(option, index) in [
-                          { title: 'TRUE' },
-                          { title: 'FALSE' },
+                          { title: 'TRUE', option: 'A' },
+                          { title: 'FALSE', option: 'B' },
                         ]"
                         :key="index"
                       >
                         <v-list-item-avatar>
-                          <v-radio :value="option.title"></v-radio>
+                          <v-radio :value="option.option"></v-radio>
                         </v-list-item-avatar>
 
                         <v-list-item-content>
