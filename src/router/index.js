@@ -27,6 +27,8 @@ import CreateQuestionView from '../views/CreateQuestionView.vue'
 import AllAssessmentView from '../views/AllAssessmentView.vue'
 import NationalScholarshipView from '../views/NationalScholarshipView.vue'
 import CreateRolesView from '../views/CreateRolesView.vue'
+import CreateAdminView from '../views/CreateAdminView.vue'
+
 
 
 // import CandidatesFormview from '../views/CandidatesFormview.vue'
@@ -286,6 +288,14 @@ const routes = [
     path: '/interview/panel',
     name: 'interview_panel',
     component: InterviewPanelView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/create-admin',
+    name: 'create admin',
+    component: CreateAdminView,
     meta: {
       requiresAuth: true,
     }

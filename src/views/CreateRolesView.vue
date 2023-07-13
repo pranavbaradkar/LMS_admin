@@ -158,7 +158,43 @@ export default {
             "view": false,
             "update": false,
             "delete": false
-          }
+          },
+          "levels": {
+            "create": false,
+            "view": false,
+            "update": false,
+            "delete": false
+          },
+          "grades": {
+            "create": false,
+            "view": false,
+            "update": false,
+            "delete": false
+          },
+          "subject_category": {
+            "create": false,
+            "view": false,
+            "update": false,
+            "delete": false
+          },
+          "subject": {
+            "create": false,
+            "view": false,
+            "update": false,
+            "delete": false
+          },
+          "skills": {
+            "create": false,
+            "view": false,
+            "update": false,
+            "delete": false
+          },
+          "los bank": {
+            "create": false,
+            "view": false,
+            "update": false,
+            "delete": false
+          },
         },
         "interview": {
           "panel": {
@@ -167,7 +203,25 @@ export default {
             "update": false,
             "delete": false
           }
-        }
+        },
+        "recommended": {
+          "panel": {
+            "create": false,
+            "view": false,
+            "update": false,
+            "delete": false
+          }
+        },
+        "question-bank": {
+          "panel": {
+            "create": false,
+            "view": false,
+            "update": false,
+            "delete": false
+          }
+        },
+        
+        
       }
     };
   },
