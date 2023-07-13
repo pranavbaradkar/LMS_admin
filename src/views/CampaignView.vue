@@ -1284,6 +1284,7 @@ export default {
    
       if (response.data.success) {
         this.assessments = response.data.data.rows;
+        this.assessments = this.assessments.filter((item) => item.status === 'PUBLISHED');
       }
       else {
         alert(response.data.error)
