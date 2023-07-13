@@ -407,8 +407,8 @@
                         </div>
                         <v-autocomplete
                         v-model="campaignData.assessment_ids"
-                         required
-                         :rules="[v => !!v || 'School is required']"
+                          required
+                          :rules="[v => !!v || 'assessment is required']"
                           clearable
                           deletable-chips
                           label="Select or Search Assessments"
