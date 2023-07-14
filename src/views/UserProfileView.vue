@@ -240,24 +240,113 @@
             </div>
           </div>
 
-          <!-- <div class="status-container">
+          <div class="status-container" v-if="interviewFeedback">
             <div class="header-bagde">
                 <div class="header-container">
-                  <div class="success-badge"><i class="dot me-2" />Cleared Interview</div>
+                  <div class="success-badge" v-if="interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'YES'"><i class="dot me-2" />Cleared Interview </div>
+                  <div class="failed-badge" v-if="interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'NO'"><i class="dot me-2" />Interview Not Cleared</div>
+                  <div class="warning-badge" v-if="interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'MAYBE'"><i class="dot me-2" />Decision Pending</div>
+                  <!-- <div class="success-badge"><i class="dot me-2" />Cleared Interview</div> -->
                   <div class="profile-title">Interview Details </div>
                 </div>
-               
+                <div class="score">
+                  <label>Score</label>
+                  <div class="per"><span>{{interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.overall_rating ? interviewFeedback.interview_feedback.overall_rating : 0}}/</span>{{10}}</div>
+                </div>
                 <div>
-                  <v-select
+                  <div>
+                    <div class="score">
+                      <label>Status</label>
+                      <div>{{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'NO' ? 'Rejected' : (interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'YES') ? 'Recommended For Offer Letter' : 'Offer Letter Pending'}}</div>
+                    </div>
+                  </div>
+                  <!-- <v-select
                     label="Status"
                     :items="['Recommended For Offer Letter']"
                     v-model="interview_status"
                     variant="underlined"
-                  ></v-select>
+                  ></v-select> -->
                 </div>
             </div>
 
-          </div> -->
+            <div class="row skills" >
+              <div class="col-6">
+                <div class="skill demo-video" :class="`color-1`">
+                  <div class="skill-title">{{ "Appearence Score" }}</div>
+                  <div class="skill-score">{{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.appearence_score ? interviewFeedback.interview_feedback.appearence_score : 0 }}/10</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="skill demo-video" :class="`color-2`">
+                  <div class="skill-title">{{ "Confidence Score" }}</div>
+                  <div class="skill-score">{{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.confidence_score ? interviewFeedback.interview_feedback.confidence_score : 0 }}/10</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-row-data d-flex align-items-center px-4 py-4 justify-content-between mt-4">
+              
+              <div class="col-data">
+                <div class="head">Mode</div>
+                <div class="text">At School</div>
+              </div>
+
+              <div class="col-data">
+                <div class="head">Date / Time</div>
+                <div class="text">12/09/2023 (12:00 - 14:00)</div>
+              </div>
+
+              <!-- <div class="col-data">
+                <div class="head">Time</div>
+                <div class="text">At School</div>
+              </div> -->
+
+              <div class="col-data">
+                <div class="head">Current CTC</div>
+                <div class="text">{{ interviewFeedback.interview_feedback ? interviewFeedback.interview_feedback.ctc_current : 'N/A' }}</div>
+              </div>
+
+              <div class="col-data">
+                <div class="head">Expected CTC</div>
+                <div class="text">{{ interviewFeedback.interview_feedback ? interviewFeedback.interview_feedback.ctc_expected : 'N/A' }}</div>
+              </div>
+
+              <div class="col-data">
+                <div class="head">Interviewer's Name</div>
+                <div class="text">{{ interviewFeedback.interviewer ? `${interviewFeedback.interviewer.email} / ${interviewFeedback.interviewer.name}` : 'N/A' }}</div>
+              </div>
+
+            </div>
+
+            <div class="title-container">
+              <div class="profile-title-interview">Interview Remarks </div>
+              <p>
+                {{ interviewFeedback && interviewFeedback.interview_remark ? interviewFeedback.interview_remark : '-N/A-' }}
+              </p>
+            </div>
+
+            <div class="title-container">
+              <div class="profile-title-interview">About Candidate </div>
+              <p>
+                {{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.about_candidate ? interviewFeedback.interview_feedback.about_candidate : '-N/A-' }}
+              </p>
+            </div>
+
+            <div class="title-container">
+              <div class="profile-title-interview">Candidate Past </div>
+              <p>
+                {{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.candidate_past ? interviewFeedback.interview_feedback.candidate_past : '-N/A-' }}
+              </p>
+            </div>
+
+            <div class="title-container">
+              <div class="profile-title-interview">Interview Notes </div>
+              <p>
+                {{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.interview_notes ? interviewFeedback.interview_feedback.interview_notes : '-N/A-' }}
+              </p>
+            </div>
+
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -315,6 +404,7 @@ export default {
       userData: {},
       demoVideos: [],
       screeningData: {},
+      interviewFeedback: null,
       mainsData: {}
     };
   },
@@ -326,7 +416,8 @@ export default {
           this.userData = response.data.data;
           this.screeningData = response.data.data && response.data.data.assessment_results ? response.data.data.assessment_results.find(ele => ele.type == 'SCREENING') : {}; 
 
-          this.demoVideos = response.data.data && response.data.data.demo_video ? response.data.data.demo_video : []; 
+          this.demoVideos = response.data.data && response.data.data.demo_video ? response.data.data.demo_video : [];
+          this.interviewFeedback = response.data.data && response.data.data.interview ? response.data.data.interview : null; 
 
           this.mainsData = response.data.data && response.data.data.assessment_results ? response.data.data.assessment_results.find(ele => ele.type == 'MAINS') : {}; 
           if(this.screeningData && this.screeningData.skill_scores) {
@@ -446,5 +537,57 @@ export default {
     max-width: 14px;
     min-width: 14px;
 }
+.detail-row-data {
+  background-color: rgba(248, 250, 252, 1);
+  border:1px solid rgba(218, 218, 218, 1);
+  border-radius: 10px;
+  justify-content: space-between;
+}
+
+.col-data {
+  border-left: 1px solid #d9dada;
+  padding-left: 10px;
+}
+.col-data:first-child {
+  border: none;
+  padding-left: 10px;
+}
+.col-data .head {
+  color :rgba(0, 0, 0, 0.6);
+  padding-bottom: 6px;
+  font-size: 12px;
+}
+
+.col-data .text {
+  color :rgba(0, 0, 0, 0.87);
+  font-size: 14px;
+}
+
+.profile-title-interview { 
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.84);
+}
+
+.title-container {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.title-container p {
+  font-size: 14px;
+  padding-top: 5px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  color: rgba(77, 77, 77, 1);
+
+}
+
 </style>
   
