@@ -28,6 +28,11 @@ import AllAssessmentView from '../views/AllAssessmentView.vue'
 import NationalScholarshipView from '../views/NationalScholarshipView.vue'
 import CreateRolesView from '../views/CreateRolesView.vue'
 import CreateAdminView from '../views/CreateAdminView.vue'
+import AdminUserView from '../views/AdminUserView.vue'
+import AllRoleView from '../views/AllRoleView'
+
+
+
 
 
 
@@ -296,6 +301,22 @@ const routes = [
     path: '/create-admin',
     name: 'create admin',
     component: CreateAdminView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/admin-user',
+    name: ' admin user',
+    component: AdminUserView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/all-role',
+    name: ' all role',
+    component: AllRoleView,
     meta: {
       requiresAuth: true,
     }

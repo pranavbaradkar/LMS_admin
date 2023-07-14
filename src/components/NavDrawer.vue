@@ -13,7 +13,7 @@
     height="95%"
   >
     <div class="d-flex justify-center pt-3 bg-surface-variant topfixed" fluid>
-      <img v-if="mini"  src="../assets/icon.svg" width="50px" height="auto" >
+      <img v-if="mini" src="../assets/icon.svg" width="50px" height="auto" />
       <!-- <v-img v-if="mini" height="50px" width="50px" src="../assets/icon.svg"> -->
       <!-- </v-img> -->
       <img
@@ -53,26 +53,26 @@
         </v-list-item>
         <v-list-item
           color="grey lighten-2"
-          key="Home"
+          key="Home1"
           to="/recommendations"
           style="border-radius: 16px"
           active-class="grey darken-4 slider"
           class="ma-2 px-2"
         >
           <v-list-item-icon class="ma-4 rounded-xl" slider>
-            <v-icon size="25px" color="grey lighten-4"
-              >mdi-star-outline</v-icon
-            >
+            <v-icon size="25px" color="grey lighten-4">mdi-star-outline</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title class="white--text">Recommended</v-list-item-title>
+            <v-list-item-title class="white--text"
+              >Recommended</v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
 
         <v-list-item
           color="grey lighten-2"
-          key="Home"
+          key="Home3"
           to="/interview/panel"
           style="border-radius: 16px"
           active-class="grey darken-4 slider"
@@ -107,7 +107,7 @@
                   >Users</v-list-item-title
                 >
               </v-list-item-content>
-            </v-list-item>            
+            </v-list-item>
           </template>
 
           <v-list-item to="/users" active-class="grey darken-4 slider">
@@ -155,7 +155,6 @@
 
         <v-list-item
           color="grey lighten-2"
-          
           to="/question-bank"
           style="border-radius: 16px"
           active-class="grey darken-4 slider"
@@ -188,9 +187,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title class="white--text"
-              >Campaigns</v-list-item-title
-            >
+            <v-list-item-title class="white--text">Campaigns</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -217,10 +214,8 @@
 
           <v-list-item to="/clusters" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-wall</v-icon
-                >
-              </v-list-item-icon>
+              <v-icon size="25px" color="grey lighten-4">mdi-wall</v-icon>
+            </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="white--text"
                 >Clusters</v-list-item-title
@@ -229,54 +224,48 @@
           </v-list-item>
           <v-list-item to="/brands" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-certificate</v-icon
-                >
-              </v-list-item-icon>
+              <v-icon size="25px" color="grey lighten-4"
+                >mdi-certificate</v-icon
+              >
+            </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="white--text">Brands</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/schools" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-town-hall</v-icon
-                >
-              </v-list-item-icon>
+              <v-icon size="25px" color="grey lighten-4">mdi-town-hall</v-icon>
+            </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="white--text">Schools</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/boards" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-file-certificate</v-icon
-                >
-              </v-list-item-icon>
-            
+              <v-icon size="25px" color="grey lighten-4"
+                >mdi-file-certificate</v-icon
+              >
+            </v-list-item-icon>
+
             <v-list-item-content>
               <v-list-item-title class="white--text">Boards</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/levels" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-finance</v-icon
-                >
-              </v-list-item-icon>
+              <v-icon size="25px" color="grey lighten-4">mdi-finance</v-icon>
+            </v-list-item-icon>
             <v-list-item-content>
-              
               <v-list-item-title class="white--text">Levels</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/grades" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-notebook-check</v-icon
-                >
-              </v-list-item-icon>
+              <v-icon size="25px" color="grey lighten-4"
+                >mdi-notebook-check</v-icon
+              >
+            </v-list-item-icon>
             <v-list-item-content>
-             
               <v-list-item-title class="white--text">Grades</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -285,12 +274,11 @@
             to="/subject-category"
             active-class="grey darken-4 slider"
           >
-          
-          <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-book-search-outline</v-icon
-                >
-              </v-list-item-icon>
+            <v-list-item-icon class="rounded-xl pr-2" slider>
+              <v-icon size="25px" color="grey lighten-4"
+                >mdi-book-search-outline</v-icon
+              >
+            </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="white--text"
                 >Subject Category</v-list-item-title
@@ -299,56 +287,105 @@
           </v-list-item>
           <v-list-item to="/subjects" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-notebook-multiple</v-icon
-                >
-              </v-list-item-icon>
+              <v-icon size="25px" color="grey lighten-4"
+                >mdi-notebook-multiple</v-icon
+              >
+            </v-list-item-icon>
             <v-list-item-content>
-             
               <v-list-item-title class="white--text">Subject</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/skills" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-lightbulb-on-outline</v-icon
-                >
-              </v-list-item-icon>         
-            
+              <v-icon size="25px" color="grey lighten-4"
+                >mdi-lightbulb-on-outline</v-icon
+              >
+            </v-list-item-icon>
+
             <v-list-item-content>
               <v-list-item-title class="white--text">Skills</v-list-item-title>
             </v-list-item-content>
-          </v-list-item>  
-
-          
-
-          
-
-          
-
-          
+          </v-list-item>
 
           <v-list-item to="/lo-banks" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-graph-outline</v-icon
-                >
-              </v-list-item-icon> 
+              <v-icon size="25px" color="grey lighten-4"
+                >mdi-graph-outline</v-icon
+              >
+            </v-list-item-icon>
             <v-list-item-content>
-              
-              <v-list-item-title class="white--text">LOs Bank</v-list-item-title>
+              <v-list-item-title class="white--text"
+                >LOs Bank</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
-
-          
-
-          
-
-          
         </v-list-group>
-       
 
-       
+        <v-list-group no-action>
+          <template v-slot:activator>
+            <v-list-item
+              color="grey lighten-2"
+              style="border-radius: 16px"
+              active-class="grey darken-4 slider"
+            >
+              <v-list-item-icon class="rounded-xl" slider>
+                <v-icon size="25px" color="grey lighten-4"
+                  >mdi-account-outline</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title class="white--text ml-4"
+                  >Admin</v-list-item-title
+                >
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+          
+          <v-list-item to="/create-admin" active-class="grey darken-4 slider">
+            <v-list-item-icon class="rounded-xl me-2" slider>
+                <v-icon size="25px" color="grey lighten-4"
+                  >mdi-account-plus</v-icon>
+              </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="white--text"
+                >Create User</v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item to="/create-role" active-class="grey darken-4 slider">
+            <v-list-item-icon class="rounded-xl me-2" slider>
+                <v-icon size="25px" color="grey lighten-4"
+                  >mdi-checkbox-marked-circle-outline</v-icon>
+              </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="white--text"
+                >Create Role</v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item to="/admin-user" active-class="grey darken-4 slider">
+            <v-list-item-icon class="rounded-xl me-2" slider>
+                <v-icon size="25px" color="grey lighten-4"
+                  >mdi-account-multiple</v-icon>
+              </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="white--text"
+                >All Admin</v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item to="/all-role" active-class="grey darken-4 slider">
+            <v-list-item-icon class="rounded-xl me-2" slider>
+                <v-icon size="25px" color="grey lighten-4"
+                  >mdi-checkbox-multiple-marked-circle-outline</v-icon>
+              </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="white--text"
+                >All Role</v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
 
         <v-list-item
           dense
