@@ -334,7 +334,7 @@
         <div>
         <div class="my-2 text-subtitle-1">
           <!-- Assessment title -->
-          {{ data.level.name}}
+          {{data.level && data.level.name}}
         </div>
 
         <div class="my-2 text-subtitle-1">
@@ -636,10 +636,10 @@
                       <v-row>
                         <v-col cols="6">
                           <div class="text-body-1 my-4">
-                            Total Number Of Questions
+                            Total Number Of Questions*
                           </div>
                           <v-text-field
-                            hide-details
+                          
                             outlined
                             class="rounded-xl"
                             solo
@@ -649,12 +649,13 @@
                             v-model.number="
                               screeningConfiguration.totalNumberQuestions
                             "
+                            :rules="[(v) => !!v || 'Please select number of questions']"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="6">
-                          <div class="text-body-1 my-4">Teaching Level</div>
+                          <div class="text-body-1 my-4">Teaching Level*</div>
                           <v-select
-                            hide-details
+                          
                             label="Choose Level"
                             :items="levels"
                             item-text="name"
@@ -662,6 +663,7 @@
                             outlined
                             class="rounded-xl"
                             v-model="screeningConfiguration.teachingLevel"
+                            :rules="[(v) => !!v || 'please select level']"
                           >
                           </v-select>
                         </v-col>
@@ -1988,7 +1990,7 @@ export default {
       else{
         alert(response.data.error)
       }
-       console.log(response.data.data);
+       console.log(this.assessments);
     },
     async fetchMainsUsers(id) {
       console.log("mains user clicked");
