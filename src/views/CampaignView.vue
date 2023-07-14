@@ -407,8 +407,8 @@
                         </div>
                         <v-autocomplete
                         v-model="campaignData.assessment_ids"
-                         required
-                         :rules="[v => !!v || 'School is required']"
+                          required
+                          :rules="[v => !!v || 'assessment is required']"
                           clearable
                           deletable-chips
                           label="Select or Search Assessments"
@@ -1284,6 +1284,7 @@ export default {
    
       if (response.data.success) {
         this.assessments = response.data.data.rows;
+        this.assessments = this.assessments.filter((item) => item.status === 'PUBLISHED');
       }
       else {
         alert(response.data.error)
