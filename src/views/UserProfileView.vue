@@ -89,7 +89,7 @@
                 :key="`${key}-scr`" class="col-6">
                 <div class="skill" :class="`color-${index+1}`">
                   <div class="skill-title">{{ key }} </div>
-                  <div class="skill-score">{{value}}/10</div>
+                  <div class="skill-score">{{value}}/{{ screeningData.skill_total[index] }}</div>
                 </div>
               </div>
             </div>
@@ -121,7 +121,7 @@
                 :key="`${key}-scr`" class="col-4">
                 <div class="skill" :class="`color-${index+1}`">
                   <div class="skill-title">{{ key }} </div>
-                  <div class="skill-score">{{value}}/10</div>
+                  <div class="skill-score">{{value}}/{{ mainsData.skill_total[index] }}</div>
                 </div>
               </div>
               
@@ -364,6 +364,7 @@ export default {
             }
             
           }
+          this.mainsData.skill_total.splice(1, 0, 112);
         }
         console.log(this.userData,this.screeningData, this.mainsData);
 
