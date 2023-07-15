@@ -31,7 +31,7 @@ import InterviewPanelView from '../views/InterviewPanelView.vue'
 import CreateRolesView from '../views/CreateRolesView.vue'
 import CreateAdminView from '../views/CreateAdminView.vue'
 import AdminUserView from '../views/AdminUserView.vue'
-import AllRoleView from '../views/AllRoleView'
+import AllRolesView from '../views/AllRolesView'
 
 
 
@@ -249,7 +249,7 @@ const routes = [
   },
   {
     path: '/create-role',
-    name: 'create roles',
+    name: 'create role',
     component: CreateRolesView,
     meta: {
       requiresAuth: true,
@@ -272,9 +272,9 @@ const routes = [
     }
   },
   {
-    path: '/all-role',
-    name: 'all role',
-    component: AllRoleView,
+    path: '/all-roles',
+    name: 'all roles',
+    component: AllRolesView,
     meta: {
       requiresAuth: true,
     }
