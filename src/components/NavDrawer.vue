@@ -22,7 +22,7 @@
             <v-list-item-title class="white--text">Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="grey lighten-2" key="Home" to="/recommendations" style="border-radius: 16px"
+        <v-list-item color="grey lighten-2" key="Home2" to="/recommendations" style="border-radius: 16px"
           active-class="grey darken-4 slider" class="ma-2 px-2">
           <v-list-item-icon class="ma-4 rounded-xl" slider>
             <v-icon size="25px" color="grey lighten-4">mdi-star-outline</v-icon>

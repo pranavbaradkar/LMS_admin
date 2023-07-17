@@ -45,7 +45,6 @@
                   width="102px"
                   height="48px"
                   rounded
-                  @click="saveInputs"
                   class="primary pa-4"
                   >{{ formbtn() }}
                 </v-btn>
@@ -189,8 +188,8 @@
   </v-container>
 </template>
 <script>
-import BrandController from "@/controllers/BrandController";
-import axios from "axios";
+import RolesController from "@/controllers/RolesController";
+
 export default {
   name: "AllRoleView",
   data() {
@@ -210,9 +209,9 @@ export default {
       singleSelect: false,
       deleteDialog: false,
       dLoading: false,
+      roleData: null,
       formbtnBool: false,
       selected: [],
-      apiData: [] ,
       search: "",
       searchBool: false,
       headers: [
@@ -228,7 +227,7 @@ export default {
   watch: {},
   methods: {
     async searchData(search) {
-      const response = await BrandController.searchBrand(
+      const response = await RolesController.searchBrand(
         this.pageSize,
         this.page,
         search
@@ -238,15 +237,6 @@ export default {
       this.count = response.data.data.count;
       this.tableData = response.data.data.rows;
     },
-    fetchData() {
-    axios.get('https://assessments-service.staging.hubblehox.ai/api/v1/admin/roles') // Replace with your API URL
-      .then(response => {
-        this.apiData = response.data; // Assign the response data to the apiData property
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  },
     getDate(timeStamp) {
       return new Date(timeStamp).toString().substring(0, 16);
     },
@@ -265,10 +255,22 @@ export default {
       return this.formbtnBool === false ? "Created" : "Updated";
     },
 
-    
+    async fetchAllRoles() {
+      const response = await RolesController.getAllRolesByPagination(this.pageSize,
+        this.page);
+      
+      if (response.data.success) {
+        this.roleData = response.data.data;
+      this.tableData = this.roleData.rows;
+      this.count = response.data.data.count;
+      }
+      else {
+        alert(response.data.error)
+      }
+    },
   },
   created() {
-    this.fetchData();
+    this.fetchAllRoles();
   },
 };
 </script>
