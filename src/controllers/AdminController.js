@@ -33,8 +33,58 @@ export default {
             return error.response;
         }
     },
+    updateUser : async function (data, id) {
+        try {
+            const response = await instance.put(`admin/role/users/${id}`, data, {
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
+    
+    getUsers: async function(payload) {
+        try {
+            const response = await instance.get('admin/role/users/', {
+                headers: {
+                    'Authorization': AuthService.getToken()
+                },
+                params: payload
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
 
+    getSingleUsers: async function(payload) {
+        try {
+            const response = await instance.get(`admin/role/users/${payload.id}`, {
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
 
-
+    deleteUser : async function (id) {
+      
+        try {
+            const response = await instance.delete('admin/role/users/'+id,{
+                headers: {
+                    'Authorization': AuthService.getToken()
+                  }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
 
 }

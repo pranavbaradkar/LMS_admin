@@ -256,23 +256,23 @@ const routes = [
     }
   },
   {
-    path: '/create-admin',
-    name: 'create admin',
+    path: '/admin/:type/:id?',
+    name: 'admin',
     component: CreateAdminView,
     meta: {
       requiresAuth: true,
     }
   },
   {
-    path: '/admin-user',
-    name: 'admin user',
+    path: '/admins',
+    name: 'admins',
     component: AdminUserView,
     meta: {
       requiresAuth: true,
     }
   },
   {
-    path: '/all-role',
+    path: '/roles',
     name: 'all role',
     component: AllRoleView,
     meta: {

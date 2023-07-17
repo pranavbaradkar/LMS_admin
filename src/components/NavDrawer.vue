@@ -33,7 +33,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="grey lighten-2" key="Home" to="/interview/panel" style="border-radius: 16px"
+        <v-list-item color="grey lighten-2" key="Home-account" to="/interview/panel" style="border-radius: 16px"
           active-class="grey darken-4 slider" class="ma-2 px-2">
           <v-list-item-icon class="ma-4 rounded-xl" slider>
             <v-icon size="25px" color="grey lighten-4">mdi-clipboard-account</v-icon>
@@ -257,48 +257,25 @@
               </v-list-item-content>
             </v-list-item>
           </template>
-          
-          <v-list-item to="/create-admin" active-class="grey darken-4 slider">
-            <v-list-item-icon class="rounded-xl me-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-account-plus</v-icon>
-              </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title class="white--text"
-                >Create User</v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="/create-role" active-class="grey darken-4 slider">
-            <v-list-item-icon class="rounded-xl me-2" slider>
-                <v-icon size="25px" color="grey lighten-4"
-                  >mdi-checkbox-marked-circle-outline</v-icon>
-              </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title class="white--text"
-                >Create Role</v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="/admin-user" active-class="grey darken-4 slider">
+          <v-list-item to="/admins" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl me-2" slider>
                 <v-icon size="25px" color="grey lighten-4"
                   >mdi-account-multiple</v-icon>
               </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="white--text"
-                >All Admin</v-list-item-title
+                >All Users</v-list-item-title
               >
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/all-role" active-class="grey darken-4 slider">
+          <v-list-item to="/roles" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl me-2" slider>
                 <v-icon size="25px" color="grey lighten-4"
                   >mdi-checkbox-multiple-marked-circle-outline</v-icon>
               </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="white--text"
-                >All Role</v-list-item-title
+                >All Roles</v-list-item-title
               >
             </v-list-item-content>
           </v-list-item>
