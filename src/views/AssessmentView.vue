@@ -3,7 +3,7 @@
     <v-row>
       <v-col class="d-flex align-center">
         <v-btn
-          v-if="!showUsers"
+          v-if="((user_permission().assessments && user_permission().assessments.panel && user_permission().assessments.panel.create) || user().role_type == 'SUPER_ADMIN') && !showUsers"
           @click="
             () => {
               dialog = true;
@@ -269,7 +269,7 @@
       </div>
           <div class="d-flex justify-end">
           
-            <v-card-title class="pa-0 cursor" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
+            <v-card-title v-if="user().role_type == 'SUPER_ADMIN'" class="pa-0 cursor" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
           </div>
         </div>
         <v-divider class="mb-4 mt-2"></v-divider>
@@ -303,6 +303,7 @@
           </div>
           <div>
           <v-btn
+          v-if="((user_permission().assessments && user_permission().assessments.panel && user_permission().assessments.panel.update) || user().role_type == 'SUPER_ADMIN')"
           fab
           color="white"
           style="width: 32px; height: 32px;"
@@ -311,6 +312,7 @@
           </v-btn>
 
           <v-btn
+          v-if="((user_permission().assessments && user_permission().assessments.panel && user_permission().assessments.panel.delete) || user().role_type == 'SUPER_ADMIN')"
           class="ml-4"
           fab
           color="#ff000059"
@@ -360,7 +362,7 @@
         </div>
         </div>
         <div class="d-flex justify-end">          
-            <v-card-title class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : 
+            <v-card-title v-if="user().role_type == 'SUPER_ADMIN'" class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : 
             showDialog(data.assessment_id)">
               {{assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE'}}
             </v-card-title>
@@ -1405,6 +1407,7 @@ import AssessmentController from "@/controllers/AssessmentController";
 import SkillsController from "@/controllers/SkillsController";
 import LevelController from "@/controllers/LevelController";
 import QuestionsController from '@/controllers/QuestionsController';
+import AuthService from "@/services/AuthService";
 
 export default {
   mixins: [validationMixin],
@@ -1560,6 +1563,14 @@ export default {
     };
   },
   methods: {
+    user() {
+      console.log(AuthService.getLoggedUser());
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      console.log(AuthService.getPermissions());
+      return AuthService.getPermissions();
+    },
     showDialog(assessment_id) {
       this.current_assessment = assessment_id;
       this.approveDialog = true;

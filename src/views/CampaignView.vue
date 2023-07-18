@@ -447,6 +447,7 @@
                       cols="6"
                       md="6"
                       class="d-flex justify-space-between align-center"
+                      v-if="((user_permission().assessments && user_permission().assessments.panel && user_permission().assessments.panel.create) || user().role_type == 'SUPER_ADMIN')"
                     >
                       <span>Create new assessment*</span>
                       <v-btn
@@ -572,7 +573,7 @@
         </div>
         <v-row>
           <v-spacer></v-spacer>
-          <img width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
+          <img v-if="((user_permission().campaigns && user_permission().campaigns.panel && user_permission().campaigns.panel.update) || user().role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
         </v-row>
         
         <v-chip color="#06C2700F" small pill>
@@ -741,7 +742,7 @@
         </div>
         <v-row>
           <v-spacer></v-spacer>
-          <img width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
+          <img v-if="((user_permission().campaigns && user_permission().campaigns.panel && user_permission().campaigns.panel.update) || user().role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
         </v-row>
         <div class="d-flex flex-column">
           <v-card-title class="pa-0"> {{ data.name }} </v-card-title>
@@ -855,7 +856,7 @@
         </div>
         <v-row>
           <v-spacer></v-spacer>
-          <img width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
+          <img v-if="((user_permission().campaigns && user_permission().campaigns.panel && user_permission().campaigns.panel.update) || user().role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
         </v-row>
         <div class="d-flex flex-column">
           <v-card-title class="pa-0"> {{ data.name }} </v-card-title>
@@ -958,6 +959,7 @@
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
         <v-btn
+          v-if="((user_permission().campaigns && user_permission().campaigns.panel && user_permission().campaigns.panel.create) || user().role_type == 'SUPER_ADMIN')"
           class="primary mx-2 m-fab"
           v-bind="attrs"
           v-on="on"
@@ -995,6 +997,7 @@ import SkillsController from "@/controllers/SkillsController";
 
 import SubjectController from "@/controllers/SubjectController";
 import ClusterController from "@/controllers/ClusterController";
+import AuthService from "@/services/AuthService";
 
 export default {
   name: "campaignView",
@@ -1043,6 +1046,12 @@ export default {
   },
 
   methods: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    },
     getPercentate(value, totalValue) {
       var data = (value / totalValue) * 100;
       data = Math.trunc( data );

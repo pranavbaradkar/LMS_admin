@@ -745,6 +745,7 @@
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
+                v-if="((user_permission().question_bank && user_permission().question_bank.panel && user_permission().question_bank.panel.create) || user().role_type == 'SUPER_ADMIN')"
                 class="primary"
                 @click="clearValue"
                 large
@@ -792,6 +793,7 @@
             <v-btn class="primary mx-2" rounded @click="filterDialog = true"
               ><v-icon>mdi-tune</v-icon>Filter</v-btn
             ><v-btn
+              v-if="((user_permission().question_bank && user_permission().question_bank.panel && user_permission().question_bank.panel.delete) || user().role_type == 'SUPER_ADMIN')"
               class="primary mx-2"
               rounded
               @click="deleteDialog = true"
@@ -881,6 +883,7 @@
         <template v-slot:[`item.actions`]="{ item }">
           <div class="d-flex flex-row">
             <img
+              v-if="((user_permission().question_bank && user_permission().question_bank.panel && user_permission().question_bank.panel.update) || user().role_type == 'SUPER_ADMIN')"
               width="36px"
               height="36px"
               @click="editQuestion(item.id)"
@@ -1252,6 +1255,7 @@ import LoBankController from "@/controllers/LoBankController";
 import SubjectController from "@/controllers/SubjectController";
 import SkillsController from "@/controllers/SkillsController";
 import LevelController from "@/controllers/LevelController";
+import AuthService from "@/services/AuthService";
 import { v4 as uuidv4 } from 'uuid';
 export default {
   name: "QuestionBankView",
@@ -1498,6 +1502,12 @@ export default {
     },
   },
   methods: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    },
     saveEditedValue() {
       this.options[this.editedOptionIndex].option_value =
         this.editedCkeditorValue;
