@@ -124,5 +124,18 @@ export default {
             return error.response;
         }
     },
+    deleteRole : async function (id) {
+      
+        try {
+            const response = await instance.delete('admin/roles/'+id,{
+                headers: {
+                    'Authorization': AuthService.getToken()
+                  }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
 
 }

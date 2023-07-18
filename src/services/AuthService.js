@@ -18,6 +18,7 @@ export default {
       if (response.data.success) {
         const token = response.data.token
         localStorage.setItem(TOKEN_KEY, token)
+        localStorage.setItem('userDetails', JSON.stringify(response.data.admin));
         return response.data.success;
       }
     } catch (error) {
@@ -45,9 +46,20 @@ export default {
     return null
   },
   getLogged: async function () {
-    const response = await instance.post('admin/login');
-    console.log(response);
-    return null
+    const response = await instance.get('admin',{
+      headers: {
+          'Authorization': this.getToken()
+      }
+    });
+    localStorage.setItem('userDetails', JSON.stringify(response.data.admin));
+  },
+  getPermissions: function() {
+    const details = localStorage.getItem('userDetails');
+    return JSON.parse(details).roles ? JSON.parse(JSON.parse(details).roles.permission) : {};
+  },
+  getLoggedUser: function() {
+    const details = localStorage.getItem('userDetails');
+    return JSON.parse(details);
   },
   getToken: function () {
     return localStorage.getItem(TOKEN_KEY)

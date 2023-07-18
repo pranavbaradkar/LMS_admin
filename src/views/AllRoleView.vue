@@ -2,7 +2,7 @@
   <v-container fluid class="pa-8">
     <v-row>
       <v-col class="d-flex align-center">
-        <v-btn to="/role" class="primary" large rounded
+        <v-btn to="/role/create" class="primary" large rounded
           ><v-icon>mdi-plus</v-icon>Create Role</v-btn
         >
       </v-col>
@@ -107,7 +107,7 @@
                 width="157px"
                 :loading="dLoading"
                 rounded
-                @click="deleteData(selected)"
+                @click="deleteRole()"
                 >DELETE</v-btn
               >
             </div>
@@ -209,8 +209,17 @@ export default {
         this.tableData = this.roleData;
         this.count = this.tableData.length;
       } else {
-        alert(response.data.error)
+        // alert(response.data.error)
       }
+    },
+    async deleteRole() {
+      var response;
+      response = await AdminController.deleteRole(this.selected.id);
+      if (response.data.success) {
+        this.selected = {};
+      }
+      this.fetchAllRoles();
+      this.deleteDialog = false;
     },
   },
   created() {

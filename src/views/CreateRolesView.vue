@@ -177,6 +177,7 @@ export default {
       name: null,
       note: null,
       isCreatingRole: false,
+      formbtnBool: false,
       windowHeight: window.innerHeight,
       permissionData: {
         "master": {
@@ -280,6 +281,22 @@ export default {
             "update": false,
             "delete": false
           }
+        },
+        "campaigns": {
+          "panel": {
+            "create": false,
+            "view": true,
+            "update": false,
+            "delete": false
+          }
+        },
+        "users": {
+          "panel": {
+            "create": false,
+            "view": true,
+            "update": false,
+            "delete": false
+          }
         }
 
       }
@@ -292,7 +309,7 @@ export default {
   },
   methods: {
     formbtn() {
-      return this.formbtnBool === false ? "Create" : "Create";
+      return this.formbtnBool === false ? "Create" : "Update";
     },
     async createRole() {
       if (this.$refs.form.validate()) {
@@ -337,11 +354,13 @@ export default {
       this.note = result.note;
       this.permissionData = result.permission;
       this.isEditId = id;
-    },
+    }
   },
   created() {
+    this.formbtnBool = false;
     if (this.$route.params.id) {
       this.getSingleRole(this.$route.params.id);
+      this.formbtnBool = true
     }
   },
 };

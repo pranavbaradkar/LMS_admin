@@ -105,7 +105,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-group no-action>
+        <v-list-group no-action v-if="(user_permission.master && user_permission.master.panel && user_permission.master.panel.view) || user.role_type == 'SUPER_ADMIN'">
           <template v-slot:activator>
             <v-list-item color="grey lighten-2" style="border-radius: 16px" active-class="grey darken-4 slider">
               <v-list-item-icon class="rounded-xl" slider>
@@ -118,7 +118,7 @@
             </v-list-item>
           </template>
 
-          <v-list-item to="/clusters" active-class="grey darken-4 slider">
+          <v-list-item v-if="(user_permission.master && user_permission.master.child.clusters && user_permission.master.child.clusters.view) || user.role_type == 'SUPER_ADMIN'" to="/clusters" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-wall</v-icon>
             </v-list-item-icon>
@@ -238,7 +238,7 @@
         </v-list-item>
 
 
-        <v-list-group no-action>
+        <v-list-group no-action v-if="user.role_type == 'SUPER_ADMIN'">
           <template v-slot:activator>
             <v-list-item
               color="grey lighten-2"
@@ -283,7 +283,7 @@
 
         <v-list-item dense to="/help" style="border-radius: 15px" active-class="grey darken-4 ma-2 slider">
           <v-list-item-icon class="ma-4">
-            <v-icon size="25px" color="white">mdi-help-circle-outline</v-icon>
+            <v-icon size="25px" color="white">mdi-help-circle-outline</v-icon> 
           </v-list-item-icon>
           <v-list-item-content class="ma-4">
             <v-list-item-title class="white--text"> Help </v-list-item-title>
@@ -319,7 +319,10 @@ export default {
   },
   computed: {
     user() {
-      return AuthService.getUser();
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
     },
     getHeight() {
       return this.windowHeight - 300;
@@ -338,7 +341,8 @@ export default {
     this.$nextTick(() => {
       window.addEventListener("resize", this.onResize);
     });
-    console.log(this.user);
+    AuthService.getLogged();
+    console.log(this.user_permission);
   },
 
   beforeDestroy() {
