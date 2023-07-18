@@ -33,6 +33,44 @@ export default {
             return error.response;
         }
     },
+    createRole : async function (data) {
+        try {
+            const response = await instance.post('admin/roles',
+                data
+                ,{
+                headers: {
+                    'Authorization': AuthService.getToken()
+                  }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
+    updateRole : async function (data, id) {
+        try {
+            const response = await instance.put(`admin/roles/${id}`, data, {
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
+    getSingleRole: async function(payload) {
+        try {
+            const response = await instance.get(`admin/roles/${payload.id}`, {
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
     updateUser : async function (data, id) {
         try {
             const response = await instance.put(`admin/role/users/${id}`, data, {

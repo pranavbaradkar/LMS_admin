@@ -44,6 +44,11 @@ export default {
     }
     return null
   },
+  getLogged: async function () {
+    const response = await instance.post('admin/login');
+    console.log(response);
+    return null
+  },
   getToken: function () {
     return localStorage.getItem(TOKEN_KEY)
   },

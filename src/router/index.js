@@ -248,7 +248,7 @@ const routes = [
     }
   },
   {
-    path: '/create-role',
+    path: '/role/:type/:id?',
     name: 'create roles',
     component: CreateRolesView,
     meta: {

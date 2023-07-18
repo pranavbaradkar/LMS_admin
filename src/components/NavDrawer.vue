@@ -338,6 +338,7 @@ export default {
     this.$nextTick(() => {
       window.addEventListener("resize", this.onResize);
     });
+    console.log(this.user);
   },
 
   beforeDestroy() {

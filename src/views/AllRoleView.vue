@@ -1,57 +1,10 @@
 <template>
   <v-container fluid class="pa-8">
     <v-row>
-      <v-col>
-        <v-btn to="/create-role" class="primary" large rounded
+      <v-col class="d-flex align-center">
+        <v-btn to="/role" class="primary" large rounded
           ><v-icon>mdi-plus</v-icon>Create Role</v-btn
         >
-        <v-dialog max-width="887px" v-model="dialog" center>
-          <v-form ref="form" lazy-validation>
-            <v-card>
-              <v-card-title class="secondary mb-8">
-                {{ formbtn() }} Role</v-card-title
-              >
-              <v-card-text class="px-6 pb-0">
-                <v-text-field
-                  outlined
-                  class="rounded-xl"
-                  v-model="name"
-                  label="Enter Role*"
-                  :rules="[(v) => !!v || 'Brand name is required']"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  outlined
-                  class="rounded-xl"
-                  v-model="description"
-                  label="Description*"
-                  :rules="[(v) => !!v || 'Brand description is required']"
-                  required
-                ></v-text-field>
-              </v-card-text>
-              <v-card-actions class="px-6 pb-6">
-                <small>*All fields are mandatory</small>
-                <v-spacer></v-spacer>
-                <v-btn
-                  width="102px"
-                  height="48px"
-                  rounded
-                  outlined
-                  class="pa-4"
-                  @click="dialog = false"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  width="102px"
-                  height="48px"
-                  rounded
-                  class="primary pa-4"
-                  >{{ formbtn() }}
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-form>
-        </v-dialog>
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -97,9 +50,25 @@
         {{ getDate(item.created_at) }}
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon class="mr-2 pa-4" @click="updateData(item)">
-          <v-icon color="black">mdi-square-edit-outline</v-icon>
-        </v-btn>
+        <div class="d-flex flex-row">
+          <img
+            width="36px"
+            height="36"
+            @click="redirectToEdit(item)"
+            class="cursor"
+            src="../assets/edit.svg"
+          />
+          <img
+            @click="() => {
+              deleteDialog = true
+              selected = item
+            }"
+            width="36px"
+            height="36"
+            class="cursor"
+            src="../assets/userdelete.svg"
+          />
+        </div>
       </template>
     </v-data-table>
     <v-dialog v-model="deleteDialog" max-width="366px" persistent>
@@ -111,14 +80,14 @@
               ><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar
             >
 
-            <p class="text-h5 pt-6 pb-0">Delete Brands</p>
+            <p class="text-h5 pt-6 pb-0">Delete Roles</p>
             <p
               class="text-disabled grey--text text-subtitle-1 pt-3"
               color="rgba(0, 0, 0, 0.6)"
               disabled
             >
-              This action will permanently delete the item . This cannot be
-              undone
+              This action will permanently delete the item. This cannot be
+              undone, please check the association with users.
             </p>
 
             <div class="d-flex justify-space-between pt-4 pb-2" fluid>
@@ -167,28 +136,10 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="successDialog" max-width="366px" persistent>
-      <v-card>
-        <v-container fluid class="pa-8">
-          <v-card-text class="text-center">
-            <v-icon color="#228B22" size="96">mdi-check-circle-outline</v-icon>
-            <p class="text-h5 py-4">Brand {{ formbtnValue() }}</p>
-            <v-btn
-              class="primary"
-              large
-              width="157px"
-              rounded
-              @click="successDialog = false"
-              >OK</v-btn
-            >
-          </v-card-text>
-        </v-container>
-      </v-card>
-    </v-dialog>
   </v-container>
 </template>
 <script>
-import RolesController from "@/controllers/RolesController";
+import AdminController from "@/controllers/AdminController";
 
 export default {
   name: "AllRoleView",
@@ -216,7 +167,9 @@ export default {
       searchBool: false,
       headers: [
         { text: "Role Name", value: "name" },
+        { text: "Note", value: "note" },
         { text: "Created  On", value: "created_at" },
+        { text: "Actions", value: "actions", cellClass: "w-10" },
       ],
       tableData: [],
       rules: {
@@ -226,16 +179,8 @@ export default {
   },
   watch: {},
   methods: {
-    async searchData(search) {
-      const response = await RolesController.searchBrand(
-        this.pageSize,
-        this.page,
-        search
-      );
-      console.log(response.data);
-      console.log(this.searchBool);
-      this.count = response.data.data.count;
-      this.tableData = response.data.data.rows;
+    async searchData(search) { 
+      console.log(search)
     },
     getDate(timeStamp) {
       return new Date(timeStamp).toString().substring(0, 16);
@@ -254,17 +199,16 @@ export default {
     formbtnValue() {
       return this.formbtnBool === false ? "Created" : "Updated";
     },
-
+    redirectToEdit(item) {
+      window.location.href=`/#/role/edit/${item.id}`
+    },  
     async fetchAllRoles() {
-      const response = await RolesController.getAllRolesByPagination(this.pageSize,
-        this.page);
-      
+      const response = await AdminController.getRoles();
       if (response.data.success) {
         this.roleData = response.data.data;
-      this.tableData = this.roleData.rows;
-      this.count = response.data.data.count;
-      }
-      else {
+        this.tableData = this.roleData;
+        this.count = this.tableData.length;
+      } else {
         alert(response.data.error)
       }
     },
