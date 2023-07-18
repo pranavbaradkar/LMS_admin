@@ -1564,11 +1564,9 @@ export default {
   },
   methods: {
     user() {
-      console.log(AuthService.getLoggedUser());
       return AuthService.getLoggedUser();
     },
     user_permission() {
-      console.log(AuthService.getPermissions());
       return AuthService.getPermissions();
     },
     showDialog(assessment_id) {

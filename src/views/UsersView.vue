@@ -4,7 +4,7 @@
       <v-col>
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn class="primary" large rounded color="primary" dark v-bind="attrs" v-on="on">
+            <v-btn v-if="((user_permission().users && user_permission().users.panel && user_permission().users.panel.create) || user().role_type == 'SUPER_ADMIN')" class="primary" large rounded color="primary" dark v-bind="attrs" v-on="on">
               <v-icon>mdi-plus</v-icon><div class="pl-1">Create</div>
             </v-btn>
           </template>
@@ -39,8 +39,11 @@
         <v-row justify="end">
           <!-- <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn> -->
           <v-btn
+            v-if="((user_permission().users && user_permission().users.panel && user_permission().users.panel.delete) || user().role_type == 'SUPER_ADMIN')"
             class="primary mx-2" rounded @click="deleteDialog = true"
-            :disabled="selected.length == 0"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn
+            :disabled="selected.length == 0"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn>
+          <v-btn
+            v-if="((user_permission().users && user_permission().users.panel && user_permission().users.panel.delete) || user().role_type == 'SUPER_ADMIN')"
             class="primary mx-2" rounded @click="resendInvite"
             :disabled="selected.length == 0"><v-icon>mdi-email-sync-outline</v-icon>Resend Invite</v-btn><v-btn
             class="primary mx-2" rounded><v-icon>mdi-export</v-icon>Export</v-btn>
@@ -83,7 +86,7 @@
         {{ item.first_name + ' ' + item.last_name }}
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <div class="d-flex flex-row">
+        <div v-if="((user_permission().users && user_permission().users.panel && user_permission().users.panel.update) || user().role_type == 'SUPER_ADMIN')" class="d-flex flex-row">
           <img width="36px" height="36" @click="updateData(item)" class="cursor" src="../assets/edit.svg">
           <img width="36px" height="36" class="cursor" src="../assets/userdelete.svg">
         </div>
@@ -697,6 +700,7 @@ import GradeController from "@/controllers/GradeController";
 import ResendInviteController from "@/controllers/ResendInviteController";
 import BoardController from "@/controllers/BoardController";
 import SchoolController from "@/controllers/SchoolController";
+import AuthService from "@/services/AuthService";
 
 export default {
   mixins: [validationMixin],
@@ -863,6 +867,12 @@ export default {
     }
   },
   methods: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    },
     
     getDate(timeStamp) {
       return new Date(timeStamp).toString().substring(0, 16);
