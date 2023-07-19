@@ -2,7 +2,9 @@
   <v-container fluid class="pa-8">
     <v-row>
       <v-col>
-        <v-btn @click="dialog = true ,newCreateBrands()" class="primary" large rounded><v-icon>mdi-plus</v-icon>Create Brand</v-btn>
+        <v-btn 
+        v-if="(user_permission.master && user_permission.master.child.brands && user_permission.master.child.brands.create) || user.role_type == 'SUPER_ADMIN'" 
+        @click="dialog = true ,newCreateBrands()" class="primary" large rounded><v-icon>mdi-plus</v-icon>Create Brand</v-btn>
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
             <v-card>
@@ -34,7 +36,8 @@
 
       <v-col>
         <v-row justify="end">
-          <v-btn class="primary mx-2" 
+          <v-btn   v-if="(user_permission.master && user_permission.master.child.brands && user_permission.master.child.brands.delete) || user.role_type == 'SUPER_ADMIN'"
+          class="primary mx-2" 
           :disabled="selected.length == 0"
           rounded
             @click="deleteDialog = true"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn class="primary mx-2"
@@ -51,7 +54,8 @@
         {{getDate(item.created_at)}}
        </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn v-if="(user_permission.master && user_permission.master.child.brands && user_permission.master.child.brands.update) || user.role_type == 'SUPER_ADMIN'"
+        icon class="mr-2 pa-4" @click="updateData(item)">
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
@@ -103,6 +107,7 @@
   </v-container>
 </template>
 <script>
+import AuthService from "@/services/AuthService";
 import BrandController from '@/controllers/BrandController';
 export default {
   name: "BrandsView",
@@ -139,6 +144,14 @@ export default {
         required: (value) => !!value || "Field is required",
       },
     };
+  },
+  computed: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    }
   },
   watch: {
     options: {

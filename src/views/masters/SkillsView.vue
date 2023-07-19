@@ -2,7 +2,7 @@
   <v-container fluid class="pa-8">
     <v-row>
       <v-col>
-        <v-btn
+        <v-btn v-if="(user_permission.master && user_permission.master.child.skills && user_permission.master.child.skills.create)  || user.role_type== 'SUPER_ADMIN'"
           @click="(dialog = true), newCreateSkills()"
           class="primary"
           large
@@ -194,7 +194,7 @@
         <v-row justify="end">
           <v-btn class="primary mx-2" rounded @click="filterDialog = true"
             ><v-icon>mdi-tune</v-icon>Filter</v-btn
-          ><v-btn
+          ><v-btn v-if="(user_permission.master && user_permission.master.child.skills && user_permission.master.child.skills.delete)  || user.role_type== 'SUPER_ADMIN'"
             class="primary mx-2"
             rounded
             :disabled="selected.length == 0"
@@ -261,7 +261,8 @@
         {{getDate(item.created_at)}}
        </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn v-if="(user_permission.master && user_permission.master.child.skills && user_permission.master.child.skills.update)  || user.role_type== 'SUPER_ADMIN'" 
+        icon class="mr-2 pa-4" @click="updateData(item)">
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
@@ -385,6 +386,7 @@
 </template>
 <script>
 import SkillsController from "@/controllers/SkillsController";
+import AuthService from "@/services/AuthService";
 import SubjectController from "@/controllers/SubjectController";
 export default {
   name: "SkillsView",
@@ -436,6 +438,14 @@ export default {
         required: (value) => !!value || "Field is required",
       },
     };
+  },
+  computed: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    }
   },
   watch: {
     options: {
