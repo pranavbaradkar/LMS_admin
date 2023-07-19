@@ -934,7 +934,7 @@
                                   <div>
                                     {{ question.question_type }}
                                   </div>
-                                  <v-btn elevation="0" @click="replaceQuestion(question)">Replace</v-btn>
+                                  <v-btn elevation="0" @click="replaceQuestionMains(question)">Replace</v-btn>
                                 </div>
                               </v-card-subtitle>
                               <v-card-title class="pt-0">
@@ -1771,6 +1771,33 @@ export default {
           q.id == question.id;
         })
         this.skillQuestionsIds[index] = response.data.data.id;
+        }
+        else {
+          alert('Not found any question to replace');
+        }
+      }
+      else {
+        alert(response.data.error);
+      }
+    },
+    async replaceQuestionMains (question) {
+      const response = await QuestionsController.replaceQuestion(question.id, this.assessmentId);
+      if (response.data.success) {
+        if (response.data.data) {
+        this.mainsQuestions = this.mainsQuestions.map((skill_q) => {
+          return {...skill_q, questions : skill_q.questions.map((q) => {
+            if (question.id == q.id) {
+              return response.data.data;
+            }
+            else {
+              return q;
+            }
+          })}
+        })
+        const index = this.mainsQuestionsIds.findIndex((q) => {
+          q.id == question.id;
+        })
+        this.mainsQuestionsIds[index] = response.data.data.id;
         }
         else {
           alert('Not found any question to replace');
