@@ -28,7 +28,7 @@
             </v-row>
           </v-toolbar>
         </v-card-title>
-        <v-card class="card role-card mb-3 mt-0 pa-4">
+        <v-card class="role-card mb-3 mt-0 pa-4">
           <v-form ref="form" lazy-validation>
             <v-row>
               <v-col cols="6" class="pt-8">
