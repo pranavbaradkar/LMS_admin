@@ -22,7 +22,7 @@
 
     <v-row>
       <v-col cols="3" class="profile-col">
-        <v-card class="rounded pa-3"  outlined>
+        <v-card class="rounded-xl pa-3"  outlined>
           <div class="d-flex justify-center flex-column align-center py-8">
             <v-avatar color="indigo" size="80">
               <v-icon dark>
@@ -62,8 +62,8 @@
         </v-card>
       </v-col>
       <v-col cols="9">
-        <v-card class="rounded pa-8 pl-9" outlined style="border: 1px solid #DADADA;">
-          <div style="border-left: 3px solid #F6F6F6;" class="pl-4">
+        <v-card class="rounded-xl pa-8 pl-9" outlined style="border: 1px solid #DADADA;">
+          <div style="border-left: 3px solid #F6F6F6; border-radius: 0%" class="pl-4">
           <div  class="status-container pl-6"  v-if="screeningData && screeningData.result">
             <div class="header-bagde" style="position: relative;">
                 <div style="position: absolute; left: -64px;" class="stepper-container">
@@ -180,8 +180,9 @@
                 <v-col col="6">
                   <v-card
                       v-if="value"
+                      height="237"
                       elevation="0"
-                      style="overflow-x: none; margin-left: 30px"
+                      style="overflow-y: scroll; margin-left: 30px"
                       class="pa-4 mt-1 vertical-steps-demo-video"
                       id="vertical-steps-demo-video"
                       depressed
@@ -222,7 +223,13 @@
                         <v-stepper-step class="stepper-step" step="" v-if="value.demo_description && value.demo_description[4]">
                           <strong>{{ value.demo_description[4][0] }}</strong> {{ value.demo_description[4][1] }}
                         </v-stepper-step>
-                        <v-stepper-content step="4">
+                        <v-stepper-content step="5">
+                        </v-stepper-content>
+
+                        <v-stepper-step class="stepper-step" step="" v-if="value.demo_description && value.demo_description[5]">
+                          <strong>{{ value.demo_description[5][0] }}</strong> {{ value.demo_description[5][1] }}
+                        </v-stepper-step>
+                        <v-stepper-content step="6">
                         </v-stepper-content>
 
                       </v-stepper>
