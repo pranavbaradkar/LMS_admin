@@ -22,7 +22,7 @@
 
     <v-row>
       <v-col cols="3" class="profile-col">
-        <v-card class="rounded pa-3"  outlined>
+        <v-card class="rounded-xl pa-3"  outlined>
           <div class="d-flex justify-center flex-column align-center py-8">
             <v-avatar color="indigo" size="80">
               <v-icon dark>
@@ -62,11 +62,14 @@
         </v-card>
       </v-col>
       <v-col cols="9">
-        <v-card class="rounded pa-8" outlined>
-          <div class="status-container"  v-if="screeningData && screeningData.result">
-            <div class="header-bagde">
-                <div class="header-container">
-                 
+        <v-card class="rounded-xl pa-8 pl-9" outlined style="border: 1px solid #DADADA;">
+          <div style="border-left: 3px solid #F6F6F6; border-radius: 0%" class="pl-4">
+          <div  class="status-container pl-6"  v-if="screeningData && screeningData.result">
+            <div class="header-bagde" style="position: relative;">
+                <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/screening.svg"></v-img>
+                </div>
+                <div class="header-container">                
                   <div v-if="screeningData.result == 'PASSED'" class="success-badge"><i class="dot me-2" />Screening Passed</div>
                   <div v-if="screeningData.result == 'FAILED'" class="failed-badge"><i class="dot me-2" />Screening Failed</div>
                   <div class="profile-title">{{ (screeningData.assessment && screeningData.assessment.name) && screeningData.assessment.name }} </div>
@@ -96,8 +99,11 @@
 
           </div>
 
-          <div class="status-container" v-if="mainsData && mainsData.result && screeningData && screeningData.result =='PASSED'">
-            <div class="header-bagde">
+          <div class="status-container pl-6" v-if="mainsData && mainsData.result && screeningData && screeningData.result =='PASSED'">
+            <div class="header-bagde" style="position: relative;">
+              <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/mains.svg"></v-img>
+                </div>
                 <div class="header-container">
                   <div v-if="mainsData.result == 'PASSED'" class="success-badge"><i class="dot me-2" />Mains Passed</div>
                   <div v-if="mainsData.result == 'FAILED'" class="failed-badge"><i class="dot me-2" />Mains Failed</div>
@@ -129,8 +135,11 @@
 
           </div>
 
-          <div class="status-container" v-if="mainsData == null && screeningData && screeningData.result =='PASSED'">
-            <div class="header-bagde">
+          <div class="status-container pl-6" v-if="mainsData == null && screeningData && screeningData.result =='PASSED'">
+            <div class="header-bagde" style="position: relative;">
+                <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/mains.svg"></v-img>
+                </div>
                 <div class="header-container">
                   <div class="warning-badge"><i class="dot me-2" />Mains Not Yet Submitted</div>
                 </div>
@@ -138,22 +147,26 @@
           </div>
 
           <div v-if="mainsData && mainsData.result =='PASSED'">
-            <div class="status-container"  
+            <div class="status-container pl-6"  
             v-for="(value, key) of demoVideos"
             :key="`${key}-ddd`"
             >
-              <div class="header-bagde">
+              <div class="header-bagde" style="position: relative;">
+                <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/demo.svg"></v-img>
+                </div>
                   <div class="header-container">
                     <div class="success-badge" v-if="value.status == 'AGREE'"><i class="dot me-2" />Demo Video Selected </div>
-                    <div class="failed-badge" v-if="value.status == 'DISAGREE'"><i class="dot me-2" />Demo Video Selected </div>
-                    <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Selected </div>
+                    <div class="failed-badge" v-if="value.status == 'DISAGREE'"><i class="dot me-2" />Demo Video Not Selected </div>
+                    <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Pending Selected </div>
+                    <div class="warning-badge" v-if="value.status == 'SUBMITTED'"><i class="dot me-2" />Demo Video Submitted </div>
                     <div class="profile-title">{{ value.assessment.name }} </div>
                   </div>
                   
                   <div>
                     <div class="score">
                       <label>Status</label>
-                      <div>{{ value.status == 'AGREE' ? 'Recommended For Interview' : (value.status == 'DISAGREE') ? 'Disagreed with AI' : 'Pending'}}</div>
+                      <div>{{ value.status == 'AGREE' ? 'Recommended For Interview' : (value.status == 'DISAGREE') ? 'Not Recommended For Interview' : 'Pending'}}</div>
                     </div>
                   </div>
               </div>
@@ -167,8 +180,9 @@
                 <v-col col="6">
                   <v-card
                       v-if="value"
+                      height="237"
                       elevation="0"
-                      style="overflow-x: none; margin-left: 30px"
+                      style="overflow-y: scroll; margin-left: 30px"
                       class="pa-4 mt-1 vertical-steps-demo-video"
                       id="vertical-steps-demo-video"
                       depressed
@@ -209,7 +223,13 @@
                         <v-stepper-step class="stepper-step" step="" v-if="value.demo_description && value.demo_description[4]">
                           <strong>{{ value.demo_description[4][0] }}</strong> {{ value.demo_description[4][1] }}
                         </v-stepper-step>
-                        <v-stepper-content step="4">
+                        <v-stepper-content step="5">
+                        </v-stepper-content>
+
+                        <v-stepper-step class="stepper-step" step="" v-if="value.demo_description && value.demo_description[5]">
+                          <strong>{{ value.demo_description[5][0] }}</strong> {{ value.demo_description[5][1] }}
+                        </v-stepper-step>
+                        <v-stepper-content step="6">
                         </v-stepper-content>
 
                       </v-stepper>
@@ -232,16 +252,22 @@
           </div>
           
 
-          <div class="status-container" v-if="demoVideos.length == 0 && mainsData && mainsData.result =='PASSED'">
-            <div class="header-bagde">
+          <div class="status-container pl-6" v-if="demoVideos.length == 0 && mainsData && mainsData.result =='PASSED'">
+            <div class="header-bagde" style="position: relative;">
+              <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/demo.svg"></v-img>
+                </div>
                 <div class="header-container">
                   <div class="warning-badge"><i class="dot me-2" />Demo Not Yet Submitted</div>
                 </div>
             </div>
           </div>
 
-          <div class="status-container" v-if="interviewFeedback">
-            <div class="header-bagde">
+          <div class="status-container pl-6" v-if="interviewFeedback">
+            <div class="header-bagde" style="position: relative;">
+              <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/interview.svg"></v-img>
+                </div>
                 <div class="header-container">
                   <div class="success-badge" v-if="interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'YES'"><i class="dot me-2" />Cleared Interview </div>
                   <div class="failed-badge" v-if="interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'NO'"><i class="dot me-2" />Interview Not Cleared</div>
@@ -346,6 +372,7 @@
               </p>
             </div>
 
+          </div>
           </div>
         </v-card>
       </v-col>
