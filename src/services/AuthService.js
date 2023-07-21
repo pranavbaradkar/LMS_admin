@@ -51,10 +51,12 @@ export default {
           'Authorization': this.getToken()
       }
     });
+    console.log(JSON.stringify(response.data.admin));
     localStorage.setItem('userDetails', JSON.stringify(response.data.admin));
   },
   getPermissions: function() {
     const details = localStorage.getItem('userDetails');
+    console.log("auth", JSON.parse(details).roles ? JSON.parse(JSON.parse(details).roles.permission) : {});
     return JSON.parse(details).roles ? JSON.parse(JSON.parse(details).roles.permission) : {};
   },
   getLoggedUser: function() {

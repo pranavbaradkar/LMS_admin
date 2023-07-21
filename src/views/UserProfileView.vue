@@ -158,7 +158,7 @@
                   <div class="header-container">
                     <div class="success-badge" v-if="value.status == 'AGREE'"><i class="dot me-2" />Demo Video Selected </div>
                     <div class="failed-badge" v-if="value.status == 'DISAGREE'"><i class="dot me-2" />Demo Video Not Selected </div>
-                    <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Pending Selected </div>
+                    <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Pending</div>
                     <div class="warning-badge" v-if="value.status == 'SUBMITTED'"><i class="dot me-2" />Demo Video Submitted </div>
                     <div class="profile-title">{{ value.assessment.name }} </div>
                   </div>

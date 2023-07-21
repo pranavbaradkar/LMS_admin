@@ -12,7 +12,7 @@
               dark
               v-bind="attrs"
               v-on="on"
-              v-if="((user_permission().users && user_permission().users.panel && user_permission().users.panel.create) || user().role_type == 'SUPER_ADMIN')"
+              v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.create) || user.role_type == 'SUPER_ADMIN')"
             >
               <v-icon>mdi-plus</v-icon><div class="pl-1">Create</div>
             </v-btn>
@@ -62,14 +62,14 @@
             ><v-icon>mdi-tune</v-icon>Filter</v-btn
           > -->
           <v-btn
-          v-if="((user_permission().users && user_permission().users.panel && user_permission().users.panel.delete) || user().role_type == 'SUPER_ADMIN')"
+          v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.delete) || user.role_type == 'SUPER_ADMIN')"
             class="primary mx-2"
             rounded
             @click="deleteDialog = true"
             :disabled="selected.length == 0"
             ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
           ><v-btn
-          v-if="((user_permission().users && user_permission().users.panel && user_permission().users.panel.delete) || user().role_type == 'SUPER_ADMIN')"
+          v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.delete) || user.role_type == 'SUPER_ADMIN')"
             class="primary mx-2"
             rounded
             @click="resendInvite"
@@ -105,7 +105,7 @@
         {{getDate(item.created_at)}}
        </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <div class="d-flex flex-row" v-if="((user_permission().users && user_permission().users.panel && user_permission().users.panel.update) || user().role_type == 'SUPER_ADMIN')">
+        <div class="d-flex flex-row" v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.update) || user.role_type == 'SUPER_ADMIN')">
           <img
             width="36px"
             height="36px"
@@ -1272,12 +1272,6 @@ export default {
     }
   },
   methods: {
-    user() {
-      return AuthService.getLoggedUser();
-    },
-    user_permission() {
-      return AuthService.getPermissions();
-    },
     getDate(timeStamp) {
       return new Date(timeStamp).toString().substring(0, 16);
     },
@@ -1545,6 +1539,12 @@ export default {
     },
   },
   computed: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    },
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;

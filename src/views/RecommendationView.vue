@@ -139,7 +139,7 @@
               src="../assets/user.svg"
               />
           </a>
-          <div v-if="item.is_show_icon && ((user_permission().recommended && user_permission().recommended.panel && user_permission().recommended.panel.update) || user().role_type == 'SUPER_ADMIN')" @click="() => {
+          <div v-if="item.is_show_icon && ((user_permission.recommended && user_permission.recommended.panel && user_permission.recommended.panel.update) || user.role_type == 'SUPER_ADMIN')" @click="() => {
               user_id = item.id;
               isAgreeText = 'AGREE';
               statusRecomm = true;
@@ -150,7 +150,7 @@
               src="../assets/thumbs-up.svg"
               />
           </div>
-          <div v-if="item.is_show_icon && ((user_permission().recommended && user_permission().recommended.panel && user_permission().recommended.panel.update) || user().role_type == 'SUPER_ADMIN')" @click="() => {
+          <div v-if="item.is_show_icon && ((user_permission.recommended && user_permission.recommended.panel && user_permission.recommended.panel.update) || user.role_type == 'SUPER_ADMIN')" @click="() => {
               user_id = item.id;
               statusRecomm = true;
               isAgreeText = 'DISAGREE';
@@ -161,7 +161,7 @@
               src="../assets/thumbs-down.svg"
               />
           </div>
-          <div class="ml-2" v-if="((user_permission().recommended && user_permission().recommended.panel && user_permission().recommended.panel.update) || user().role_type == 'SUPER_ADMIN')">
+          <div class="ml-2" v-if="((user_permission.recommended && user_permission.recommended.panel && user_permission.recommended.panel.update) || user.role_type == 'SUPER_ADMIN')">
             <img
              v-if="!item.is_interview_icon" 
               width="30px"
@@ -397,13 +397,15 @@ export default {
       editedSkill: null,
     };
   },
-  methods: {
+  computed: {
     user() {
       return AuthService.getLoggedUser();
     },
     user_permission() {
       return AuthService.getPermissions();
     },
+  },
+  methods: {
     truncate (string) {
       if(string) {
         if (string && string.length < 17) return string;
