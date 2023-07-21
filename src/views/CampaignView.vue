@@ -407,8 +407,8 @@
                         </div>
                         <v-autocomplete
                         v-model="campaignData.assessment_ids"
-                         required
-                         :rules="[v => !!v || 'School is required']"
+                          required
+                          :rules="[v => !!v || 'assessment is required']"
                           clearable
                           deletable-chips
                           label="Select or Search Assessments"
@@ -447,6 +447,7 @@
                       cols="6"
                       md="6"
                       class="d-flex justify-space-between align-center"
+                      v-if="((user_permission().assessments && user_permission().assessments.panel && user_permission().assessments.panel.create) || user().role_type == 'SUPER_ADMIN')"
                     >
                       <span>Create new assessment*</span>
                       <v-btn
@@ -572,7 +573,7 @@
         </div>
         <v-row>
           <v-spacer></v-spacer>
-          <img width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
+          <img v-if="((user_permission().campaigns && user_permission().campaigns.panel && user_permission().campaigns.panel.update) || user().role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
         </v-row>
         
         <v-chip color="#06C2700F" small pill>
@@ -586,7 +587,8 @@
             <!-- Assessment title -->
             <div
               v-if="data.levels.length > 0"
-              class="d-flex flex-row w-100 flex-wrap"
+              class="d-flex flex-row w-100 h-300 flex-wrap"
+              style="height: 68px;"
             >
               <div
                 v-for="(item, index) in data.levels"
@@ -740,7 +742,7 @@
         </div>
         <v-row>
           <v-spacer></v-spacer>
-          <img width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
+          <img v-if="((user_permission().campaigns && user_permission().campaigns.panel && user_permission().campaigns.panel.update) || user().role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
         </v-row>
         <div class="d-flex flex-column">
           <v-card-title class="pa-0"> {{ data.name }} </v-card-title>
@@ -854,7 +856,7 @@
         </div>
         <v-row>
           <v-spacer></v-spacer>
-          <img width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
+          <img v-if="((user_permission().campaigns && user_permission().campaigns.panel && user_permission().campaigns.panel.update) || user().role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
         </v-row>
         <div class="d-flex flex-column">
           <v-card-title class="pa-0"> {{ data.name }} </v-card-title>
@@ -957,6 +959,7 @@
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
         <v-btn
+          v-if="((user_permission().campaigns && user_permission().campaigns.panel && user_permission().campaigns.panel.create) || user().role_type == 'SUPER_ADMIN')"
           class="primary mx-2 m-fab"
           v-bind="attrs"
           v-on="on"
@@ -994,6 +997,7 @@ import SkillsController from "@/controllers/SkillsController";
 
 import SubjectController from "@/controllers/SubjectController";
 import ClusterController from "@/controllers/ClusterController";
+import AuthService from "@/services/AuthService";
 
 export default {
   name: "campaignView",
@@ -1042,6 +1046,12 @@ export default {
   },
 
   methods: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    },
     getPercentate(value, totalValue) {
       var data = (value / totalValue) * 100;
       data = Math.trunc( data );
@@ -1109,8 +1119,8 @@ export default {
       this.campaignData.audience_type = data.audience_type;
       this.updateFlag=true;
       this.campaignData=data
-      this.campaignData.start_date = this.convertDateFormatForUpdate(data.start_date)
-      this.campaignData.end_date = this.convertDateFormatForUpdate(data.end_date)
+      // this.campaignData.start_date = this.convertDateFormatForUpdate(data.start_date)
+      // this.campaignData.end_date = this.convertDateFormatForUpdate(data.end_date)
       this.getAssessmentsIds(data);
       this.convertStartTimeFormatForUpdate(data.start_time)
       this.convertEndTimeFormatForUpdate(data.end_time)
@@ -1152,6 +1162,8 @@ export default {
     async createCampaign() {
       this.campaignData.start_time = this.startHH + ":" + this.startMM;
       this.campaignData.end_time = this.endHH + ":" + this.endMM
+      const start_date = this.campaignData.start_date;
+      const end_date = this.campaignData.end_date;
       this.campaignData.start_date = this.convertDateFormat(this.campaignData.start_date)
       this.campaignData.end_date = this.convertDateFormat(this.campaignData.end_date)
       if(this.updateFlag==false){
@@ -1175,7 +1187,9 @@ export default {
       alert(response.data.error)
       this.campaignId =null    }
       }
-
+      this.campaignData.start_date = start_date
+      this.campaignData.end_date = end_date
+      
     },
     async getSchool() {
       const response = await SchoolController.getSchool();
@@ -1279,6 +1293,7 @@ export default {
    
       if (response.data.success) {
         this.assessments = response.data.data.rows;
+        this.assessments = this.assessments.filter((item) => item.status === 'PUBLISHED');
       }
       else {
         alert(response.data.error)

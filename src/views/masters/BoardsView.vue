@@ -2,7 +2,7 @@
   <v-container fluid class="pa-8">
     <v-row>
       <v-col>
-        <v-btn
+        <v-btn v-if="(user_permission.master && user_permission.master.child.boards && user_permission.master.child.boards.create) || user.role_type == 'SUPER_ADMIN'"
           @click="(dialog = true), newCreateBoards()"
           class="primary"
           large
@@ -127,7 +127,7 @@
 
       <v-col>
         <v-row justify="end">
-          <v-btn
+          <v-btn v-if="(user_permission.master && user_permission.master.child.boards && user_permission.master.child.boards.delete) || user.role_type == 'SUPER_ADMIN'"
             class="primary mx-2"
             rounded
             :disabled="selected.length == 0"
@@ -157,7 +157,8 @@
         {{ getDate(item.created_at) }}
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn v-if="(user_permission.master && user_permission.master.child.boards && user_permission.master.child.boards.update) || user.role_type == 'SUPER_ADMIN'"
+         icon class="mr-2 pa-4" @click="updateData(item)">
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
@@ -201,7 +202,7 @@
                 @click="deleteDialog = false"
                 >CANCEL</v-btn
               >
-              <v-btn
+              <v-btn 
                 class="black white--text"
                 depressed
                 large
@@ -257,6 +258,7 @@
   </v-container>
 </template>
 <script>
+import AuthService from "@/services/AuthService";
 import BoardController from "@/controllers/BoardController";
 import UploadController from "@/controllers/UploadController";
 export default {
@@ -298,6 +300,14 @@ export default {
       ],
       tableData: [],
     };
+  },
+  computed: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    }
   },
   watch: {
     options: {

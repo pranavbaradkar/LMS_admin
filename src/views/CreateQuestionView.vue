@@ -60,10 +60,24 @@
             <v-card-text>
               <v-card class="ma-4 pa-4" elevation="0">
                 <!-- Select Question Type -->
-                <v-row>
+                <v-row class="d-flex align-center">
+                  <v-col class="py-0" cols="3">
+                    <div class="text-body-1 my-2"> <v-checkbox v-model="is_psychometric" label="Is Psychometric"></v-checkbox></div>
+                  </v-col>
+                  <v-col class="py-0" cols="3" v-if="is_psychometric">
+                    <v-text-field
+                      label="Set Number"
+                      outlined
+                      v-model="set_number"
+                      :rules="[(v) => (!!v && is_psychometric) || 'Please enter the set number']"
+                      type="number"
+                      hide-details="auto"
+                    ></v-text-field>
+                  </v-col>
                   <v-col class="py-0" cols="6">
                     <div class="text-body-1 my-2">Question Type*</div>
                     <v-select
+                      :disabled="is_psychometric"
                       v-model="questionType"
                       label="Choose Question Type"
                       :items="questionTypeList"
@@ -133,7 +147,7 @@
                     </div>
                     <v-radio-group
                       v-model="singleSelectCorrectAnswer"
-                      :rules="[(v) => !!v || 'Please select one']"
+                      :rules="[(v) => (!!v || is_psychometric) || 'Please select one']"
                     >
                       <v-list-item
                         :class="
@@ -145,7 +159,7 @@
                         v-for="(option, index) in options"
                         :key="index"
                       >
-                        <v-list-item-avatar>
+                        <v-list-item-avatar  v-if="!is_psychometric">
                           <v-radio :value="option.option_key"></v-radio>
                         </v-list-item-avatar>
                         <v-list-item-content>
@@ -164,6 +178,8 @@
                             <div v-html="option.option_value"></div>
                           </v-list-item-title>
 
+                          
+
                           <!-- <v-list-item-title >
                             <ckeditor                     
                               :config="editorConfig"
@@ -174,6 +190,14 @@
                             >
                             </ckeditor>
                           </v-list-item-title> -->
+                        </v-list-item-content>
+                        <v-list-item-content class="w-10 align-center" v-if="is_psychometric">
+                          <v-text-field
+                            label="Score"
+                            outlined
+                            v-model="option.score_value"
+                            hide-details="auto"
+                          ></v-text-field>
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-row align="center">
@@ -295,8 +319,8 @@
                 </v-row>
                 <v-row
                   v-if="
-                    questionType == 'SINGLE_CHOICE' ||
-                    questionType == 'MULTIPLE_CHOICE'
+                    (questionType == 'SINGLE_CHOICE' ||
+                    questionType == 'MULTIPLE_CHOICE')
                   "
                   justify="start"
                   align="center"
@@ -334,19 +358,19 @@
                     >
                       <v-list-item
                         :class="
-                          trueFalseCorrectAnswer == option.title
+                          trueFalseCorrectAnswer == option.title || trueFalseCorrectAnswer == option.option
                             ? 'green lighten-4 rounded-xl my-2'
                             : 'secondary rounded-xl my-2'
                         "
                         min-height="72"
                         v-for="(option, index) in [
-                          { title: 'TRUE' },
-                          { title: 'FALSE' },
+                          { title: 'TRUE', option: 'A' },
+                          { title: 'FALSE', option: 'B' },
                         ]"
                         :key="index"
                       >
                         <v-list-item-avatar>
-                          <v-radio :value="option.title"></v-radio>
+                          <v-radio :value="option.option"></v-radio>
                         </v-list-item-avatar>
 
                         <v-list-item-content>
@@ -644,6 +668,7 @@
                       class="rounded-xl"
                       :rules="[(v) => !!v || 'Related Skill field is required']"
                       required
+                      :disabled="is_psychometric"
                       @change="checkSubjects(skillId)"
                     >
                     </v-select>
@@ -724,6 +749,7 @@
                     outlined
                     item-text="sub_strand_text"
                     item-value="id"
+                    @change="dependApi()"
                   ></v-select>
                   </v-col>
                   <v-col cols="6">
@@ -1381,7 +1407,8 @@ export default {
       questionDescription: "NA",
       errorMessage: "",
       skillId: 0,
-      grade_id: null,
+      grade_id: -1,
+      set_number: 1,
       level: 0,
       searchBool: false,
       tag: "",
@@ -1398,7 +1425,7 @@ export default {
       hint: "",
       subjectShowBool: false,
       subject: null,
-      proficiencyLevel: "",
+      proficiencyLevel: null,
 
       isCreatingQuestion: false,
       dummyLO: [{ name: "lO1_1" }, { name: "lO1_2" }, { name: "lO1_3" }],
@@ -1481,7 +1508,7 @@ export default {
 
       selectedlearningObjectives: [],
       tagsList: [],
-
+      subStrandList: [],
       selectedtags: [],
       mtfAnswers: [
         {
@@ -1512,6 +1539,17 @@ export default {
     };
   },
   watch: {
+    is_psychometric: {
+      handler: function(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          console.log(newVal);
+          if(newVal && this.editId == null) {
+            this.questionType = 'SINGLE_CHOICE';
+            this.skillId = 48;
+          }
+        }
+      }
+    },
     dataTableOptions: {
       handler() {
         this.pageSize = this.dataTableOptions.itemsPerPage;
@@ -1744,7 +1782,9 @@ export default {
           question_mtf_answers: this.questionType == 'MATCH_THE_FOLLOWING' ? this.mtfAnswers : null,
           level_id: this.level,
           hint: this.hint,
+          is_psychometric: this.is_psychometric,
           tags: selectTags,
+          set_number: this.set_number,
           grade_id: this.grade_id  == null ? -1 : this.grade_id,
           answer_explanation: this.answerExplanation,
           question_options: this.getOptions(),
@@ -1769,17 +1809,19 @@ export default {
       this.editId = item.id; // selected id for edit
       this.formbtnBool = true; // change update/create btn value
       this.createQuestionDialog = true;
-      this.questionType = item.question_type;
+      this.questionType = item.question_type ? item.question_type : 'SINGLE_CHOICE' ;
       this.skillId = item.skill_id;
+      this.is_psychometric = item.skill_id == 48 ? true : false;
       this.correctAnswerScore = item.correct_answer_score;
       this.estimatedTime = item.estimated_time != '' ? parseInt(item.estimated_time) : 0 ;
       this.bloomsTaxonomy = item.blooms_taxonomy != '' ? item.blooms_taxonomy : null;
       this.knowledgeLevel = item.knowledge_level != '' ? item.knowledge_level : null;
       this.complexityLevel = item.complexity_level != '' ? item.complexity_level : null;
       this.difficultyLevel = item.difficulty_level != '' ? item.difficulty_level : null;
-      this.grade_id = item.grade_id  == -1 ? null : item.grade_id;
+      this.grade_id = item.grade_id;
       this.correct_answer = item.correct_answer;
       this.hint = item.hint;
+      this.set_number = item.set_number;
      
       this.subject = item.subject_id == -1 ? null : item.subject_id;
       this.proficiencyLevel = item.proficiency_level != '' ? item.proficiency_level : null;
@@ -1969,7 +2011,8 @@ export default {
         selectTags = selectTags.slice(0, -1);
         console.log(selectTags);
         this.isCreatingQuestion = true;
-        const response = await QuestionsController.createQuestion({
+
+        let payload = {
           uuid:this.questionUuid,
           statement: this.questionName,
           question_type: this.questionType,
@@ -1997,7 +2040,12 @@ export default {
           grade_id: this.grade_id  == null ? -1 : this.grade_id,
           answer_explanation: this.answerExplanation,
           question_options: this.getOptions(),
-        });
+          is_psychometric: this.is_psychometric,
+          set_number: this.set_number
+        };
+        console.log(payload);
+        // return false;
+        const response = await QuestionsController.createQuestion(payload);
         console.log("create question res",response.data.success);
         if (response.data.success) {
           this.isCreatingQuestion = false;
@@ -2145,6 +2193,7 @@ export default {
           console.log("",response);
           this.gradeData = response.data.data;
           this.gradeList = this.gradeData.rows;
+          this.gradeList = [...[{id: -1, name: "Unknown" }], ...this.gradeList]
           this.count = response.data.data.count;
       }
       else {
@@ -2154,9 +2203,10 @@ export default {
 
     },
     dependApi(topic_id = null, strand_id = null, sub_strand_id = null) {
-      this.getTopics(topic_id);
+      
       this.getStrands(strand_id);
-      this.getSubStrand(sub_strand_id)
+      this.getSubStrand(sub_strand_id);
+      this.getTopics(topic_id);
     },
     async getTopics(topic_id) {
       const response = await MetaController.getTopics({level_id: this.level, skill_id: this.skillId > 0 ? this.skillId : undefined, grade_id: this.grade_id > 0 ? this.grade_id : undefined, subject_id: this.subject > 0 ? this.subject : undefined, strand_id: this.strand_id, sub_strand_id: this.sub_strand_id});

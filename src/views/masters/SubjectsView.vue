@@ -2,7 +2,8 @@
   <v-container fluid class="pa-8">
     <v-row>
       <v-col>
-        <v-btn @click="dialog = true, newSubjectCreate()" class="primary" large rounded><v-icon>mdi-plus</v-icon>Create
+        <v-btn v-if="(user_permission.master && user_permission.master.child.subject && user_permission.master.child.subject.create)  || user.role_type== 'SUPER_ADMIN'"
+        @click="dialog = true, newSubjectCreate()" class="primary" large rounded><v-icon>mdi-plus</v-icon>Create
           Subject</v-btn>
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
@@ -163,14 +164,15 @@
     </v-row>
     <v-row justify="space-between" class="my-4">
       <v-col>
-        <div class="text-h5">Subjects</div>
+        <div class="text-h5">subject</div>
       </v-col>
 
       <v-col>
         <v-row justify="end">
           <v-btn class="primary mx-2" rounded @click="filterDialog = true"
           ><v-icon>mdi-tune</v-icon>Filter</v-btn
-        ><v-btn class="primary mx-2" rounded :disabled="selected.length == 0"
+        ><v-btn v-if="(user_permission.master && user_permission.master.child.subject && user_permission.master.child.subject.delete)  || user.role_type== 'SUPER_ADMIN'"
+        class="primary mx-2" rounded :disabled="selected.length == 0"
             @click="deleteDialog = true"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn class="primary mx-2"
             rounded><v-icon>mdi-export</v-icon>Export</v-btn>
         </v-row>
@@ -185,7 +187,8 @@
         {{getDate(item.created_at)}}
        </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn v-if="(user_permission.master && user_permission.master.child.subject && user_permission.master.child.subject.update)  || user.role_type== 'SUPER_ADMIN'" 
+        icon class="mr-2 pa-4" @click="updateData(item)">
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
@@ -223,7 +226,7 @@
 </template>
 <script>
 import UploadController from "@/controllers/UploadController";
-
+import AuthService from "@/services/AuthService";
 import SubjectController from "@/controllers/SubjectController";
 import SubjectCategoryController from "@/controllers/SubjectCategoryController";
 export default {
@@ -271,6 +274,14 @@ export default {
         required: (value) => !!value || "Field is required",
       },
     };
+  },
+  computed: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    }
   },
   watch: {
     options: {

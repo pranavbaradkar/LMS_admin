@@ -5,21 +5,7 @@ const instance = axios.create({
     baseURL: process.env.VUE_APP_API_URL
 });
 export default {
-    // getCampaigns: async function () {
-    //     try {
-    //         console.log("campain start controller")
-    //         const response = await instance.get('admin/campaigns', {
-    //             headers: {
-    //                 'Authorization': AuthService.getToken()
-    //             }
-    //         })
-    //         console.log("campain end controller",response)
-    //         return response;
-    //     } catch (error) {
-    //         return error.response;
-    //     }
-    // },
-
+    
     async  getCampaigns(){
        
         try {

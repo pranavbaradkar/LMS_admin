@@ -150,7 +150,7 @@ export default {
       const response = await AuthService.login(this.email, this.password);
       console.log(response);
       if (response) {
-        this.$router.push("/");
+        window.location.href = "/#/";
       } else {
         alert("Invalid Login");
       }

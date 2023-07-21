@@ -2,7 +2,8 @@
   <v-container fluid class="pa-8">
     <v-row>
       <v-col>
-        <v-btn @click="dialog = true, newLOBankCreate()" class="primary" large rounded><v-icon>mdi-plus</v-icon>Create
+        <v-btn v-if="(user_permission.master && user_permission.master.child.los_bank && user_permission.master.child.los_bank.create)  || user.role_type== 'SUPER_ADMIN'"
+         @click="dialog = true, newLOBankCreate()" class="primary" large rounded><v-icon>mdi-plus</v-icon>Create
           Learning Objective</v-btn>
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
@@ -50,7 +51,8 @@
 
       <v-col>
         <v-row justify="end">
-          <v-btn class="primary mx-2" rounded
+          <v-btn v-if="(user_permission.master && user_permission.master.child.los_bank && user_permission.master.child.los_bank.delete)  || user.role_type== 'SUPER_ADMIN'" 
+          class="primary mx-2" rounded
           :disabled="selected.length == 0"
             @click="deleteDialog = true"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn class="primary mx-2"
             rounded><v-icon>mdi-export</v-icon>Export</v-btn>
@@ -67,7 +69,8 @@
         {{getDate(item.created_at)}}
        </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn v-if="(user_permission.master && user_permission.master.child.los_bank && user_permission.master.child.los_bank.update)  || user.role_type== 'SUPER_ADMIN'" 
+        icon class="mr-2 pa-4" @click="updateData(item)">
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
@@ -120,6 +123,7 @@
 </template>
 <script>
 import LoBankController from "@/controllers/LoBankController";
+import AuthService from "@/services/AuthService";
 export default {
   name: "LoBankView",
   data() {
@@ -158,6 +162,14 @@ export default {
         required: (value) => !!value || "Field is required",
       },
     };
+  },
+  computed: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    }
   },
   watch: {
     options: {

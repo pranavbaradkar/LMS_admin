@@ -2,8 +2,11 @@
   <v-container fluid class="pa-8">
     <v-row>
       <v-col>
-        <v-btn @click="dialog = true, newCreateClusterValue()" class="primary" large
+        <v-btn 
+        v-if="(user_permission.master && user_permission.master.child.clusters && user_permission.master.child.clusters.create) || user.role_type == 'SUPER_ADMIN'"
+        @click="dialog = true, newCreateClusterValue()" class="primary" large
           rounded><v-icon>mdi-plus</v-icon>Create Cluster</v-btn>
+
         <v-dialog max-width="887px "  v-model="dialog" center>
           <v-form ref="form" lazy-validation>
             <v-card>
@@ -43,8 +46,12 @@
       </v-col>
       <v-col>
         <v-row justify="end">
-          <v-btn class="primary mx-2" rounded @click="deleteDialog = true"
-            :disabled="selected.length == 0"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn
+          <v-btn class="primary mx-2" 
+          v-if="(user_permission.master && user_permission.master.child.clusters && user_permission.master.child.clusters.delete) || user.role_type == 'SUPER_ADMIN'"
+          rounded @click="deleteDialog = true"
+            :disabled="selected.length == 0"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn>
+            
+            <v-btn
             class="primary mx-2" rounded><v-icon>mdi-export</v-icon>Export</v-btn>
         </v-row>
       </v-col>
@@ -57,7 +64,7 @@
         {{ getDate(item.created_at) }}
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn v-if="(user_permission.master && user_permission.master.child.clusters && user_permission.master.child.clusters.update) || user.role_type == 'SUPER_ADMIN'" icon class="mr-2 pa-4" @click="updateData(item)">
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template></v-data-table>
@@ -106,6 +113,7 @@
 </template>
 
 <script>
+import AuthService from "@/services/AuthService";
 import ClusterController from "@/controllers/ClusterController";
 export default {
   name: "ClustersView",
@@ -143,6 +151,14 @@ export default {
         required: (value) => !!value || "Field is required",
       },
     };
+  },
+  computed: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    }
   },
   watch: {
     options: {

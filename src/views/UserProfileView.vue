@@ -22,7 +22,7 @@
 
     <v-row>
       <v-col cols="3" class="profile-col">
-        <v-card class="rounded pa-3"  outlined>
+        <v-card class="rounded-xl pa-3"  outlined>
           <div class="d-flex justify-center flex-column align-center py-8">
             <v-avatar color="indigo" size="80">
               <v-icon dark>
@@ -62,11 +62,14 @@
         </v-card>
       </v-col>
       <v-col cols="9">
-        <v-card class="rounded pa-8" outlined>
-          <div class="status-container"  v-if="screeningData && screeningData.result">
-            <div class="header-bagde">
-                <div class="header-container">
-                 
+        <v-card class="rounded-xl pa-8 pl-9" outlined style="border: 1px solid #DADADA;">
+          <div style="border-left: 3px solid #F6F6F6; border-radius: 0%" class="pl-4">
+          <div  class="status-container pl-6"  v-if="screeningData && screeningData.result">
+            <div class="header-bagde" style="position: relative;">
+                <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/screening.svg"></v-img>
+                </div>
+                <div class="header-container">                
                   <div v-if="screeningData.result == 'PASSED'" class="success-badge"><i class="dot me-2" />Screening Passed</div>
                   <div v-if="screeningData.result == 'FAILED'" class="failed-badge"><i class="dot me-2" />Screening Failed</div>
                   <div class="profile-title">{{ (screeningData.assessment && screeningData.assessment.name) && screeningData.assessment.name }} </div>
@@ -96,8 +99,11 @@
 
           </div>
 
-          <div class="status-container" v-if="mainsData && mainsData.result && screeningData && screeningData.result =='PASSED'">
-            <div class="header-bagde">
+          <div class="status-container pl-6" v-if="mainsData && mainsData.result && screeningData && screeningData.result =='PASSED'">
+            <div class="header-bagde" style="position: relative;">
+              <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/mains.svg"></v-img>
+                </div>
                 <div class="header-container">
                   <div v-if="mainsData.result == 'PASSED'" class="success-badge"><i class="dot me-2" />Mains Passed</div>
                   <div v-if="mainsData.result == 'FAILED'" class="failed-badge"><i class="dot me-2" />Mains Failed</div>
@@ -129,8 +135,11 @@
 
           </div>
 
-          <div class="status-container" v-if="mainsData == null && screeningData && screeningData.result =='PASSED'">
-            <div class="header-bagde">
+          <div class="status-container pl-6" v-if="mainsData == null && screeningData && screeningData.result =='PASSED'">
+            <div class="header-bagde" style="position: relative;">
+                <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/mains.svg"></v-img>
+                </div>
                 <div class="header-container">
                   <div class="warning-badge"><i class="dot me-2" />Mains Not Yet Submitted</div>
                 </div>
@@ -138,22 +147,26 @@
           </div>
 
           <div v-if="mainsData && mainsData.result =='PASSED'">
-            <div class="status-container"  
+            <div class="status-container pl-6"  
             v-for="(value, key) of demoVideos"
             :key="`${key}-ddd`"
             >
-              <div class="header-bagde">
+              <div class="header-bagde" style="position: relative;">
+                <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/demo.svg"></v-img>
+                </div>
                   <div class="header-container">
                     <div class="success-badge" v-if="value.status == 'AGREE'"><i class="dot me-2" />Demo Video Selected </div>
-                    <div class="failed-badge" v-if="value.status == 'DISAGREE'"><i class="dot me-2" />Demo Video Selected </div>
-                    <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Selected </div>
+                    <div class="failed-badge" v-if="value.status == 'DISAGREE'"><i class="dot me-2" />Demo Video Not Selected </div>
+                    <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Pending Selected </div>
+                    <div class="warning-badge" v-if="value.status == 'SUBMITTED'"><i class="dot me-2" />Demo Video Submitted </div>
                     <div class="profile-title">{{ value.assessment.name }} </div>
                   </div>
                   
                   <div>
                     <div class="score">
                       <label>Status</label>
-                      <div>{{ value.status == 'AGREE' ? 'Recommended For Interview' : (value.status == 'DISAGREE') ? 'Disagreed with AI' : 'Pending'}}</div>
+                      <div>{{ value.status == 'AGREE' ? 'Recommended For Interview' : (value.status == 'DISAGREE') ? 'Not Recommended For Interview' : 'Pending'}}</div>
                     </div>
                   </div>
               </div>
@@ -167,8 +180,9 @@
                 <v-col col="6">
                   <v-card
                       v-if="value"
+                      height="237"
                       elevation="0"
-                      style="overflow-x: none; margin-left: 30px"
+                      style="overflow-y: scroll; margin-left: 30px"
                       class="pa-4 mt-1 vertical-steps-demo-video"
                       id="vertical-steps-demo-video"
                       depressed
@@ -209,7 +223,13 @@
                         <v-stepper-step class="stepper-step" step="" v-if="value.demo_description && value.demo_description[4]">
                           <strong>{{ value.demo_description[4][0] }}</strong> {{ value.demo_description[4][1] }}
                         </v-stepper-step>
-                        <v-stepper-content step="4">
+                        <v-stepper-content step="5">
+                        </v-stepper-content>
+
+                        <v-stepper-step class="stepper-step" step="" v-if="value.demo_description && value.demo_description[5]">
+                          <strong>{{ value.demo_description[5][0] }}</strong> {{ value.demo_description[5][1] }}
+                        </v-stepper-step>
+                        <v-stepper-content step="6">
                         </v-stepper-content>
 
                       </v-stepper>
@@ -232,32 +252,128 @@
           </div>
           
 
-          <div class="status-container" v-if="demoVideos.length == 0 && mainsData && mainsData.result =='PASSED'">
-            <div class="header-bagde">
+          <div class="status-container pl-6" v-if="demoVideos.length == 0 && mainsData && mainsData.result =='PASSED'">
+            <div class="header-bagde" style="position: relative;">
+              <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/demo.svg"></v-img>
+                </div>
                 <div class="header-container">
                   <div class="warning-badge"><i class="dot me-2" />Demo Not Yet Submitted</div>
                 </div>
             </div>
           </div>
 
-          <!-- <div class="status-container">
-            <div class="header-bagde">
+          <div class="status-container pl-6" v-if="interviewFeedback">
+            <div class="header-bagde" style="position: relative;">
+              <div style="position: absolute; left: -64px;" class="stepper-container">
+                  <v-img src="@/assets/interview.svg"></v-img>
+                </div>
                 <div class="header-container">
-                  <div class="success-badge"><i class="dot me-2" />Cleared Interview</div>
+                  <div class="success-badge" v-if="interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'YES'"><i class="dot me-2" />Cleared Interview </div>
+                  <div class="failed-badge" v-if="interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'NO'"><i class="dot me-2" />Interview Not Cleared</div>
+                  <div class="warning-badge" v-if="interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'MAYBE'"><i class="dot me-2" />Decision Pending</div>
+                  <!-- <div class="success-badge"><i class="dot me-2" />Cleared Interview</div> -->
                   <div class="profile-title">Interview Details </div>
                 </div>
-               
+                <div class="score">
+                  <label>Score</label>
+                  <div class="per"><span>{{interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.overall_rating ? interviewFeedback.interview_feedback.overall_rating : 0}}/</span>{{10}}</div>
+                </div>
                 <div>
-                  <v-select
+                  <div>
+                    <div class="score">
+                      <label>Status</label>
+                      <div>{{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'NO' ? 'Rejected' : (interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.offer_selection == 'YES') ? 'Recommended For Offer Letter' : 'Offer Letter Pending'}}</div>
+                    </div>
+                  </div>
+                  <!-- <v-select
                     label="Status"
                     :items="['Recommended For Offer Letter']"
                     v-model="interview_status"
                     variant="underlined"
-                  ></v-select>
+                  ></v-select> -->
                 </div>
             </div>
 
-          </div> -->
+            <div class="row skills" >
+              <div class="col-6">
+                <div class="skill demo-video" :class="`color-1`">
+                  <div class="skill-title">{{ "Appearence Score" }}</div>
+                  <div class="skill-score">{{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.appearence_score ? interviewFeedback.interview_feedback.appearence_score : 0 }}/10</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="skill demo-video" :class="`color-2`">
+                  <div class="skill-title">{{ "Confidence Score" }}</div>
+                  <div class="skill-score">{{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.confidence_score ? interviewFeedback.interview_feedback.confidence_score : 0 }}/10</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-row-data d-flex align-items-center px-4 py-4 justify-content-between mt-4">
+              
+              <div class="col-data">
+                <div class="head">Mode</div>
+                <div class="text">At School</div>
+              </div>
+
+              <div class="col-data">
+                <div class="head">Date / Time</div>
+                <div class="text">12/09/2023 (12:00 - 14:00)</div>
+              </div>
+
+              <!-- <div class="col-data">
+                <div class="head">Time</div>
+                <div class="text">At School</div>
+              </div> -->
+
+              <div class="col-data">
+                <div class="head">Current CTC</div>
+                <div class="text">{{ interviewFeedback.interview_feedback ? interviewFeedback.interview_feedback.ctc_current : 'N/A' }}</div>
+              </div>
+
+              <div class="col-data">
+                <div class="head">Expected CTC</div>
+                <div class="text">{{ interviewFeedback.interview_feedback ? interviewFeedback.interview_feedback.ctc_expected : 'N/A' }}</div>
+              </div>
+
+              <div class="col-data">
+                <div class="head">Interviewer's Name</div>
+                <div class="text">{{ interviewFeedback.interviewer ? `${interviewFeedback.interviewer.email} / ${interviewFeedback.interviewer.name}` : 'N/A' }}</div>
+              </div>
+
+            </div>
+
+            <div class="title-container">
+              <div class="profile-title-interview">Interview Remarks </div>
+              <p>
+                {{ interviewFeedback && interviewFeedback.interview_remark ? interviewFeedback.interview_remark : '-N/A-' }}
+              </p>
+            </div>
+
+            <div class="title-container">
+              <div class="profile-title-interview">About Candidate </div>
+              <p>
+                {{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.about_candidate ? interviewFeedback.interview_feedback.about_candidate : '-N/A-' }}
+              </p>
+            </div>
+
+            <div class="title-container">
+              <div class="profile-title-interview">Candidate Past </div>
+              <p>
+                {{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.candidate_past ? interviewFeedback.interview_feedback.candidate_past : '-N/A-' }}
+              </p>
+            </div>
+
+            <div class="title-container">
+              <div class="profile-title-interview">Interview Notes </div>
+              <p>
+                {{ interviewFeedback.interview_feedback && interviewFeedback.interview_feedback.interview_notes ? interviewFeedback.interview_feedback.interview_notes : '-N/A-' }}
+              </p>
+            </div>
+
+          </div>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -315,6 +431,7 @@ export default {
       userData: {},
       demoVideos: [],
       screeningData: {},
+      interviewFeedback: null,
       mainsData: {}
     };
   },
@@ -326,7 +443,8 @@ export default {
           this.userData = response.data.data;
           this.screeningData = response.data.data && response.data.data.assessment_results ? response.data.data.assessment_results.find(ele => ele.type == 'SCREENING') : {}; 
 
-          this.demoVideos = response.data.data && response.data.data.demo_video ? response.data.data.demo_video : []; 
+          this.demoVideos = response.data.data && response.data.data.demo_video ? response.data.data.demo_video : [];
+          this.interviewFeedback = response.data.data && response.data.data.interview ? response.data.data.interview : null; 
 
           this.mainsData = response.data.data && response.data.data.assessment_results ? response.data.data.assessment_results.find(ele => ele.type == 'MAINS') : {}; 
           if(this.screeningData && this.screeningData.skill_scores) {
@@ -447,5 +565,57 @@ export default {
     max-width: 14px;
     min-width: 14px;
 }
+.detail-row-data {
+  background-color: rgba(248, 250, 252, 1);
+  border:1px solid rgba(218, 218, 218, 1);
+  border-radius: 10px;
+  justify-content: space-between;
+}
+
+.col-data {
+  border-left: 1px solid #d9dada;
+  padding-left: 10px;
+}
+.col-data:first-child {
+  border: none;
+  padding-left: 10px;
+}
+.col-data .head {
+  color :rgba(0, 0, 0, 0.6);
+  padding-bottom: 6px;
+  font-size: 12px;
+}
+
+.col-data .text {
+  color :rgba(0, 0, 0, 0.87);
+  font-size: 14px;
+}
+
+.profile-title-interview { 
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.84);
+}
+
+.title-container {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.title-container p {
+  font-size: 14px;
+  padding-top: 5px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  color: rgba(77, 77, 77, 1);
+
+}
+
 </style>
   

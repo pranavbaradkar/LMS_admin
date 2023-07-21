@@ -21,15 +21,19 @@
 
 
         <v-menu offset-y>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark v-bind="attrs" v-on="on" text icon>
-                  <v-avatar>
-                    <v-icon class="pa-2">mdi-account-outline</v-icon>
-                  </v-avatar>
-                </v-btn>
-              </template>
-              <v-btn @click="logout">logout</v-btn>
-            </v-menu>
+          <template v-slot:activator="{ on, attrs }">
+            <div  v-on="on"> 
+            <v-btn color="primary" dark  v-bind="attrs"  text icon>
+              <v-avatar>
+                <v-icon class="pa-2">mdi-account-outline</v-icon> 
+              </v-avatar>
+            </v-btn>
+            {{ user.email }}
+          </div>
+            
+          </template>
+          <v-btn style="min-width: 100%;" @click="logout">logout</v-btn>
+        </v-menu>
         
       </v-app-bar>
       <router-view> </router-view>
@@ -48,6 +52,11 @@ export default {
   name: "App",
   components: {
     NavDrawer,
+  },
+  computed: {
+    user() {
+      return AuthService.getLoggedUser();
+    }
   },
   data() {
     return {

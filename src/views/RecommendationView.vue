@@ -139,7 +139,7 @@
               src="../assets/user.svg"
               />
           </a>
-          <div v-if="item.is_show_icon" @click="() => {
+          <div v-if="item.is_show_icon && ((user_permission().recommended && user_permission().recommended.panel && user_permission().recommended.panel.update) || user().role_type == 'SUPER_ADMIN')" @click="() => {
               user_id = item.id;
               isAgreeText = 'AGREE';
               statusRecomm = true;
@@ -150,7 +150,7 @@
               src="../assets/thumbs-up.svg"
               />
           </div>
-          <div v-if="item.is_show_icon" @click="() => {
+          <div v-if="item.is_show_icon && ((user_permission().recommended && user_permission().recommended.panel && user_permission().recommended.panel.update) || user().role_type == 'SUPER_ADMIN')" @click="() => {
               user_id = item.id;
               statusRecomm = true;
               isAgreeText = 'DISAGREE';
@@ -161,7 +161,7 @@
               src="../assets/thumbs-down.svg"
               />
           </div>
-          <div class="ml-2">
+          <div class="ml-2" v-if="((user_permission().recommended && user_permission().recommended.panel && user_permission().recommended.panel.update) || user().role_type == 'SUPER_ADMIN')">
             <img
              v-if="!item.is_interview_icon" 
               width="30px"
@@ -182,8 +182,6 @@
                   recommendations_id = item.r_id
                 }" 
               />
-
-
           </div>
         </div>
       </template>
@@ -232,6 +230,7 @@ import { required, email } from "vuelidate/lib/validators";
 // import SkillsController from "@/controllers/SkillsController";
 // import LevelController from "@/controllers/LevelController";
 import RecommendationController from '@/controllers/RecommendationController'
+import AuthService from "@/services/AuthService";
 
 export default {
   mixins: [validationMixin],
@@ -399,6 +398,12 @@ export default {
     };
   },
   methods: {
+    user() {
+      return AuthService.getLoggedUser();
+    },
+    user_permission() {
+      return AuthService.getPermissions();
+    },
     truncate (string) {
       if(string) {
         if (string && string.length < 17) return string;

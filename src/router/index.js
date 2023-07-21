@@ -28,6 +28,13 @@ import CandidatesFormview from '../views/CandidatesFormview.vue'
 import InterviewPanelView from '../views/InterviewPanelView.vue'
 
 
+import CreateRolesView from '../views/CreateRolesView.vue'
+import CreateAdminView from '../views/CreateAdminView.vue'
+import AdminUserView from '../views/AdminUserView.vue'
+import AllRoleView from '../views/AllRoleView'
+
+
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -236,6 +243,38 @@ const routes = [
     path: '/interview/panel',
     name: 'interview_panel',
     component: InterviewPanelView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/role/:type/:id?',
+    name: 'create roles',
+    component: CreateRolesView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/admin/:type/:id?',
+    name: 'admin',
+    component: CreateAdminView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/admins',
+    name: 'admins',
+    component: AdminUserView,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/roles',
+    name: 'all role',
+    component: AllRoleView,
     meta: {
       requiresAuth: true,
     }
