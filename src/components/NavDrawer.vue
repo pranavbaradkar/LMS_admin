@@ -22,7 +22,7 @@
             <v-list-item-title class="white--text">Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="grey lighten-2" key="Home" to="/recommendations" style="border-radius: 16px"
+        <v-list-item v-if="(user_permission.recommended && user_permission.recommended.panel && user_permission.recommended.panel.view) || user.role_type == 'SUPER_ADMIN'" color="grey lighten-2" key="Home" to="/recommendations" style="border-radius: 16px"
           active-class="grey darken-4 slider" class="ma-2 px-2">
           <v-list-item-icon class="ma-4 rounded-xl" slider>
             <v-icon size="25px" color="grey lighten-4">mdi-star-outline</v-icon>
@@ -33,7 +33,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="grey lighten-2" key="Home-account" to="/interview/panel" style="border-radius: 16px"
+        <v-list-item v-if="(user_permission.interview && user_permission.interview.panel && user_permission.interview.panel.view) || user.role_type == 'SUPER_ADMIN'" color="grey lighten-2" key="Home-account" to="/interview/panel" style="border-radius: 16px"
           active-class="grey darken-4 slider" class="ma-2 px-2">
           <v-list-item-icon class="ma-4 rounded-xl" slider>
             <v-icon size="25px" color="grey lighten-4">mdi-clipboard-account</v-icon>
@@ -44,7 +44,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-group no-action>
+        <v-list-group v-if="(user_permission.users && user_permission.users.panel && user_permission.users.panel.view) || user.role_type == 'SUPER_ADMIN'" no-action>
           <template v-slot:activator>
             <v-list-item color="grey lighten-2" style="border-radius: 16px" active-class="grey darken-4 slider">
               <v-list-item-icon class="rounded-xl" slider>
@@ -57,7 +57,7 @@
             </v-list-item>
           </template>
 
-          <v-list-item to="/users" active-class="grey darken-4 slider">
+          <v-list-item  to="/users" active-class="grey darken-4 slider">
             <v-list-item-content>
               <v-list-item-title class="white--text">All Users</v-list-item-title>
             </v-list-item-content>
@@ -73,7 +73,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
-        <v-list-item color="grey lighten-2" key="Assessment" to="/assessment" style="border-radius: 16px"
+        <v-list-item v-if="(user_permission.assesssments && user_permission.assesssments.panel && user_permission.assesssments.panel.view) || user.role_type == 'SUPER_ADMIN'" color="grey lighten-2" key="Assessment" to="/assessment" style="border-radius: 16px"
           active-class="grey darken-4 slider" class="ma-2 px-2">
           <v-list-item-icon class="ma-4 rounded-xl" slider>
             <v-icon size="25px" color="grey lighten-4">mdi-clipboard-list-outline</v-icon>
@@ -84,7 +84,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="grey lighten-2" to="/question-bank" style="border-radius: 16px"
+        <v-list-item v-if="(user_permission.question_bank && user_permission.question_bank.panel && user_permission.question_bank.panel.view) || user.role_type == 'SUPER_ADMIN'" color="grey lighten-2" to="/question-bank" style="border-radius: 16px"
           active-class="grey darken-4 slider" class="ma-2 px-2">
           <v-list-item-icon class="ma-4 rounded-xl" slider>
             <v-icon size="25px" color="grey lighten-4">mdi-help-circle-outline</v-icon>
@@ -94,7 +94,8 @@
             <v-list-item-title class="white--text">Question Bank</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="grey lighten-2" key="Question Bank" to="/campaign" style="border-radius: 16px"
+
+        <v-list-item v-if="(user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.view) || user.role_type == 'SUPER_ADMIN'"  color="grey lighten-2" key="Question Bank" to="/campaign" style="border-radius: 16px"
           active-class="grey darken-4 slider" class="ma-2 px-2">
           <v-list-item-icon class="ma-4 rounded-xl" slider>
             <v-icon size="25px" color="grey lighten-4">mdi-bullhorn-variant-outline</v-icon>
@@ -126,7 +127,7 @@
               <v-list-item-title class="white--text">Clusters</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/brands" active-class="grey darken-4 slider">
+          <v-list-item v-if="(user_permission.master && user_permission.master.child.brands && user_permission.master.child.brands.view) || user.role_type == 'SUPER_ADMIN'" to="/brands" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-certificate</v-icon>
             </v-list-item-icon>
@@ -134,7 +135,7 @@
               <v-list-item-title class="white--text">Brands</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/schools" active-class="grey darken-4 slider">
+          <v-list-item v-if="(user_permission.master && user_permission.master.child.schools && user_permission.master.child.schools.view) || user.role_type == 'SUPER_ADMIN'" to="/schools" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-town-hall</v-icon>
             </v-list-item-icon>
@@ -142,7 +143,7 @@
               <v-list-item-title class="white--text">Schools</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/boards" active-class="grey darken-4 slider">
+          <v-list-item v-if="(user_permission.master && user_permission.master.child.boards && user_permission.master.child.boards.view) || user.role_type == 'SUPER_ADMIN'" to="/boards" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-file-certificate</v-icon>
             </v-list-item-icon>
@@ -151,7 +152,7 @@
               <v-list-item-title class="white--text">Boards</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/levels" active-class="grey darken-4 slider">
+          <v-list-item  v-if="(user_permission.master && user_permission.master.child.levels && user_permission.master.child.levels.view) || user.role_type == 'SUPER_ADMIN'" to="/levels" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-finance</v-icon>
             </v-list-item-icon>
@@ -160,7 +161,7 @@
               <v-list-item-title class="white--text">Levels</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/grades" active-class="grey darken-4 slider">
+          <v-list-item  v-if="(user_permission.master && user_permission.master.child.grades && user_permission.master.child.grades.view) || user.role_type == 'SUPER_ADMIN'"  to="/grades" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-notebook-check</v-icon>
             </v-list-item-icon>
@@ -170,7 +171,7 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item to="/subject-category" active-class="grey darken-4 slider">
+          <v-list-item v-if="(user_permission.master && user_permission.master.child.subject_category && user_permission.master.child.subject_category.view) || user.role_type == 'SUPER_ADMIN'"  to="/subject-category" active-class="grey darken-4 slider">
 
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-book-search-outline</v-icon>
@@ -179,7 +180,7 @@
               <v-list-item-title class="white--text">Subject Category</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/subjects" active-class="grey darken-4 slider">
+          <v-list-item v-if="(user_permission.master && user_permission.master.child.subject && user_permission.master.child.subject.view) || user.role_type == 'SUPER_ADMIN'" to="/subjects" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-notebook-multiple</v-icon>
             </v-list-item-icon>
@@ -188,7 +189,7 @@
               <v-list-item-title class="white--text">Subject</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/skills" active-class="grey darken-4 slider">
+          <v-list-item v-if="(user_permission.master && user_permission.master.child.skills && user_permission.master.child.skills.view) || user.role_type == 'SUPER_ADMIN'"  to="/skills" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-lightbulb-on-outline</v-icon>
             </v-list-item-icon>
@@ -197,16 +198,7 @@
               <v-list-item-title class="white--text">Skills</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-
-
-
-
-
-
-
-
-
-          <v-list-item to="/lo-banks" active-class="grey darken-4 slider">
+          <v-list-item v-if="(user_permission.master && user_permission.master.child.los_bank && user_permission.master.child.los_bank.view) || user.role_type == 'SUPER_ADMIN'"  to="/lo-banks" active-class="grey darken-4 slider">
             <v-list-item-icon class="rounded-xl pr-2" slider>
               <v-icon size="25px" color="grey lighten-4">mdi-graph-outline</v-icon>
             </v-list-item-icon>
@@ -215,18 +207,8 @@
               <v-list-item-title class="white--text">LOs Bank</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-
-
-
-
-
-
         </v-list-group>
-
-
-
-
-        <v-list-item dense to="/settings" style="border-radius: 15px" active-class="grey darken-4 ma-2 ">
+        <v-list-item v-if="(user_permission.master && user_permission.master.child.settings && user_permission.master.child.settings.view) || user.role_type == 'SUPER_ADMIN'" dense to="/settings" style="border-radius: 15px" active-class="grey darken-4 ma-2 ">
           <v-list-item-icon class="ma-4">
             <v-icon size="28px" color="white"> mdi-cogs</v-icon>
           </v-list-item-icon>
