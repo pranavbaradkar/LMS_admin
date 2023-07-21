@@ -26,43 +26,21 @@
           prepend-inner-icon="mdi-magnify"
           v-model="search"
           clearable
-        ></v-text-field
-      ></v-col>
+        ></v-text-field>
+    </v-col>
     </v-row>
     <v-row justify="space-between" class="my-4">
       <v-col cols="4" sm="4" md="4">
         <div class="text-h5">All Users</div>
       </v-col>
 
-      <v-col cols="8" sm="8" md="8">
-        <v-row justify="end">
-          <!-- <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn> -->
-          <v-btn
-            class="primary mx-2"
-            rounded
-            :disabled="selected.length == 0"
-            ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-          >
-          <!-- <v-btn
-            class="primary mx-2"
-            rounded
-            @click="resendInvite"
-            :disabled="selected.length == 0"
-            ><v-icon>mdi-email-sync-outline</v-icon>Resend Invite</v-btn
-          > -->
-          
-          <v-btn class="primary mx-2" rounded
-            ><v-icon>mdi-export</v-icon>Export</v-btn
-          >
-        </v-row>
-      </v-col>
+   
     </v-row>
     
     <v-data-table
       v-model="selected"
       :headers="headers"
       :items="users"
-      show-select
       :single-select="singleSelect"
       item-key="id"
       :options.sync="options"
@@ -190,6 +168,24 @@ export default {
         { text: "Actions", value: "actions", cellClass: "w-10" },
       ]
     };
+  },
+  watch: {
+    options: {
+      handler() {
+        console.log(this.options);
+        this.pageSize = this.options.itemsPerPage;
+        this.page = this.options.page;
+        this.fetchUsers()
+      },
+      deep: true,
+    },
+    search(newValue){
+      console.log(newValue);
+        this.pageSize = this.options.itemsPerPage;
+        this.page = this.options.page;
+        this.options.page=1;
+        this.fetchUsers();
+    }
   },
  
   methods: {

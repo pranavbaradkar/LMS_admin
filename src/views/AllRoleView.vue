@@ -20,25 +20,12 @@
         <div class="text-h5">Roles</div>
       </v-col>
 
-      <v-col>
-        <v-row justify="end">
-          <v-btn
-            class="primary mx-2"
-            :disabled="selected.length == 0"
-            rounded
-            @click="deleteDialog = true"
-            ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-          ><v-btn class="primary mx-2" rounded
-            ><v-icon>mdi-export</v-icon>Export</v-btn
-          >
-        </v-row>
-      </v-col>
+   
     </v-row>
     <v-data-table
       v-model="selected"
       :headers="headers"
       :items="tableData"
-      show-select
       :single-select="singleSelect"
       :options.sync="options"
       :footer-props="{
@@ -71,7 +58,7 @@
         </div>
       </template>
     </v-data-table>
-    <v-dialog v-model="deleteDialog" max-width="366px" persistent>
+    <v-dialog v-model="deleteDialog" max-width="36px" persistent>
       <v-card fluid>
         <v-container fluid class="pa-0">
           <v-container></v-container>
@@ -178,6 +165,13 @@ export default {
     };
   },
   watch: {},
+  computed: {
+    filteredEntries() {
+      return this.tableData.filter((entry) => {
+        return entry.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
+    },
+  },
   methods: {
     async searchData(search) { 
       console.log(search)

@@ -134,6 +134,7 @@
               </v-stepper-header>
 
               <v-stepper-items>
+              
                 <!------------------------------------------ STEP 1 ------------------------------------------>
                 <v-stepper-content step="1">
                   <v-form lazy-validation ref="step1">
@@ -181,7 +182,7 @@
                               </v-col>
                             </v-row>
 
-                            <v-row class="py-0">
+                            <v-row class="py-0">  
                               <v-col cols="6" class="py-0">
                                 <v-select v-model="personalInfo.country_id" label="Country" :items="countries"
                                   item-value="id" item-text="country_name" outlined class="rounded-xl" :rules="[v => !!v || 'Country is required']" required
@@ -1261,7 +1262,7 @@ export default {
     this.getSubjects();
     this.getGrades();
     this.getBoards();
-    this.getSchool();
+    this.getSchool();                     
   },
 };
 </script>

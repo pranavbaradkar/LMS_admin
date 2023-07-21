@@ -302,9 +302,45 @@
       </v-row>
       <v-row>
         <v-col cols="2">
-          <v-btn @click="submitForm" class="submit-btn ">Submit </v-btn>
+          <v-btn @click="submitForm"  @click.stop="dialog = true" class="submit-btn ">Submit </v-btn>
         </v-col>
       </v-row>
+      <v-dialog
+      v-model="dialog"
+      max-width="500"
+   
+    >
+      <v-card class="pop-up">
+          <!-- <v-card-title class="text-h5">
+            Use Google's location service?
+          </v-card-title> -->
+
+        <v-card-text class="text-h5 py-5">
+          SUCCESSFULLY SUBMIT THE FORM
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="black darken-1"
+            text
+            @click="dialog = false"
+          >
+            CANCEL
+          </v-btn>
+
+          <v-btn
+            color="black darken-1"
+            text
+            @click="dialog = false"
+          >
+            OK
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+      
 
     </v-container>
   </v-form>
@@ -344,6 +380,7 @@ export default {
       user_id: '',
       recommended_level: '',
       levels: [],
+      dialog: false,
       name: '',
       gradeList: [],
       boardData: [],
@@ -465,5 +502,8 @@ export default {
   width: 25px;
   height: 25px;
   left: -10px;
+}
+.pop-up{
+  height: 150px;
 }
 </style>

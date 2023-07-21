@@ -137,5 +137,12 @@ export default {
             return error.response;
         }
     },
-
+    searchRole: async function  (pageSize,page,search) {
+        try {
+            const response = await instance.get('admin/roles?pageSize='+pageSize+'&page='+page+'&search='+search)
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
 }
