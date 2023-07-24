@@ -1770,7 +1770,7 @@ export default {
           })}
         })
         const index = this.skillQuestionsIds.findIndex((q) => {
-          q.id == question.id;
+          return q == question.id;
         })
         this.skillQuestionsIds[index] = response.data.data.id;
         }
@@ -1797,7 +1797,7 @@ export default {
           })}
         })
         const index = this.mainsQuestionsIds.findIndex((q) => {
-          q.id == question.id;
+         return q == question.id;
         })
         this.mainsQuestionsIds[index] = response.data.data.id;
         }
@@ -2133,7 +2133,6 @@ export default {
         },
         this.assessmentId
       );
-
       console.log(response);
       window.location.reload();
       if(response.data.success){
