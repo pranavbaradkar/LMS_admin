@@ -160,7 +160,7 @@
                     <div class="failed-badge" v-if="value.status == 'DISAGREE'"><i class="dot me-2" />Demo Video Not Selected </div>
                     <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Pending</div>
                     <div class="warning-badge" v-if="value.status == 'SUBMITTED'"><i class="dot me-2" />Demo Video Submitted </div>
-                    <div class="profile-title">{{ value.assessment.name }} </div>
+                    <div class="profile-title">Demo Video</div>
                   </div>
                   
                   <div>
