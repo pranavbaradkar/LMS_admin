@@ -30,7 +30,9 @@
                     </v-col>
                     <v-col cols="6" class="email-input">
                       <v-text-field outlined class="rounded-xl" v-model="password" label="Password*"
-                        :rules="[v => (!!v || isEditId > 0) || 'Password name is required']" required></v-text-field>
+                        :rules="[v => (
+                          !!v || isEditId > 0) || 'Password name is required',
+                          v => ( v && v.length >= 8 ) || 'This field must have atleast 8 characters']" required></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row class="ms-5 ">
