@@ -10,8 +10,6 @@ const instance = axios.create({
 export default {
 
   login: async function (email, password) {
-
-
     try {
       const response = await instance.post('admin/login', { email, password });
       //console.log(response);
@@ -19,6 +17,12 @@ export default {
         const token = response.data.token
         localStorage.setItem(TOKEN_KEY, token)
         localStorage.setItem('userDetails', JSON.stringify(response.data.admin));
+        const response2 = await instance.get('admin',{
+          headers: {
+              'Authorization': this.getToken()
+          }
+        });
+        localStorage.setItem('userDetails', JSON.stringify(response2.data.admin));
         return response.data.success;
       }
     } catch (error) {
@@ -51,10 +55,12 @@ export default {
           'Authorization': this.getToken()
       }
     });
+    console.log(JSON.stringify(response.data.admin));
     localStorage.setItem('userDetails', JSON.stringify(response.data.admin));
   },
   getPermissions: function() {
     const details = localStorage.getItem('userDetails');
+    console.log("auth", JSON.parse(details).roles ? JSON.parse(JSON.parse(details).roles.permission) : {});
     return JSON.parse(details).roles ? JSON.parse(JSON.parse(details).roles.permission) : {};
   },
   getLoggedUser: function() {

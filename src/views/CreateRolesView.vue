@@ -110,6 +110,8 @@
                         ></v-checkbox>
                       </v-col>
 
+                     
+
                     </v-col>
                   </v-row>
 
@@ -149,6 +151,14 @@
                         class="mt-0"
                           v-model="ele.delete"
                           label="Delete"
+                        ></v-checkbox>
+                      </v-col>
+
+                      <v-col cols="2" v-if="index == 'campaigns'">
+                        <v-checkbox
+                        class="mt-0"
+                          v-model="item.panel.is_admin"
+                          label="Is Admin"
                         ></v-checkbox>
                       </v-col>
 
@@ -287,7 +297,8 @@ export default {
             "create": false,
             "view": true,
             "update": false,
-            "delete": false
+            "delete": false,
+            "is_admin": false
           }
         },
         "users": {

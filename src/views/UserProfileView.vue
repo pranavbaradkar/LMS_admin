@@ -158,7 +158,7 @@
                   <div class="header-container">
                     <div class="success-badge" v-if="value.status == 'AGREE'"><i class="dot me-2" />Demo Video Selected </div>
                     <div class="failed-badge" v-if="value.status == 'DISAGREE'"><i class="dot me-2" />Demo Video Not Selected </div>
-                    <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Pending Selected </div>
+                    <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Pending</div>
                     <div class="warning-badge" v-if="value.status == 'SUBMITTED'"><i class="dot me-2" />Demo Video Submitted </div>
                     <div class="profile-title">{{ value.assessment.name }} </div>
                   </div>
@@ -329,12 +329,12 @@
 
               <div class="col-data">
                 <div class="head">Current CTC</div>
-                <div class="text">{{ interviewFeedback.interview_feedback ? interviewFeedback.interview_feedback.ctc_current : 'N/A' }}</div>
+                <div class="text">{{ interviewFeedback.interview_feedback ? interviewFeedback.interview_feedback.ctc_current+" Lac" : 'N/A' }}</div>
               </div>
 
               <div class="col-data">
                 <div class="head">Expected CTC</div>
-                <div class="text">{{ interviewFeedback.interview_feedback ? interviewFeedback.interview_feedback.ctc_expected : 'N/A' }}</div>
+                <div class="text">{{ interviewFeedback.interview_feedback ? interviewFeedback.interview_feedback.ctc_expected+" Lac" : 'N/A' }}</div>
               </div>
 
               <div class="col-data">
@@ -344,12 +344,12 @@
 
             </div>
 
-            <div class="title-container">
+            <!-- <div class="title-container">
               <div class="profile-title-interview">Interview Remarks </div>
               <p>
                 {{ interviewFeedback && interviewFeedback.interview_remark ? interviewFeedback.interview_remark : '-N/A-' }}
               </p>
-            </div>
+            </div> -->
 
             <div class="title-container">
               <div class="profile-title-interview">About Candidate </div>

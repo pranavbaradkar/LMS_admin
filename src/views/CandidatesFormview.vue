@@ -405,7 +405,7 @@ export default {
         }
         const response = await InterviewController.postCandidateData(formData, this.user_id);
         if (response.data.success) {
-          this.$route.push('/interview/panel');
+          window.location.href = '/#/interview/panel';
         } else {
           alert("Something went wrong could you please check with admin");
         }

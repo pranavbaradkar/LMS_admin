@@ -96,7 +96,7 @@
             <v-row class="mb-4">
               <v-col cols="2" class="ms-5 mt-2 ms-5 pb-0 mb-0 mt-1 ">
                 <v-btn variant="tonal"
-                  v-if="((user_permission().interview && user_permission().interview.panel && user_permission().interview.panel.create) || user().role_type == 'SUPER_ADMIN')"
+                  v-if="((user_permission.interview && user_permission.interview.panel && user_permission.interview.panel.create) || user.role_type == 'SUPER_ADMIN')"
                   @click="startInterview(item, item.user_id, item.recommended_level, item.levels_string.join(','), item.user.first_name + ' ' + item.user.last_name, 0)"
 
                   class=" end-btn start-interview">  {{ item.interview_feedback != '' ? 'Response Submitted' : 'Start Interview' }} <span
@@ -131,15 +131,15 @@ export default {
       
     }
   },
-  methods: {
+  computed: {
     user() {
-      console.log(AuthService.getLoggedUser());
       return AuthService.getLoggedUser();
     },
     user_permission() {
-      console.log(AuthService.getPermissions());
       return AuthService.getPermissions();
     },
+  },
+  methods: {
     async getInterviewDetail() {
       const response = await InterviewController.getInterviewDetails();
       if (response.data.success) {

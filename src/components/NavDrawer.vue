@@ -73,7 +73,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
-        <v-list-item v-if="(user_permission.assesssments && user_permission.assesssments.panel && user_permission.assesssments.panel.view) || user.role_type == 'SUPER_ADMIN'" color="grey lighten-2" key="Assessment" to="/assessment" style="border-radius: 16px"
+        <v-list-item v-if="(user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.view) || user.role_type == 'SUPER_ADMIN'" color="grey lighten-2" key="Assessment" to="/assessment" style="border-radius: 16px"
           active-class="grey darken-4 slider" class="ma-2 px-2">
           <v-list-item-icon class="ma-4 rounded-xl" slider>
             <v-icon size="25px" color="grey lighten-4">mdi-clipboard-list-outline</v-icon>
