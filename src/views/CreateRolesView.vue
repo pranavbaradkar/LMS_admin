@@ -161,6 +161,13 @@
                           label="Is Admin"
                         ></v-checkbox>
                       </v-col>
+                      <v-col cols="2" v-if="index == 'assessments'">
+                        <v-checkbox
+                        class="mt-0"
+                          v-model="item.panel.is_approval"
+                          label="Is Approval"
+                        ></v-checkbox>
+                      </v-col>
 
                     </v-col>
                   </v-row>
@@ -289,7 +296,8 @@ export default {
             "create": false,
             "view": true,
             "update": false,
-            "delete": false
+            "delete": false,
+            "is_approval": false
           }
         },
         "campaigns": {

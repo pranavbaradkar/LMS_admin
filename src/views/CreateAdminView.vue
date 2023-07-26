@@ -39,6 +39,10 @@
                     <v-col cols="6">
                       <v-select :items="rolesList" v-model="role_id" label="Select Role*"  :rules="[v => !!v || 'Role is required']"  outlined class="rounded-xl" item-text="name" item-value="id"></v-select>
                     </v-col>
+                    <v-col cols="5">
+                      <v-select :items="schoolList" v-model="school_id"   multiple type="checkbox" label="School List"  :rules="[v => !!v || 'School is required']"  outlined class="rounded-xl" item-text="name" item-value="id"></v-select>
+                    </v-col>
+                    
                   </v-row>
                   <v-row class="ms-5 end-row mb-5">
                     <v-col cols="8">
@@ -73,11 +77,13 @@
 
 <script>
 import AdminController from "@/controllers/AdminController";
+import SchoolController from "@/controllers/SchoolController";
 export default {
   name: "CreateAdminView",
   data() {
     return {
       rolesList: [],
+      schoolList:[],
       first: null,
       last: null,
       email: null,
@@ -95,6 +101,11 @@ export default {
       let response = await AdminController.getRoles({ compact: true });
       console.log(response);
       this.rolesList = response.data && response.data.data ? response.data.data : []; 
+    },
+    async getSchool() {
+      let response = await SchoolController.getSchool({ compact: true });
+      this.schoolList = response.data && response.data.data ? response.data.data.rows : [];
+      console.log(response);
     },
     async createUser() {
       if (this.$refs.form.validate()) {
@@ -151,15 +162,21 @@ export default {
       this.role_id = result.role_id; 
       this.isEditId = id;
     },
+   
     redirectToHome() {
       window.location.href = '/#/admins'
     }
+    
   },
   created() {
 
     this.getRoles();
     if (this.$route.params.id) {
       this.getSingleUser(this.$route.params.id);
+    }
+    this.getSchool();
+    if (this.$route.params.id) {
+      this.getAllSchool(this.$route.params.id);
     }
   },
 };

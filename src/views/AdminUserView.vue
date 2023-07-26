@@ -78,6 +78,8 @@
       <template v-slot:[`item.role`]="{ item }">
         {{ item.role.name }}
       </template>
+    
+      
       <template v-slot:[`item.actions`]="{ item }">
         <div class="d-flex flex-row">
           <img
@@ -162,6 +164,7 @@
 
 </template>
 <script>
+import SchoolController from "@/controllers/SchoolController";
 import "../styles.css";
 import AdminController from "@/controllers/AdminController";
 
@@ -179,6 +182,7 @@ export default {
       singleSelect: false,
       deleteDialog: false,
       users: [],
+      school:[],
       selected: {},
       search:"",
       headers: [
@@ -187,6 +191,7 @@ export default {
         { text: "Created On", value: "created_at", cellClass: "w-15" },
         { text: "Status", value: "status", cellClass: "w-15" },
         { text: "Role", value: "role", cellClass: "w-15" },
+        { text: "School", value: "school", cellClass: "w-15" },
         { text: "Actions", value: "actions", cellClass: "w-10" },
       ]
     };
@@ -203,6 +208,12 @@ export default {
       this.users = response.data.data;
       this.count = this.users.length;
       console.log(this.users);
+    },
+    async getSchool() {
+      const response = await SchoolController.getSchool();
+      this.school = response.data.data;
+      this.count = this.school.length;
+      console.log(this.school);
     },
     redirectToEdit(item) {
       window.location.href=`/#/admin/edit/${item.id}`
