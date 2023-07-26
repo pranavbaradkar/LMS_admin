@@ -228,6 +228,186 @@
 
       </v-row>
       <v-row>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card " outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  8
+                </v-btn>
+              </v-col>
+              <v-col cols="8" class="ml-n8">
+                <strong class="d-flex  ms-3 "> Job Knowledge</strong>
+                <span class="ma-3 job-para">Knowledge and relevance of experience in the job area.</span>
+              </v-col>
+            </div>
+
+
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider v-model="job_knowledge" step="1" ticks max="10" show-ticks="always" tick-size="4"
+                  thumb-label="always" track-color="grey" color="#277BC0"></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+              <span>Remarks (Optional)</span>
+             </v-col>
+             <v-col cols="11" class="ms-5 remark">
+                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                  class="underline" required></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+           
+            </v-row>
+          </v-card>
+        </v-col>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  9
+                </v-btn>
+              </v-col>
+              <v-col cols="8" class="ml-n8">
+                <strong class="d-flex  ms-3 "> Communication Skills</strong>
+                <span class="ma-3 job-para">Clarity & fluency of expression, method & manner of speech, listening ability.</span>
+              </v-col>
+            </div>
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider v-model="communication_skills" step="1" ticks max="10" show-ticks="always" tick-size="4"
+                  thumb-label="always" track-color="grey" color="#277BC0"></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+              <span>Remarks (Optional)</span>
+             </v-col>
+             <v-col cols="11" class="ms-5 remark">
+                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                  class="underline" required></v-text-field>
+              </v-col>
+            </v-row>
+
+
+
+
+          </v-card>
+        </v-col>
+
+      </v-row>
+      <v-row>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card " outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  10
+                </v-btn>
+              </v-col>
+              <v-col cols="12" class="ml-n8">
+                <strong class="d-flex  ms-3 "> Interpersonal & Team Skills</strong>
+                  <span class="ma-3 job-para">Attitude towards self & others, ability to get along with people, persuasion, coordination and influencing skills.</span>
+              </v-col>
+            </div>
+
+
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider v-model="interpersonal_team" step="1" ticks max="10" show-ticks="always" tick-size="4"
+                  thumb-label="always" track-color="grey" color="#277BC0"></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+              <span>Remarks (Optional)</span>
+             </v-col>
+             <v-col cols="11" class="ms-5 remark">
+                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                  class="underline" required></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+           
+            </v-row>
+          </v-card>
+        </v-col>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  11
+                </v-btn>
+              </v-col>
+              <v-col cols="12" class="ml-n8">
+                <strong class="d-flex  ms-3 "> Analytical Skills</strong>
+                <span class="ma-3 job-para">Logic in presenting opinions and views, interpretation of information, mental alertness, asking probing questions</span>
+              </v-col>
+            </div>
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider v-model="analytical_skills" step="1" ticks max="10" show-ticks="always" tick-size="4"
+                  thumb-label="always" track-color="grey" color="#277BC0"></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+              <span>Remarks (Optional)</span>
+             </v-col>
+             <v-col cols="11" class="ms-5 remark">
+                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                  class="underline" required></v-text-field>
+              </v-col>
+            </v-row>
+
+
+
+
+          </v-card>
+        </v-col>
+
+      </v-row>
+      <v-row>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  12
+                </v-btn>
+              </v-col>
+              <v-col cols="12" class="ml-n8">
+                <strong class="d-flex  ms-3 "> Leadership</strong>
+                <span class="ma-3 job-para">Vision-setting, aligning structures, systems, people, leading by example, motivating teams.</span>
+              </v-col>
+            </div>
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider v-model="leadership" step="1" ticks max="10" show-ticks="always" tick-size="4"
+                  thumb-label="always" track-color="grey" color="#277BC0"></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+              <span>Remarks (Optional)</span>
+             </v-col>
+             <v-col cols="11" class="ms-5 remark">
+                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                  class="underline" required></v-text-field>
+              </v-col>
+            </v-row>
+
+
+
+
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
         <v-col cols="12">
           <v-card class="rounded-xl card-height " outlined>
             <div class="d-flex align-center">

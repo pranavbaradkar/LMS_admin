@@ -176,7 +176,7 @@ export default {
     }
     this.getSchool();
     if (this.$route.params.id) {
-      this.getAllSchool(this.$route.params.id);
+      this.getSchool(this.$route.params.id);
     }
   },
 };
