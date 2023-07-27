@@ -46,6 +46,48 @@
                 </v-btn>
               </V-col>
               <v-col cols="3" class="ml-n8">
+                <strong class="d-flex">Position</strong>
+              </v-col>
+            </div>
+
+            <v-row>
+            <v-col cols="6" class="d-flex align-center">
+              <v-col cols="2" class="ms-3">
+                <span>Applied For -</span>
+              </v-col>
+              <v-col cols="8">
+                <v-select
+                  :items="items"
+                  label=""
+                ></v-select>
+              </v-col>
+            </v-col>
+              <v-col cols="6" class="d-flex align-center">
+                <v-col cols="2">
+                <span>Selected For -</span>
+              </v-col>
+                <v-col cols="8">
+                <v-select
+                  :items="senior"
+                  label=""
+                ></v-select>
+              </v-col>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          <v-card class="rounded-xl card-height " outlined>
+            <div class="d-flex align">
+              <V-col cols="1">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  1
+                </v-btn>
+              </V-col>
+              <v-col cols="3" class="ml-n8">
                 <strong class="d-flex   ">About Candidate in his/her words *</strong>
               </v-col>
             </div>
@@ -189,6 +231,7 @@
               </v-col>
               <v-col cols="8" class="ml-n8">
                 <strong class="d-flex  ms-3 "> Confidences Score</strong>
+                <span class="ma-3 job-para">Dress appropriately, show positive attitude, be warm, friendly, energetic.</span>
               </v-col>
             </div>
 
@@ -209,8 +252,10 @@
                   7
                 </v-btn>
               </v-col>
-              <v-col cols="8" class="ml-n8">
+              <v-col cols="12" class="ml-n8">
                 <strong class="d-flex  ms-3 "> Appearance Score</strong>
+                <span class="ma-3 job-para">Attitude towards self & others, ability to get along with people, persuasion, coordination and influencing skills.</span>
+
               </v-col>
             </div>
             <v-row>
@@ -254,7 +299,7 @@
               <span>Remarks (Optional)</span>
              </v-col>
              <v-col cols="11" class="ms-5 remark">
-                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                <v-text-field v-model="job_knowledge_underline" color="primary"  placeholder="Enter your remarks here" variant="underlined"
                   class="underline" required></v-text-field>
               </v-col>
             </v-row>
@@ -287,7 +332,7 @@
               <span>Remarks (Optional)</span>
              </v-col>
              <v-col cols="11" class="ms-5 remark">
-                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                <v-text-field v-model="communication_skills_underline" color="primary"  placeholder="Enter your remarks here" variant="underlined"
                   class="underline" required></v-text-field>
               </v-col>
             </v-row>
@@ -326,7 +371,7 @@
               <span>Remarks (Optional)</span>
              </v-col>
              <v-col cols="11" class="ms-5 remark">
-                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                <v-text-field v-model="interpersonal_team_underline" color="primary"  placeholder="Enter your remarks here" variant="underlined"
                   class="underline" required></v-text-field>
               </v-col>
             </v-row>
@@ -359,7 +404,7 @@
               <span>Remarks (Optional)</span>
              </v-col>
              <v-col cols="11" class="ms-5 remark">
-                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                <v-text-field v-model="analytical_skills_underline" color="primary"  placeholder="Enter your remarks here" variant="underlined"
                   class="underline" required></v-text-field>
               </v-col>
             </v-row>
@@ -396,7 +441,7 @@
               <span>Remarks (Optional)</span>
              </v-col>
              <v-col cols="11" class="ms-5 remark">
-                <v-text-field v-model="about_candidate" color="primary" label="" placeholder="Enter your remarks here" variant="underlined"
+                <v-text-field v-model="leadership_underline" color="primary"  placeholder="Enter your remarks here" variant="underlined"
                   class="underline" required></v-text-field>
               </v-col>
             </v-row>
@@ -431,6 +476,49 @@
         </v-col>
 
       </v-row>
+      <v-row>
+        <v-col cols="12">
+          <v-card class="rounded-xl card-height " outlined>
+            <div class="d-flex align">
+              <V-col cols="1">
+                <v-btn class="mx-2 btn-gray" fab disable small >
+                  1
+                </v-btn>  
+              </V-col>
+              <v-col cols="3" class="ml-n8">
+                <strong class="d-flex">Head of the Department</strong>
+              </v-col>
+            </div>
+
+            <v-row>
+            <v-col cols="6" class="d-flex align-center">
+              <v-col cols="2" class="ms-3">
+                <span>Name -</span>
+              </v-col>
+              <v-col cols="8">
+                <v-select
+                  :items="department_name"
+                  label=""
+                ></v-select>
+              </v-col>
+            </v-col>
+              <v-col cols="6" class="d-flex align-center">
+                <v-col cols="2">
+                <span>Designation -</span>
+              </v-col>
+                <v-col cols="8">
+                <v-select
+                  :items="department_designation"
+                  label=""
+                ></v-select>
+              </v-col>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+
+      </v-row>
+      
       <v-row>
         <v-col cols="6">
           <v-card class="rounded-xl cross-card " outlined>
@@ -541,6 +629,10 @@ export default {
       overall_rating: 0,
       offer_selection: "YES",
       grades: ['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'],
+      items: [' Secondary'],
+      senior:['Sr.Secondary'],
+      department_name: ['Taranjeet Singh'],
+      department_designation: ['CTO']
     }
   },
   created() {
