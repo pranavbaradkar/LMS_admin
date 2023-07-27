@@ -154,8 +154,6 @@ color: #E0E0E0 !important;
   width: 200px;
 }
 
-
-
 .w-20 {
   min-width: 20% !important;
 
@@ -351,6 +349,9 @@ input[type="file"] {
 }
 .cursor {
   cursor: pointer;
+}
+.roletype{
+  background-color: #E9F2F9;
 }
 
 .uplaodbtn {
@@ -639,11 +640,16 @@ color: #4D4D4D;
 .color-5 {
   background: rgba(26, 98, 255, 0.1);
 }
-
 .header-bagde {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+.custom-margin {
+  margin-left: 80px;
+}
+.pointradius {
+  border-radius: 24px !important;
 }
 
 .status-container {

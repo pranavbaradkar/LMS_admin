@@ -120,6 +120,7 @@
       </v-col>
       <v-col cols="8" sm="8" class="d-flex justify-end">
         <div>
+
           <v-btn class="primary mx-2" rounded @click="filterDialog = true"
             ><v-icon>mdi-tune</v-icon>Filter</v-btn
           >
@@ -149,7 +150,7 @@
     </v-row>
 
     <!------------------------------------------ Assessment card here---------------------------- -->
-    <div class="d-flex flex-row pb-4" id="myScroll-x" v-if="!showUsers">
+    <div class="d-flex flex-row pb-4 pointradius" id="myScroll-x" v-if="!showUsers">
       <v-card
         width="427px"
         min-width="427px"
@@ -267,9 +268,12 @@
             </v-card>
           </v-card>
       </div>
-          <div class="d-flex justify-end">
+      <div class="d-flex justify-space-between">
+           <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor roletype" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS </v-card-title>
+           <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
+
+           <img src="../assets/trash.svg" alt="Edit Icon" />
           
-            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
           </div>
         </div>
         <v-divider class="mb-4 mt-2"></v-divider>
@@ -1043,7 +1047,7 @@
     <!-- ASSESSMENT PUBLISH CONFORMATION POP UP -->
     <v-dialog v-model="publishDialog" max-width="366px" persistent>
       <v-card fluid>
-        <v-container fluid class="pa-0">
+        <v-container fluid class="pa-0 ">
           <v-card-text class="text-center">
             <v-avatar color="secondary" size="90"
               ><v-icon size="65">mdi-notebook-check-outline</v-icon></v-avatar
