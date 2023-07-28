@@ -52,11 +52,27 @@
                 label="Period"
                 rounded
                 style="width: 200px;"
-                :items="['Last 30 days', 'last 2 month', 'last 1 year']"
+                :items="['Today', 'Last 7 days', 'Last 1 month', 'Custom']"
                 dense
                 outlined
                 v-model="period"
-              ></v-select>
+                @change="changePeriod"
+                :menu-props="{
+                      closeOnClick: true,
+                      closeOnContentClick: true,
+                      }">
+            </v-select>
+            <VueDatePicker
+                    v-model="date"
+                    style="opacity: 0; top: -200px"
+                    v-if="period == 'Custom'"
+                    :visible="period == 'Custom'"
+                    range
+    @onChange="onClickOk('-- date changed --')"
+    @onClose="onClose('-- datepicker closed --')"
+                    validate
+                    :locale="{lang: 'en'}"
+                    placeholder="Custom"/>
           </div>
         </v-col>
       </v-row>
@@ -197,7 +213,8 @@ export default {
       userType: 'ALL',
       userTypeArray: ['ALL','TEACHER','JOB_SEEKER'],
       dataType: 'Default',
-      period: 'Last 30 days',
+      period: 'Today',
+      date: new Date(),
       NudgeData: [
         {
         title: "Total Sign Up",
@@ -283,6 +300,50 @@ export default {
     };
   },
   methods: {
+    onClose () {
+      // this.period = 'Last 30 days'
+    },
+    onClickOk() {
+      this.getDashboardData({
+        start_date: this.date.start,
+        end_date: this.date.end,
+        user_type: this.userTypeArray[this.userType]
+      })
+    },
+    changePeriod() {
+      console.log(this.period)
+      if (this.period == 'Today') {
+        const end_date = new Date();
+        const current_date = new Date();
+        const start_date = new Date(current_date.setDate(current_date.getDate() - 1));
+        this.getDashboardData({
+          start_date: JSON.stringify(start_date).slice(1,11),
+          end_date: JSON.stringify(end_date).slice(1,11),
+          user_type: this.userTypeArray[this.userType]
+        })
+      }
+      else if (this.period == 'Last 7 days') {
+        const end_date = new Date();
+        const current_date = new Date();
+        const start_date = new Date(current_date.setDate(current_date.getDate() - 7));
+
+        this.getDashboardData({
+          start_date: JSON.stringify(start_date).slice(1,11),
+          end_date: JSON.stringify(end_date).slice(1,11),
+          user_type: this.userTypeArray[this.userType]
+        })
+      }
+      else if (this.period == 'Last 1 month') {
+        const end_date = new Date();
+        const current_date = new Date();
+        const start_date = new Date(current_date.setDate(current_date.getDate() - 30));
+        this.getDashboardData({
+          start_date: JSON.stringify(start_date).slice(1,11),
+          end_date: JSON.stringify(end_date).slice(1,11),
+          user_type: this.userTypeArray[this.userType]
+        })
+      }
+    },
     changeUserType() {
       this.getDashboardData({user_type: this.userTypeArray[this.userType]})
     },
@@ -305,7 +366,7 @@ export default {
       this.chartDataForSuccess = this.convertData(
         response.data.data.success, ['Level','Screening', 'Mains']
       );
-
+      
       this.chartDataForTimeToAnswer = this.convertData(
         response.data.data.time_to_answer, ['Level','Screening', 'Mains']
       );
@@ -341,3 +402,10 @@ export default {
   },
 };
 </script>
+
+<style>
+.vd-menu__content {
+    top: 60px !important;
+    left: 1200px !important;
+}
+</style>
