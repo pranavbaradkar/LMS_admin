@@ -213,7 +213,7 @@ export default {
       userType: 'ALL',
       userTypeArray: ['ALL','TEACHER','JOB_SEEKER'],
       dataType: 'Default',
-      period: 'Today',
+      period: 'Last 1 month',
       date: new Date(),
       NudgeData: [
         {
