@@ -91,7 +91,7 @@
                 <GChart
                   :height="260"
                   type="BarChart"
-                  :data="pieChartDataForConversion"
+                  :data="chartDataForLevel"
                   :options="chartOptionsForLevel"
                   :resizeDebounce="0"
                 />
@@ -157,6 +157,7 @@
         chartDataForBlooms: [],
         chartDataForSkills: [],
         chartDataForDropout: [],
+        chartDataForLevel: [],
         pieChartDataForConversion: [],
         pieChartDataForPlatform: [],
         chartData: [
@@ -212,7 +213,7 @@
           legend: 'none',
           height: 200, 
           width: 370,
-          chartArea: {width: '85%', height: '50%', left: 40},
+          chartArea: {width: '80%', height: '50%', left: 60},
           vAxis: {title: 'Difficulty', titleTextStyle: {fontSize: 12, italic: false}},
           hAxis: {title: 'Success rate', titleTextStyle: {fontSize: 12, italic: false}}
         },
@@ -251,7 +252,7 @@
         this.NudgeData[3].value = response.data.data.user_failed_assessment;
 
         this.pieChartDataForConversion = this.convertData(
-          response.data.data.success_rate_difficulty, ['difficulty','Success rate']
+          response.data.data.assessment_status, ['Status','Count']
         );
         this.chartDataForGrades = this.convertData(
           response.data.data.pass_rate_grades, ['Grade','Pass Rate']
@@ -266,6 +267,9 @@
 
         this.chartDataForDropout = this.convertData(
           response.data.data.dropout_rate, ['Grade','Rate']
+        );
+        this.chartDataForLevel = this.convertData(
+          response.data.data.success_rate_difficulty, ['Difficulty','Rate']
         );
         // this.chartDataForUsers = this.convertData(
         //   response.data.data.users, ['Level','Screening', 'Mains']
