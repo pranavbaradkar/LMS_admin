@@ -4,35 +4,24 @@
       <v-col class="d-flex align-center">
         <v-btn
           v-if="((user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.create) || user.role_type == 'SUPER_ADMIN') && !showUsers"
-          @click="
-            () => {
+          @click="() => {
               dialog = true;
               e1 = 1;
               isEdit = false;
             }
-          "
-          class="primary"
-          large
-          rounded
-          elevation="0"
-          ><v-icon>mdi-plus</v-icon>Create Assessment</v-btn
-        >
+            " class="primary" large rounded elevation="0"><v-icon>mdi-plus</v-icon>Create Assessment</v-btn>
 
         <div class="mt-4" v-if="showUsers">
           <span class="m-4 cursor" @click="showUsers = false">Assessments</span>
           <v-icon>mdi-chevron-right</v-icon>
           <span class="text--secondary">Assessment Name</span>
           <v-icon>mdi-chevron-right</v-icon>
-          <select
-            @change="
-              () => {
-                screeningMainsUser == 'false'
-                  ? fetchMainsUsers(selectedId)
-                  : fetchScreeningUsers(selectedId);
-              }
-            "
-            v-model="screeningMainsUser"
-          >
+          <select @change="() => {
+              screeningMainsUser == 'false'
+                ? fetchMainsUsers(selectedId)
+                : fetchScreeningUsers(selectedId);
+            }
+            " v-model="screeningMainsUser">
             <option value="true" selected>
               Users in Screening Assessments
             </option>
@@ -41,74 +30,39 @@
         </div>
       </v-col>
       <v-col cols="4">
-        <v-text-field
-          v-if="!showUsers"
-          label="Search"
-          prepend-inner-icon="mdi-magnify"
-        ></v-text-field
-      ></v-col>
+        <v-text-field v-if="!showUsers" label="Search" prepend-inner-icon="mdi-magnify"></v-text-field></v-col>
     </v-row>
 
     <!-- assessment user table row with filter btn and color code -->
     <v-row justify="space-between" class="my-8" v-if="showUsers">
       <v-col cols="6" sm="6" md="" class="ma-0 pa-0 f-flex align-center">
         <div class="m-tab">
-          <v-tabs
-            background-color="#0000000D"
-            class="ml-2 d-flex space-evenly"
-            height="38"
-            hide-slider
-          >
-            <v-tab
-              active-class=" white ma-1 black--text"
-              class="rounded"
-              v-on:click="assessmentUsers = inProgress"
-            >
+          <v-tabs background-color="#0000000D" class="ml-2 d-flex space-evenly" height="38" hide-slider>
+            <v-tab active-class=" white ma-1 black--text" class="rounded" v-on:click="assessmentUsers = inProgress">
               In Progress
             </v-tab>
-            <v-tab
-              active-class=" white ma-1 black--text"
-              class="rounded"
-              v-on:click="assessmentUsers = cleared"
-            >
+            <v-tab active-class=" white ma-1 black--text" class="rounded" v-on:click="assessmentUsers = cleared">
               Cleared
             </v-tab>
 
-            <v-tab
-              active-class="white ma-1 black--text"
-              class="rounded"
-              v-on:click="assessmentUsers = yetToAttempt"
-            >
+            <v-tab active-class="white ma-1 black--text" class="rounded" v-on:click="assessmentUsers = yetToAttempt">
               Not Cleared
             </v-tab>
-            <v-tab
-              active-class="ma-1 white black--text"
-              class="rounded"
-              v-on:click="assessmentUsers = yetToAttempt"
-            >
+            <v-tab active-class="ma-1 white black--text" class="rounded" v-on:click="assessmentUsers = yetToAttempt">
               Yet To Attempt
             </v-tab>
           </v-tabs>
         </div>
       </v-col>
       <!-- filter btn and color code -->
-      <v-col
-        cols="6"
-        sm="6"
-        md="6"
-        class="d-flex justify-end align-center ma-0 pa-0"
-      >
+      <v-col cols="6" sm="6" md="6" class="d-flex justify-end align-center ma-0 pa-0">
         <v-spacer></v-spacer>
 
         <v-spacer></v-spacer>
-        <v-text-field
-          label="Search"
-          class="ma-0 pa-0"
-          prepend-inner-icon="mdi-magnify"
-        ></v-text-field>
+        <v-text-field label="Search" class="ma-0 pa-0" prepend-inner-icon="mdi-magnify"></v-text-field>
         <v-btn class="primary ml-2" rounded>
-          <v-icon>mdi-tune</v-icon>Filter</v-btn
-        >
+          <v-icon>mdi-tune</v-icon>Filter</v-btn>
+
       </v-col>
     </v-row>
 
@@ -121,12 +75,8 @@
       <v-col cols="8" sm="8" class="d-flex justify-end">
         <div>
 
-          <v-btn class="primary mx-2" rounded @click="filterDialog = true"
-            ><v-icon>mdi-tune</v-icon>Filter</v-btn
-          >
-          <v-btn class="primary mx-2" rounded
-            ><v-icon>mdi-export</v-icon>Export</v-btn
-          >
+          <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn>
+          <v-btn class="primary mx-2" rounded><v-icon>mdi-export</v-icon>Export</v-btn>
         </div>
       </v-col>
     </v-row>
@@ -151,129 +101,72 @@
 
     <!------------------------------------------ Assessment card here---------------------------- -->
     <div class="d-flex flex-row pb-4 pointradius" id="myScroll-x" v-if="!showUsers">
-      <v-card
-        width="427px"
-        min-width="427px"
-        height="auto"
-        class="pa-5 ml-4 pb-8"
-        v-for="assessment in assessments.filter((item) => item.status == 'PUBLISHED')"
-        
-        :key="assessment.id"
-      >
+      <v-card width="427px" min-width="427px" height="auto" class="pa-5 ml-4 pb-8"
+        v-for="assessment in assessments.filter((item) => item.status == 'PUBLISHED')" :key="assessment.id">
+        <v-chip class="live pa-0">
+          <img src="../assets/radar.svg" alt="question Icon" />
+          Live
+        </v-chip>
         <v-card-title class="pa-0">
-        <div style="width: 100%;" class="d-flex justify-space-between">
-          <div>
-            {{ assessment.name }}
+          <div style="width: 100%;" class="d-flex justify-space-between">
+            <div>
+              {{ assessment.name }}
+            </div>
+            <v-btn outlined fab color="black" style="width: 24px; height: 24px;" @click="fetchAssessmentUsers(assessment)"
+              depressed>
+              <v-icon>mdi-information-symbol</v-icon>
+            </v-btn>
           </div>
-          <v-btn
-          outlined
-          fab
-          color="black"
-          style="width: 24px; height: 24px;"
-          @click="fetchAssessmentUsers(assessment)" depressed>
-          <v-icon>mdi-information-symbol</v-icon>
-          </v-btn>
-        </div>
         </v-card-title>
         <!-- assessment type -->
-        <div
-          v-for="data in assessment.assessment_configurations"
-          :key="data.id"
-          class="d-flex justify-space-between flex-column"
-          style="height: 85%;"
-        >
-      <div>
-        <div class="my-2 text-subtitle-1">
-          <!-- Assessment title -->
-          {{ data.level.name}}
-        </div>
+        <div v-for="data in assessment.assessment_configurations" :key="data.id"
+          class="d-flex justify-space-between flex-column" style="height: 85%;">
+          <div>
+            <div class="my-2 text-subtitle-1">
+              <!-- Assessment title -->
+              {{ data.level.name }}
+            </div>
 
-        <div class="my-2 text-subtitle-1">
-          <!-- Assessment title -->
-          <span style="font-weight: 500;" v-for="subject in data.subjects" :key="subject">{{ subject + ' '}}</span>
-        </div>
-          <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
-          <div
-            class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 " 
-          >
-            <div class="assessmentIconColor">
-              <v-icon  class="pr-0 ">mdi-help-circle-outline</v-icon
-              >{{ data.total_no_of_questions }} Questions
+            <div class="my-2 text-subtitle-1">
+              <!-- Assessment title -->
+              <span style="font-weight: 500;" v-for="subject in data.subjects" :key="subject">{{ subject + ' ' }}</span>
             </div>
-            <div class="assessmentIconColor">
-              <v-icon class="pr-0 pl-4">mdi-clock-outline</v-icon
-              >{{ formatTime(data.duration_of_assessment)  }}
+            <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
+            <div class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 ">
+              <div class="assessmentIconColor">
+                <img src="../assets/marks.svg" alt="question Icon" />
+                {{ data.total_no_of_questions }} Questions
+              </div>
+              <div class="assessmentIconColor">
+                <img src="../assets/question.svg" alt="question Icon" />
+                {{ formatTime(data.duration_of_assessment) }}
+              </div>
+              <div class="assessmentIconColor mb-5 pointradius">
+                <img src="../assets/clock.svg" alt=" clock Icon" />
+                {{ data.correct_score_answer }} marks
+              </div>
             </div>
-            <div class="assessmentIconColor">
-              <v-icon class="pr-0 pl-4">mdi-alpha-a-circle-outline</v-icon
-              >{{ data.correct_score_answer }} marks
+            <div>
+              <div class="d-flex content ">
+                <v-chip class="my-clear ">43 Cleared</v-chip>
+                <v-chip class="my-progress">43 In progress</v-chip>
+                <v-chip class="my-notcleared">43 Not Cleared</v-chip>
+              </div>
             </div>
-          </div>
-          <v-card
-          
-            class="d-flex flex-row pa-0 ma-0"
-            width="100%"
-            height="40px"
-            color="transparent"
-            depressed
-            elevation="0"
-          >
-            <v-card
-            elevation="0"
-              class="d-flex flex-row pa-0 ma-0"
-              width="100%"
-              height="0px"
-              color="grey"
-            >
-              <v-card
-              elevation="0"
-                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
-                width="20%"
-                height="10px"
-                color="#43ff64d9"
-                justify-center
-              >
-                <div class="graph-value litegreen">50</div>
-              </v-card>
-              <v-card
-              elevation="0"
-                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
-                width="30%"
-                height="10px"
-                color="#1b72e8b3"
-                justify-center
-              >
-                <div class="graph-value liteblue">50</div>
-              </v-card>
-              <v-card
-              elevation="0"
-                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
-                width="25%"
-                height="10px"
-                color="#ff9501cc"
-                justify-center
-              >
-                <div class="graph-value liteyellow">50</div>
-              </v-card>
-              <v-card
-              elevation="0"
-                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0" 
-                width="25%"
-                height="10px"
-                color="#D9D9D9"
-                justify-center
-              >
-                <div class="graph-value">50</div>
+            <v-card class="d-flex flex-row pa-0 ma-0 justify-content=space-evenly" width="100%" height="40px"
+              color="transparent" depressed elevation="0">
+              <v-card elevation="0" class="d-flex flex-row pa-0 ma-0" width="100%" height="0px" color="grey">
               </v-card>
             </v-card>
-          </v-card>
-      </div>
-      <div class="d-flex justify-space-between">
-           <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor roletype" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS </v-card-title>
-           <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
+          </div>
 
-           <img src="../assets/trash.svg" alt="Edit Icon" />
-          
+          <div class="d-flex justify-space-between">
+            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor roletype publish"
+              @click="publishMethod(data.assessment_id, data.assessment_type)">PUBLISH RESULTS </v-card-title>
+            <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
+
+            <img src="../assets/trash.svg" alt="Edit Icon" />
+
           </div>
         </div>
         <v-divider class="mb-4 mt-2"></v-divider>
@@ -291,97 +184,71 @@
 
     <!------------------------------------------ Assessment card here---------------------------- -->
     <div class="d-flex flex-row pb-4" id="myScroll-x" v-if="!showUsers">
-      <v-card
-        width="427px"
-        min-width="427px"
-        height="auto"
-        class="pa-5 ml-4 pb-8"
-        v-for="assessment in assessments.filter((item) => item.status != 'PUBLISHED')"
-        
-        :key="assessment.id"
-      >
-      <v-card-title class="pa-0">
-        <div style="width: 100%;" class="d-flex justify-space-between">
-          <div>
-            {{ assessment.name }}
-          </div>
-          <div>
-          <v-btn
-          v-if="((user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.update) || user.role_type == 'SUPER_ADMIN')"
-          fab
-          color="white"
-          style="width: 32px; height: 32px;"
-          @click="getAssesmentDetails(assessment ,assessment.id)" depressed>
-          <v-icon>mdi-pencil</v-icon>
-          </v-btn>
+      <v-card width="427px" min-width="427px" height="auto" class="pa-5 ml-4 pb-8"
+        v-for="assessment in assessments.filter((item) => item.status != 'PUBLISHED')" :key="assessment.id">
+        <v-card-title class="pa-0">
+          <div style="width: 100%;" class="d-flex justify-space-between">
+            <div>
+              {{ assessment.name }}
+            </div>
+            <div>
+              <v-btn
+                v-if="((user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.update) || user.role_type == 'SUPER_ADMIN')"
+                fab color="white" style="width: 32px; height: 32px;"
+                @click="getAssesmentDetails(assessment, assessment.id)" depressed>
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
 
-          <v-btn
-          v-if="((user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.delete) || user.role_type == 'SUPER_ADMIN')"
-          class="ml-4"
-          fab
-          color="#ff000059"
-          style="width: 32px; height: 32px;"
-          @click="() => {
-            deleteDialog = true
-            selectedId = assessment.id;
-            }" depressed>
-          <v-icon color="red">mdi-delete-outline</v-icon>
-          </v-btn>
-         </div>
-        </div>
+              <v-btn
+                v-if="((user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.delete) || user.role_type == 'SUPER_ADMIN')"
+                class="ml-4" fab color="#ff000059" style="width: 32px; height: 32px;" @click="() => {
+                  deleteDialog = true
+                  selectedId = assessment.id;
+                }" depressed>
+                <v-icon color="red">mdi-delete-outline</v-icon>
+              </v-btn>
+            </div>
+          </div>
         </v-card-title>
         <!-- assessment type -->
-        <div
-          v-for="data in assessment.assessment_configurations"
-          :key="data.id"
-          class="d-flex justify-space-between flex-column"
-          style="height: 80%;"
-        >
-        <div>
-        <div class="my-2 text-subtitle-1">
-          <!-- Assessment title -->
-          {{data.level && data.level.name}}
-        </div>
+        <div v-for="data in assessment.assessment_configurations" :key="data.id"
+          class="d-flex justify-space-between flex-column" style="height: 80%;">
+          <div>
+            <div class="my-2 text-subtitle-1">
+              <!-- Assessment title -->
+              {{ data.level && data.level.name }}
+            </div>
 
-        <div class="my-2 text-subtitle-1">
-          <!-- Assessment title -->
-          <span style="font-weight: 500" v-for="subject in data.subjects" :key="subject">{{ subject + ' '}}</span>
-        </div>
-          <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
-        <div
-            class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 " 
-          >
-            <div class="assessmentIconColor">
-              <v-icon  class="pr-0 ">mdi-help-circle-outline</v-icon
-              >{{ data.total_no_of_questions }} Questions
+            <div class="my-2 text-subtitle-1">
+              <!-- Assessment title -->
+              <span style="font-weight: 500" v-for="subject in data.subjects" :key="subject">{{ subject + ' ' }}</span>
             </div>
-            <div class="assessmentIconColor">
-              <v-icon class="pr-0 pl-4">mdi-clock-outline</v-icon
-              >{{ formatTime(data.duration_of_assessment)  }}
+            <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
+            <div class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 ">
+              <div class="assessmentIconColor">
+                <v-icon class="pr-0 ">mdi-help-circle-outline</v-icon>{{ data.total_no_of_questions }} Questions
+              </div>
+              <div class="assessmentIconColor">
+                <v-icon class="pr-0 pl-4">mdi-clock-outline</v-icon>{{ formatTime(data.duration_of_assessment) }}
+              </div>
+              <div class="assessmentIconColor">
+                <v-icon class="pr-0 pl-4">mdi-alpha-a-circle-outline</v-icon>{{ data.correct_score_answer }} marks
+              </div>
             </div>
-            <div class="assessmentIconColor">
-              <v-icon class="pr-0 pl-4">mdi-alpha-a-circle-outline</v-icon
-              >{{ data.correct_score_answer }} marks
-            </div>
-        </div>
-        </div>
-        <div class="d-flex justify-end">          
-            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : 
-            showDialog(data.assessment_id)">
-              {{assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE'}}
+          </div>
+          <div class="d-flex justify-end">
+            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment, data.assessment_id) :
+              showDialog(data.assessment_id)">
+              {{ assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE' }}
             </v-card-title>
-        </div>
+          </div>
         </div>
         <v-divider class="mb-4 mt-2"></v-divider>
         <!-- Assessment type -->
       </v-card>
     </div>
 
-    <v-data-table
-      v-if="showUsers"
-      :headers="screeningHeaders"
-      :items="assessmentUsers"
-    >
+    <v-data-table v-if="showUsers" :headers="screeningHeaders" :items="assessmentUsers">
       <template v-slot:[`item.actions`]="{}">
         <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
       </template>
@@ -418,16 +285,15 @@
                 >Back</v-btn
               > -->
               <v-btn width="111px" height="48px" rounded class="primary" @click="nextStep(e1)">
-                <v-icon v-if="e1 == 4">mdi-book-open-variant</v-icon
-                >{{ e1 == 4 ? isEdit ? "Update":"Create" : "Next" }}
+                <v-icon v-if="e1 == 4">mdi-book-open-variant</v-icon>{{ e1 == 4 ? isEdit ? "Update" : "Create" : "Next" }}
               </v-btn>
             </v-row>
           </v-toolbar>
         </v-card-title>
         <v-card-text>
           <v-stepper v-model="e1" elevation="0" class="secondary">
-            <v-stepper-header class="mx-6 white rounded-xl" >
-              <v-stepper-step  :complete="e1 > 1" step="1">
+            <v-stepper-header class="mx-6 white rounded-xl">
+              <v-stepper-step :complete="e1 > 1" step="1">
                 DETAILS
               </v-stepper-step>
 
@@ -460,11 +326,7 @@
                           <div class="text-body-1 my-4">Assessment Type</div>
                         </v-col>
                         <v-col cols="3">
-                          <v-radio-group
-                            v-model="assessment_type"
-                            :rules="[(v) => !!v || 'Please select one']"
-                            required
-                          >
+                          <v-radio-group v-model="assessment_type" :rules="[(v) => !!v || 'Please select one']" required>
                             <v-row>
                               <v-col>
                                 <v-radio label="SCREENING" value="SCREENING"></v-radio>
@@ -485,31 +347,17 @@
                       <v-row class="py-0">
                         <v-col class="py-0">
                           <div class="text-body-1 my-2">Assessment Name*</div>
-                          <v-text-field
-                            outlined
-                            class="rounded-xl"
-                            v-model="name"
-                            solo
-                            flat
-                            label="Enter Assessment Name*"
-                            :rules="[
+                          <v-text-field outlined class="rounded-xl" v-model="name" solo flat
+                            label="Enter Assessment Name*" :rules="[
                               (v) => !!v || 'Assessment Name is required',
-                            ]"
-                          ></v-text-field>
+                            ]"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="py-0">
                         <v-col class="py-0">
                           <div class="text-body-1 my-2">Instructions*</div>
-                          <v-textarea
-                            outlined
-                            class="rounded-xl"
-                            label="Enter Instructions"
-                            solo
-                            flat
-                            v-model="instructions"
-                            :rules="[(v) => !!v || 'Instructions is required']"
-                          >
+                          <v-textarea outlined class="rounded-xl" label="Enter Instructions" solo flat
+                            v-model="instructions" :rules="[(v) => !!v || 'Instructions is required']">
                           </v-textarea>
                         </v-col>
                       </v-row>
@@ -525,27 +373,16 @@
                       <div class="text-body-1 my-4">
                         Screening Configuration
                       </div>
-                      <v-row
-                        class="py-0"
-                        v-for="(
+                      <v-row class="py-0" v-for="(
                           skillsField, index
-                        ) in screeningConfiguration.skillsFields"
-                        :key="index"
-                        align="center"
-                      >
+                        ) in screeningConfiguration.skillsFields" :key="index" align="center">
                         <v-col fluid class="py-0" cols="5">
                           <div class="text-body-1 my-2">
                             Skill Distribution* (change skill settings)
                           </div>
-                          <v-select
-                            :items="skillsList"
-                            outlined
-                            class="rounded-xl py-0 mytextFiled"
-                            v-model="skillsField.skill_id"
-                            item-text="name"
-                            item-value="id"
-                            :rules="[(v) => !!v || 'Skill is required']"
-                          >
+                          <v-select :items="skillsList" outlined class="rounded-xl py-0 mytextFiled"
+                            v-model="skillsField.skill_id" item-text="name" item-value="id"
+                            :rules="[(v) => !!v || 'Skill is required']">
                           </v-select>
                           <div class="py-0 text-subtitle-2 font-weight-light">
                             Novice : 0-20, Advance : 20-40, Competent : 40-60,
@@ -556,74 +393,45 @@
                           <div class="text-body-1 my-2">
                             Number of Questions*
                           </div>
-                          <v-text-field
-                            v-model.number="skillsField.no_of_questions"
-                            outlined
-                            class="rounded-xl"
-                            type="number"
-                            :rules="[
+                          <v-text-field v-model.number="skillsField.no_of_questions" outlined class="rounded-xl"
+                            type="number" :rules="[
                               (v) => !!v || 'Number of Questions is required',
-                            ]"
-                            required
-                          ></v-text-field>
+                            ]" required></v-text-field>
                         </v-col>
-                        <v-col
-                          align-self="center"
-                          v-if="screeningConfiguration.skillsFields.length > 1"
-                        >
-                          <v-btn
-                            @click="deleteScreeningSkillField(index)"
-                            text
-                            color="blue"
-                          >
+                        <v-col align-self="center" v-if="screeningConfiguration.skillsFields.length > 1">
+                          <v-btn @click="deleteScreeningSkillField(index)" text color="blue">
                             Delete
                           </v-btn>
                         </v-col>
                         <v-col>
                           <!-- screning open dialog -->
-                          <v-btn
-                            v-if="checkSubjects(skillsField.skill_id)"
-                            text
-                            color="blue"
-                            @click="
-                              openSubjectDialog(
-                                skillsList.find(
-                                  (skill) => skill.id == skillsField.skill_id
-                                ),
-                                skillsField
-                              )
-                            "
-                            >Add/Edit Subject</v-btn
-                          >
+                          <v-btn v-if="checkSubjects(skillsField.skill_id)" text color="blue" @click="
+                            openSubjectDialog(
+                              skillsList.find(
+                                (skill) => skill.id == skillsField.skill_id
+                              ),
+                              skillsField
+                            )
+                            ">Add/Edit Subject</v-btn>
                         </v-col>
                       </v-row>
 
-                      <v-row
-                        justify="start"
-                        align="center"
-                        class="px-2 blue--text"
-                        @click="addScreeningSkillsField"
-                      >
+                      <v-row justify="start" align="center" class="px-2 blue--text" @click="addScreeningSkillsField">
                         <v-icon large>mdi-plus-circle-outline</v-icon>
-                        <v-btn width="125px" height="20px" class="pl-0" text x-large color="blue"
-                          >Add Skills</v-btn
-                        >
+                        <v-btn width="125px" height="20px" class="pl-0" text x-large color="blue">Add Skills</v-btn>
                       </v-row>
                     </v-card-text>
                   </v-card>
 
                   <v-card elevation="0" class="my-4">
-                    <v-card-text >
+                    <v-card-text>
                       <v-row align="center">
                         <v-col cols="3">
                           <div class="text-body-1 my-4">Difficulty Level*</div>
                         </v-col>
                         <v-col cols="3">
-                          <v-radio-group
-                            v-model="screeningConfiguration.difficultyLevel"
-                            :rules="[(v) => !!v || 'Please select one']"
-                            required
-                          >
+                          <v-radio-group v-model="screeningConfiguration.difficultyLevel"
+                            :rules="[(v) => !!v || 'Please select one']" required>
                             <v-row>
                               <v-col>
                                 <v-radio label="NO" value="NO"></v-radio>
@@ -644,33 +452,15 @@
                           <div class="text-body-1 my-4">
                             Total Number Of Questions*
                           </div>
-                          <v-text-field
-                          
-                            outlined
-                            class="rounded-xl"
-                            solo
-                            flat
-                            label="Total Number Of Questions"
-                            type="number"
-                            v-model.number="
-                              screeningConfiguration.totalNumberQuestions
-                            "
-                            :rules="[(v) => !!v || 'Please select number of questions']"
-                          ></v-text-field>
+                          <v-text-field outlined class="rounded-xl" solo flat label="Total Number Of Questions"
+                            type="number" v-model.number="screeningConfiguration.totalNumberQuestions
+                              " :rules="[(v) => !!v || 'Please select number of questions']"></v-text-field>
                         </v-col>
                         <v-col cols="6">
                           <div class="text-body-1 my-4">Teaching Level*</div>
-                          <v-select
-                          
-                            label="Choose Level"
-                            :items="levels"
-                            item-text="name"
-                            item-value="id"
-                            outlined
-                            class="rounded-xl"
-                            v-model="screeningConfiguration.teachingLevel"
-                            :rules="[(v) => !!v || 'please select level']"
-                          >
+                          <v-select label="Choose Level" :items="levels" item-text="name" item-value="id" outlined
+                            class="rounded-xl" v-model="screeningConfiguration.teachingLevel"
+                            :rules="[(v) => !!v || 'please select level']">
                           </v-select>
                         </v-col>
                       </v-row>
@@ -681,18 +471,9 @@
                           </div>
                         </v-col>
                         <v-col cols="2">
-                          <v-text-field
-                            hide-details
-                            outlined
-                            class="rounded-xl green"
-                            solo
-                            flat
-                            type="number"
-                            required
-                            v-model.number="
-                              screeningConfiguration.correctAnswerScore
-                            "
-                          ></v-text-field>
+                          <v-text-field hide-details outlined class="rounded-xl green" solo flat type="number" required
+                            v-model.number="screeningConfiguration.correctAnswerScore
+                              "></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row align="center">
@@ -700,19 +481,9 @@
                           <div class="text-body-1">Duration Of Assessment*</div>
                         </v-col>
                         <v-col cols="2">
-                          <v-text-field
-                            hide-details
-                            type="number"
-                            outlined
-                            class="rounded-xl green"
-                            solo
-                            flat
-                            v-model.number="
-                              screeningConfiguration.assessmentDuration
-                            "
-                            required
-                            
-                          ></v-text-field>
+                          <v-text-field hide-details type="number" outlined class="rounded-xl green" solo flat
+                            v-model.number="screeningConfiguration.assessmentDuration
+                              " required></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row align="center">
@@ -720,10 +491,7 @@
                           <div class="text-body-1">Negative Marking*</div>
                         </v-col>
                         <v-col cols="3">
-                          <v-radio-group
-                            v-model="screeningConfiguration.negativeMarking"
-                            required
-                          >
+                          <v-radio-group v-model="screeningConfiguration.negativeMarking" required>
                             <v-row>
                               <v-col>
                                 <v-radio label="YES" value="YES"></v-radio>
@@ -740,10 +508,7 @@
                           <div class="text-body-1">Randomize Questions*</div>
                         </v-col>
                         <v-col cols="3">
-                          <v-radio-group
-                            v-model="screeningConfiguration.randomizeQuestions"
-                            required
-                          >
+                          <v-radio-group v-model="screeningConfiguration.randomizeQuestions" required>
                             <v-row>
                               <v-col>
                                 <v-radio label="YES" value="YES"></v-radio>
@@ -753,16 +518,12 @@
                               </v-col>
                             </v-row>
                           </v-radio-group>
-                        </v-col> </v-row
-                      ><v-row align="center">
+                        </v-col> </v-row><v-row align="center">
                         <v-col cols="3">
                           <div class="text-body-1">Shuffle Options*</div>
                         </v-col>
                         <v-col cols="3">
-                          <v-radio-group
-                            v-model="screeningConfiguration.shuffleOptions"
-                            required
-                          >
+                          <v-radio-group v-model="screeningConfiguration.shuffleOptions" required>
                             <v-row>
                               <v-col>
                                 <v-radio label="YES" value="YES"></v-radio>
@@ -772,18 +533,13 @@
                               </v-col>
                             </v-row>
                           </v-radio-group>
-                        </v-col> </v-row
-                      ><v-row align="center">
+                        </v-col> </v-row><v-row align="center">
                         <v-col cols="3">
                           <div class="text-body-1">Display Correct Answer*</div>
                         </v-col>
                         <v-col cols="3">
-                          <v-radio-group
-                            required
-                            v-model="
-                              screeningConfiguration.displayCorrectAnswer
-                            "
-                          >
+                          <v-radio-group required v-model="screeningConfiguration.displayCorrectAnswer
+                            ">
                             <v-row>
                               <v-col>
                                 <v-radio label="YES" value="YES"></v-radio>
@@ -793,16 +549,12 @@
                               </v-col>
                             </v-row>
                           </v-radio-group>
-                        </v-col> </v-row
-                      ><v-row align="center">
+                        </v-col> </v-row><v-row align="center">
                         <v-col cols="3">
                           <div class="text-body-1">Display Result*</div>
                         </v-col>
                         <v-col cols="3">
-                          <v-radio-group
-                            v-model="screeningConfiguration.displayResult"
-                            required
-                          >
+                          <v-radio-group v-model="screeningConfiguration.displayResult" required>
                             <v-row>
                               <v-col>
                                 <v-radio label="YES" value="YES"></v-radio>
@@ -819,19 +571,9 @@
                           <div class="text-body-1">Passing Criteria*</div>
                         </v-col>
                         <v-col cols="2">
-                          <v-text-field
-                            append-icon="mdi-percent-outline"
-                            hide-details
-                            type="number"
-                            outlined
-                            required
-                            class="rounded-xl green"
-                            solo
-                            flat
-                            v-model.number="
-                              screeningConfiguration.passingCriteria
-                            "
-                          ></v-text-field>
+                          <v-text-field append-icon="mdi-percent-outline" hide-details type="number" outlined required
+                            class="rounded-xl green" solo flat v-model.number="screeningConfiguration.passingCriteria
+                              "></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row>
@@ -839,28 +581,16 @@
                           <div class="text-body-1 my-4">
                             Assessment Time Up First Reminder
                           </div>
-                          <v-select
-                            v-model="screeningConfiguration.timeUpFirstReminder"
-                            hide-details
-                            label="Choose First Reminder Time"
-                            :items="[1, 2, 3, 4, 5]"
-                            outlined
-                            class="rounded-xl"
-                          >
+                          <v-select v-model="screeningConfiguration.timeUpFirstReminder" hide-details
+                            label="Choose First Reminder Time" :items="[1, 2, 3, 4, 5]" outlined class="rounded-xl">
                           </v-select>
                         </v-col>
                         <v-col cols="6">
                           <div class="text-body-1 my-4">
                             Assessment Time Up Last Reminder
                           </div>
-                          <v-select
-                            v-model="screeningConfiguration.timeUpLastReminder"
-                            hide-details
-                            label="Choose Last Reminder Time"
-                            :items="[1, 2, 3, 4, 5]"
-                            outlined
-                            class="rounded-xl"
-                          >
+                          <v-select v-model="screeningConfiguration.timeUpLastReminder" hide-details
+                            label="Choose Last Reminder Time" :items="[1, 2, 3, 4, 5]" outlined class="rounded-xl">
                           </v-select>
                         </v-col>
                       </v-row>
@@ -875,21 +605,16 @@
                     <v-card-text>
                       <v-row>
                         <v-spacer></v-spacer>
-                        <v-btn v-if="scrBtnShow" class="ma-4" @click="expandAndCollMethod" text>{{screeningBtnValue()}}</v-btn>
+                        <v-btn v-if="scrBtnShow" class="ma-4" @click="expandAndCollMethod"
+                          text>{{ screeningBtnValue() }}</v-btn>
                       </v-row>
-                     
+
                       <v-expansion-panels v-model="screenPanel" popout multiple>
-                        <v-expansion-panel
-                          v-for="(skill, index) in skillQuestions"
-                          :key="index"
-                        >
+                        <v-expansion-panel v-for="(skill, index) in skillQuestions" :key="index">
                           <v-expansion-panel-header>{{
                             skill.name
                           }}</v-expansion-panel-header>
-                          <v-expansion-panel-content
-                            v-for="(question, i) in skill.questions"
-                            :key="i"
-                          >
+                          <v-expansion-panel-content v-for="(question, i) in skill.questions" :key="i">
                             <v-card>
                               <v-card-subtitle class="pb-0">
                                 <div class="d-flex justify-space-between flex-row">
@@ -905,12 +630,9 @@
                               <v-card-text>
                                 <p>Options</p>
                                 <v-row justify="start">
-                                  <div
-                                    v-for="(
+                                  <div v-for="(
                                       option, inx
-                                    ) in question.question_options"
-                                    :key="inx"
-                                  >
+                                    ) in question.question_options" :key="inx">
                                     <v-chip class="ma-2">{{
                                       option.option_value
                                     }}</v-chip>
@@ -921,17 +643,11 @@
                           </v-expansion-panel-content>
                         </v-expansion-panel>
 
-                        <v-expansion-panel
-                          v-for="(skill, index) in mainsQuestions"
-                          :key="index"
-                        >
+                        <v-expansion-panel v-for="(skill, index) in mainsQuestions" :key="index">
                           <v-expansion-panel-header>{{
                             skill.name
                           }}</v-expansion-panel-header>
-                          <v-expansion-panel-content
-                            v-for="(question, i) in skill.questions"
-                            :key="i"
-                          >
+                          <v-expansion-panel-content v-for="(question, i) in skill.questions" :key="i">
                             <v-card>
                               <v-card-subtitle class="pb-0">
                                 <div class="d-flex justify-space-between flex-row">
@@ -947,12 +663,9 @@
                               <v-card-text>
                                 <p>Options</p>
                                 <v-row justify="start">
-                                  <div
-                                    v-for="(
+                                  <div v-for="(
                                       option, inx
-                                    ) in question.question_options"
-                                    :key="inx"
-                                  >
+                                    ) in question.question_options" :key="inx">
                                     <v-chip class="ma-2">{{
                                       option.option_value
                                     }}</v-chip>
@@ -976,11 +689,7 @@
                       <v-card elevation="0">
                         <v-card-title> Mobile App </v-card-title>
                         <v-card-title>
-                          <v-img
-                            src="../assets/phone.png"
-                            height="60vh"
-                            contain
-                          ></v-img>
+                          <v-img src="../assets/phone.png" height="60vh" contain></v-img>
                         </v-card-title>
                       </v-card>
                     </v-col>
@@ -988,11 +697,7 @@
                       <v-card elevation="0">
                         <v-card-title> Web App </v-card-title>
                         <v-card-title>
-                          <v-img
-                            src="../assets/web.png"
-                            height="60vh"
-                            contain
-                          ></v-img>
+                          <v-img src="../assets/web.png" height="60vh" contain></v-img>
                         </v-card-title>
                       </v-card>
                     </v-col>
@@ -1011,14 +716,7 @@
           <v-card-text class="text-center">
             <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
             <p class="text-h5 py-4">{{ successMessage }}</p>
-            <v-btn
-              class="primary"
-              large
-              width="157px"
-              rounded
-              @click="successDialog = false"
-              >OK</v-btn
-            >
+            <v-btn class="primary" large width="157px" rounded @click="successDialog = false">OK</v-btn>
           </v-card-text>
         </v-container>
       </v-card>
@@ -1031,14 +729,7 @@
           <v-card-text class="text-center">
             <v-icon color="error" size="96">mdi-close-circle-outline</v-icon>
             <p class="text-h5 py-4">{{ errorMessage }}</p>
-            <v-btn
-              class="primary"
-              large
-              width="157px"
-              rounded
-              @click="errorDialog = false"
-              >OK</v-btn
-            >
+            <v-btn class="primary" large width="157px" rounded @click="errorDialog = false">OK</v-btn>
           </v-card-text>
         </v-container>
       </v-card>
@@ -1049,38 +740,19 @@
       <v-card fluid>
         <v-container fluid class="pa-0 ">
           <v-card-text class="text-center">
-            <v-avatar color="secondary" size="90"
-              ><v-icon size="65">mdi-notebook-check-outline</v-icon></v-avatar
-            >
+            <v-avatar color="secondary" size="90"><v-icon size="65">mdi-notebook-check-outline</v-icon></v-avatar>
 
             <p class="text-h5 pt-4 pb-0">Publish Results</p>
-            <p
-              class="text-disabled grey--text text-subtitle-1 mb-4"
-              color="rgba(0, 0, 0, 0.6)"
-              disabled
-            >
-            This action will publish the assessment results. This cannot be undone
+            <p class="text-disabled grey--text text-subtitle-1 mb-4" color="rgba(0, 0, 0, 0.6)" disabled>
+              This action will publish the assessment results. This cannot be undone
             </p>
 
             <div class="d-flex justify-space-between" fluid>
-              <v-btn
-                depressed
-                class="secondary black--text"
-                large
-                width="157px"
-                rounded
-                @click="publishDialog = false"
-                >CANCEL</v-btn
-              >
-              <v-btn
-                class="black white--text"
-                depressed
-                large
-                width="157px"
-                rounded
-                @click="publishResults(publishData.id,publishData.assessmentType)"
-                >Publish</v-btn>
-             </div>
+              <v-btn depressed class="secondary black--text" large width="157px" rounded
+                @click="publishDialog = false">CANCEL</v-btn>
+              <v-btn class="black white--text" depressed large width="157px" rounded
+                @click="publishResults(publishData.id, publishData.assessmentType)">Publish</v-btn>
+            </div>
           </v-card-text>
         </v-container>
       </v-card>
@@ -1090,38 +762,19 @@
       <v-card fluid>
         <v-container fluid class="pa-0">
           <v-card-text class="text-center">
-            <v-avatar color="secondary" size="90"
-              ><v-icon size="65">mdi-notebook-check-outline</v-icon></v-avatar
-            >
+            <v-avatar color="secondary" size="90"><v-icon size="65">mdi-notebook-check-outline</v-icon></v-avatar>
 
             <p class="text-h5 pt-4 pb-0">Publish Assessment</p>
-            <p
-              class="text-disabled grey--text text-subtitle-1 mb-4"
-              color="rgba(0, 0, 0, 0.6)"
-              disabled
-            >
-            This action will make the assessment live. This cannot be undone
+            <p class="text-disabled grey--text text-subtitle-1 mb-4" color="rgba(0, 0, 0, 0.6)" disabled>
+              This action will make the assessment live. This cannot be undone
             </p>
 
             <div class="d-flex justify-space-between" fluid>
-              <v-btn
-                depressed
-                class="secondary black--text"
-                large
-                width="157px"
-                rounded
-                @click="approveDialog = false"
-                >CANCEL</v-btn
-              >
-              <v-btn
-                class="black white--text"
-                depressed
-                large
-                width="157px"
-                rounded
-                @click="ApproveAssessment(current_assessment)"
-                >Publish</v-btn>
-             </div>
+              <v-btn depressed class="secondary black--text" large width="157px" rounded
+                @click="approveDialog = false">CANCEL</v-btn>
+              <v-btn class="black white--text" depressed large width="157px" rounded
+                @click="ApproveAssessment(current_assessment)">Publish</v-btn>
+            </div>
           </v-card-text>
         </v-container>
       </v-card>
@@ -1132,45 +785,25 @@
       <v-card fluid>
         <v-container fluid class="pa-0">
           <v-card-text class="text-center">
-            <v-avatar color="secondary" size="90"
-              ><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar
-            >
+            <v-avatar color="secondary" size="90"><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar>
 
             <p class="text-h5 pt-4 pb-0">Delete Assessment</p>
-            <p
-              class="text-disabled grey--text text-subtitle-1"
-              color="rgba(0, 0, 0, 0.6)"
-              disabled
-            >
+            <p class="text-disabled grey--text text-subtitle-1" color="rgba(0, 0, 0, 0.6)" disabled>
               This action will permanently delete the item . This cannot be
               undone
             </p>
 
             <div class="d-flex justify-space-between" fluid>
-              <v-btn
-                depressed
-                class="secondary black--text"
-                large
-                width="157px"
-                rounded
-                @click="deleteDialog = false"
-                >CANCEL</v-btn
-              >
-              <v-btn
-                class="black white--text"
-                depressed
-                large
-                width="157px"
-                rounded
-                @click="deleteAssessment(selectedId)"
-                >DELETE</v-btn
-              >
+              <v-btn depressed class="secondary black--text" large width="157px" rounded
+                @click="deleteDialog = false">CANCEL</v-btn>
+              <v-btn class="black white--text" depressed large width="157px" rounded
+                @click="deleteAssessment(selectedId)">DELETE</v-btn>
             </div>
           </v-card-text>
         </v-container>
       </v-card>
     </v-dialog>
-    <!-- Add Subject Dialog Screening--> 
+    <!-- Add Subject Dialog Screening-->
     <v-dialog max-width="550px" v-model="subjectDialog" center>
       <v-form ref="form" lazy-validation>
         <v-card>
@@ -1178,84 +811,43 @@
 
           <v-container>
             <v-card-text>
-              <v-row
-                v-for="(subjectField, index) in selectedSubjects"
-                :key="index"
-              >
+              <v-row v-for="(subjectField, index) in selectedSubjects" :key="index">
                 <v-col fluid class="py-0" cols="6">
                   <div class="font-weight-medium">Subject</div>
-                  <v-select
-                    v-model.number="subjectField.subject_id"
-                    clearable
-                    deletable-chips
-                    label="Select or Search Subject"
-                    outlined
-                    class="rounded-xl"
-                    :items="selectedSkillSubjects"
-                    item-text="name"
-                    item-value="id"
-                  >
+                  <v-select v-model.number="subjectField.subject_id" clearable deletable-chips
+                    label="Select or Search Subject" outlined class="rounded-xl" :items="selectedSkillSubjects"
+                    item-text="name" item-value="id">
                   </v-select>
                 </v-col>
                 <v-col fluid class="py-0" cols="4">
                   <div class="font-weight-medium">Number of Questions*</div>
-                  <v-text-field
-                    v-model.number="subjectField.no_of_questions"
-                    hide-details
-                    type="number"
-                    outlined
-                    class="rounded-xl green"
-                    solo
-                    flat
-                    :rules="[rules.required]"
-                    required
-                  ></v-text-field>
+                  <v-text-field v-model.number="subjectField.no_of_questions" hide-details type="number" outlined
+                    class="rounded-xl green" solo flat :rules="[rules.required]" required></v-text-field>
                 </v-col>
 
-                <v-col
-                  class="pr-5 mb-5"
-                  align-self="center"
-                  cols="2"
-                  v-if="selectedSubjects.length > 1"
-                >
+                <v-col class="pr-5 mb-5" align-self="center" cols="2" v-if="selectedSubjects.length > 1">
                   <v-btn @click="deleteSubjectField(index)" text color="blue">
                     Delete
                   </v-btn>
                 </v-col>
               </v-row>
-              <v-row
-                justify="start"
-                align="center"
-                class="px-2 blue--text"
-                @click="addSubjectField"
-              >
+              <v-row justify="start" align="center" class="px-2 blue--text" @click="addSubjectField">
                 <v-icon large>mdi-plus-circle-outline</v-icon>
-                <v-btn class="pl-0" text x-large color="blue"
-                  >Add New Subject</v-btn
-                >
+                <v-btn class="pl-0" text x-large color="blue">Add New Subject</v-btn>
               </v-row>
             </v-card-text>
             <v-card-actions class="px-6 pb-6">
-              <v-btn
-                rounded
-                outlined
-                class="pa-4"
-                @click="
-                  () => {
-                    subjectDialog = false;
-                  }
-                "
-                >Cancel</v-btn
-              >
-              <v-btn rounded class="primary pa-4" @click="addSubjectsToSkill"
-                >Apply</v-btn
-              >
+              <v-btn rounded outlined class="pa-4" @click="() => {
+                  subjectDialog = false;
+                }
+                ">Cancel</v-btn>
+              <v-btn rounded class="primary pa-4" @click="addSubjectsToSkill">Apply</v-btn>
             </v-card-actions>
           </v-container>
         </v-card>
       </v-form>
     </v-dialog>
-    <!-- Add Subject Dialog Mains--> 
+    <!-- Add Subject Dialog Mains-->
     <v-dialog max-width="550px" v-model="MainsDialog" center>
       <v-form ref="form" lazy-validation>
         <v-card>
@@ -1263,74 +855,34 @@
 
           <v-container>
             <v-card-text>
-              <v-row
-                v-for="(subjectField, index) in selectedSubjectsMains"
-                :key="index"
-              >
+              <v-row v-for="(subjectField, index) in selectedSubjectsMains" :key="index">
                 <v-col fluid class="py-0" cols="6">
                   <div class="font-weight-medium">Subject</div>
-                  <v-select
-                    v-model.number="subjectField.subject_id"
-                    clearable
-                    deletable-chips
-                    label="Select or Search Subject"
-                    outlined
-                    class="rounded-xl"
-                    :items="selectedSkillSubjectsMains"
-                    item-text="name"
-                    item-value="id"
-                  >
+                  <v-select v-model.number="subjectField.subject_id" clearable deletable-chips
+                    label="Select or Search Subject" outlined class="rounded-xl" :items="selectedSkillSubjectsMains"
+                    item-text="name" item-value="id">
                   </v-select>
                 </v-col>
                 <v-col fluid class="py-0" cols="4">
                   <div class="font-weight-medium">Number of Questions*</div>
-                  <v-text-field
-                    v-model.number="subjectField.no_of_questions"
-                    hide-details
-                    type="number"
-                    outlined
-                    class="rounded-xl green"
-                    solo
-                    flat
-                    :rules="[rules.required]"
-                    required
-                  ></v-text-field>
+                  <v-text-field v-model.number="subjectField.no_of_questions" hide-details type="number" outlined
+                    class="rounded-xl green" solo flat :rules="[rules.required]" required></v-text-field>
                 </v-col>
 
-                <v-col
-                  class="pr-5 mb-5"
-                  align-self="center"
-                  cols="2"
-                  v-if="selectedSubjectsMains.length > 1"
-                >
+                <v-col class="pr-5 mb-5" align-self="center" cols="2" v-if="selectedSubjectsMains.length > 1">
                   <v-btn @click="deleteSubjectFieldMains(index)" text color="blue">
                     Delete
                   </v-btn>
                 </v-col>
               </v-row>
-              <v-row
-                justify="start"
-                align="center"
-                class="px-2 blue--text"
-                @click="addSubjectFieldMains"
-              >
+              <v-row justify="start" align="center" class="px-2 blue--text" @click="addSubjectFieldMains">
                 <v-icon large>mdi-plus-circle-outline</v-icon>
-                <v-btn class="pl-0" text x-large color="blue"
-                  >Add New Subject</v-btn
-                >
+                <v-btn class="pl-0" text x-large color="blue">Add New Subject</v-btn>
               </v-row>
             </v-card-text>
             <v-card-actions class="px-6 pb-6">
-              <v-btn
-                rounded
-                outlined
-                class="pa-4"
-                @click="MainsDialog = false"
-                >Cancel</v-btn
-              >
-              <v-btn rounded class="primary pa-4" @click="addSubjectsToSkillMains"
-                >Apply</v-btn
-              >
+              <v-btn rounded outlined class="pa-4" @click="MainsDialog = false">Cancel</v-btn>
+              <v-btn rounded class="primary pa-4" @click="addSubjectsToSkillMains">Apply</v-btn>
             </v-card-actions>
           </v-container>
         </v-card>
@@ -1346,21 +898,13 @@
             </v-col>
             <v-spacer></v-spacer>
             <v-col>
-              <div
-                @click="clearFilter"
-                class="text-body1 font-weight-bold black--text cursor"
-              >
+              <div @click="clearFilter" class="text-body1 font-weight-bold black--text cursor">
                 CLEAR FILTER
               </div>
             </v-col>
           </v-row>
           <div>
-            <v-card
-              height="450px"
-              elevation="0"
-              id="myScroll"
-              class="pt-5 ,pb-5"
-            >
+            <v-card height="450px" elevation="0" id="myScroll" class="pt-5 ,pb-5">
               <v-row class="pl-1">
                 <v-col>
                   <div class="text-body1 font-weight-normal black--text">
@@ -1368,18 +912,8 @@
                   </div>
                 </v-col>
               </v-row>
-              <v-chip-group
-                v-model="selectedSkillsFilter"
-                active-class="primary"
-                column
-                :multiple="true"
-              >
-                <v-chip
-                  v-for="(skillType, index) in skillsList"
-                  :key="index"
-                  :value="skillType"
-                  elevated
-                >
+              <v-chip-group v-model="selectedSkillsFilter" active-class="primary" column :multiple="true">
+                <v-chip v-for="(skillType, index) in skillsList" :key="index" :value="skillType" elevated>
                   {{ skillType.name }}
                 </v-chip>
               </v-chip-group>
@@ -1387,13 +921,7 @@
             <div>
               <v-card-actions class="px-6 pb-6">
                 <v-spacer></v-spacer>
-                <v-btn
-                  rounded
-                  outlined
-                  class="pa-4"
-                  @click="filterDialog = false"
-                  >Cancel</v-btn
-                >
+                <v-btn rounded outlined class="pa-4" @click="filterDialog = false">Cancel</v-btn>
                 <v-btn rounded class="primary pa-4">Apply</v-btn>
               </v-card-actions>
             </div>
@@ -1427,7 +955,7 @@ export default {
       },
       approveDialog: false,
       current_assessment: null,
-      successMessage:'New Assessment Created',
+      successMessage: 'New Assessment Created',
       isEdit: false,
       selectedSkillSubjects: [],
       selectedSkillSubjectsMains: [],
@@ -1444,7 +972,7 @@ export default {
           no_of_questions: 0,
         },
       ],
-      screenPanel:[],
+      screenPanel: [],
       e1: 1,
       showUsers: false,
       cleared: [],
@@ -1452,15 +980,15 @@ export default {
       notCleared: [],
       yetToAttempt: [],
       name: "",
-      scrBtnShow:false,
-      screeningItem:0,
-      mainItem:0,
+      scrBtnShow: false,
+      screeningItem: 0,
+      mainItem: 0,
       assessmentUsers: [],
       screeningMainsUser: "true",
       instructions: "",
       filterDialog: false,
-      mainPanel:[],
-      mainBtnShow:false,
+      mainPanel: [],
+      mainBtnShow: false,
       assessment_type: 'SCREENING',
       screeningConfiguration: {
         difficultyLevel: null,
@@ -1480,7 +1008,7 @@ export default {
         timeUpFirstReminder: null,
         timeUpLastReminder: null,
         assessmentType: "SCREENING",
-        skillsFields: [{ skill_id: null, no_of_questions: 10 }],  
+        skillsFields: [{ skill_id: null, no_of_questions: 10 }],
       },
       deleteId: null,
       breadItems: [
@@ -1506,9 +1034,9 @@ export default {
         },
       ],
       publishData: {
-          id: null,
-          assessmentType: null,
-        },
+        id: null,
+        assessmentType: null,
+      },
       skill_questions: [],
       skillQuestions: [],
       mainsQuestions: [],
@@ -1579,20 +1107,20 @@ export default {
       this.current_assessment = assessment_id;
       this.approveDialog = true;
     },
-    screeningBtnValue(){
+    screeningBtnValue() {
       return this.screenPanel.length === 0 ? "EXPAND" : "COLLAPSE";
     },
-    expandAndCollMethod(){
-      return this.screenPanel.length === 0 ? this.screenPanel = [...Array(this.screeningItem).keys()].map((k, i) => i):this.screenPanel = [];
+    expandAndCollMethod() {
+      return this.screenPanel.length === 0 ? this.screenPanel = [...Array(this.screeningItem).keys()].map((k, i) => i) : this.screenPanel = [];
     },
-    mainBtnValue(){
+    mainBtnValue() {
       return this.mainPanel.length === 0 ? "EXPAND" : "COLLAPSE";
     },
-    mainExpandAndCollMethod(){
-      return this.mainPanel.length === 0 ? this.mainPanel = [...Array(this.mainItem).keys()].map((k, i) => i):this.mainPanel = [];
+    mainExpandAndCollMethod() {
+      return this.mainPanel.length === 0 ? this.mainPanel = [...Array(this.mainItem).keys()].map((k, i) => i) : this.mainPanel = [];
     },
 
-    async getAssesmentDetails (data) {
+    async getAssesmentDetails(data) {
       console.log(data);
       this.name = data.name;
       this.instructions = data.instructions;
@@ -1602,7 +1130,7 @@ export default {
       this.screeningConfiguration.teachingLevel = data.assessment_configurations[0].level_id
       this.screeningConfiguration.correctAnswerScore = data.assessment_configurations[0].correct_score_answer
       this.screeningConfiguration.negativeMarking = data.assessment_configurations[0].negative_marking
-      this.screeningConfiguration.assessmentDuration =  data.assessment_configurations[0].duration_of_assessment
+      this.screeningConfiguration.assessmentDuration = data.assessment_configurations[0].duration_of_assessment
       this.screeningConfiguration.randomizeQuestions = data.assessment_configurations[0].randomize_questions
       this.screeningConfiguration.shuffleOptions = data.assessment_configurations[0].shuffle_questions
       this.screeningConfiguration.displayCorrectAnswer = data.assessment_configurations[0].display_correct_answer
@@ -1613,10 +1141,10 @@ export default {
       this.assessment_type = data.assessment_configurations[0].assessment_type
       this.assessmentId = data.assessment_configurations[0].assessment_id
       this.dialog = true;
-      this.isEdit =  true;
+      this.isEdit = true;
     },
-    publishMethod(id,type){
-      this.publishData.id = id; 
+    publishMethod(id, type) {
+      this.publishData.id = id;
       this.publishData.assessmentType = type;
       this.publishDialog = true;
     },
@@ -1635,15 +1163,15 @@ export default {
         );
       }
     },
-    async publishResults(assessmentId,type) {
+    async publishResults(assessmentId, type) {
       console.log(assessmentId);
-      const response=await AssessmentController.publishResults(assessmentId,type);
-      if(response.data.success){
-        this.successMessage='Results Published Successfully';
-        this.successDialog=true;
+      const response = await AssessmentController.publishResults(assessmentId, type);
+      if (response.data.success) {
+        this.successMessage = 'Results Published Successfully';
+        this.successDialog = true;
       }
-      else{
-        this.errorDialog=true;
+      else {
+        this.errorDialog = true;
       }
       this.publishDialog = false;
 
@@ -1725,7 +1253,7 @@ export default {
     },
     addSubjectsToSkillMains() {
       this.MainsDialog = false;
-      console.log(this.editedSkill);      
+      console.log(this.editedSkill);
       this.editedSkill.subject_ids = this.selectedSubjectsMains;
       // this.selectedSubjects = [];      
       console.log(this.mainsConfiguration.skillsFields);
@@ -1735,7 +1263,7 @@ export default {
       this.subjectDialog = true;
       console.log(skill.subject_skills);
       this.editedSkill = skillsField;
-      console.log("skill field",skillsField)
+      console.log("skill field", skillsField)
     },
     openSubjectDialogMains(skill, skillsField) {
       this.selectedSkillSubjectsMains = skill.subject_skills;
@@ -1747,36 +1275,38 @@ export default {
       const response = await AssessmentController.screeningQuestions(
         this.assessmentId
       );
-      if(response.data.success){
+      if (response.data.success) {
         this.skillQuestions = response.data.data.skill_questions;
-      console.log("skill questions", this.skillQuestions);
-      this.storingSkillsQuestionIds();
-      this.screeningItem = this.skillQuestions.length;
-      this.scrBtnShow=true
+        console.log("skill questions", this.skillQuestions);
+        this.storingSkillsQuestionIds();
+        this.screeningItem = this.skillQuestions.length;
+        this.scrBtnShow = true
       }
-      else{
+      else {
         alert(response.data.error)
       }
       //console.log("screening request", response);
     },
-    async replaceQuestion (question) {
+    async replaceQuestion(question) {
       const response = await QuestionsController.replaceQuestion(question.id, this.assessmentId);
       if (response.data.success) {
         if (response.data.data) {
-        this.skillQuestions = this.skillQuestions.map((skill_q) => {
-          return {...skill_q, questions : skill_q.questions.map((q) => {
-            if (question.id == q.id) {
-              return response.data.data;
+          this.skillQuestions = this.skillQuestions.map((skill_q) => {
+            return {
+              ...skill_q, questions: skill_q.questions.map((q) => {
+                if (question.id == q.id) {
+                  return response.data.data;
+                }
+                else {
+                  return q;
+                }
+              })
             }
-            else {
-              return q;
-            }
-          })}
-        })
-        const index = this.skillQuestionsIds.findIndex((q) => {
-          return q == question.id;
-        })
-        this.skillQuestionsIds[index] = response.data.data.id;
+          })
+          const index = this.skillQuestionsIds.findIndex((q) => {
+            return q == question.id;
+          })
+          this.skillQuestionsIds[index] = response.data.data.id;
         }
         else {
           alert('Not found any question to replace');
@@ -1786,24 +1316,26 @@ export default {
         alert(response.data.error);
       }
     },
-    async replaceQuestionMains (question) {
+    async replaceQuestionMains(question) {
       const response = await QuestionsController.replaceQuestion(question.id, this.assessmentId);
       if (response.data.success) {
         if (response.data.data) {
-        this.mainsQuestions = this.mainsQuestions.map((skill_q) => {
-          return {...skill_q, questions : skill_q.questions.map((q) => {
-            if (question.id == q.id) {
-              return response.data.data;
+          this.mainsQuestions = this.mainsQuestions.map((skill_q) => {
+            return {
+              ...skill_q, questions: skill_q.questions.map((q) => {
+                if (question.id == q.id) {
+                  return response.data.data;
+                }
+                else {
+                  return q;
+                }
+              })
             }
-            else {
-              return q;
-            }
-          })}
-        })
-        const index = this.mainsQuestionsIds.findIndex((q) => {
-         return q == question.id;
-        })
-        this.mainsQuestionsIds[index] = response.data.data.id;
+          })
+          const index = this.mainsQuestionsIds.findIndex((q) => {
+            return q == question.id;
+          })
+          this.mainsQuestionsIds[index] = response.data.data.id;
         }
         else {
           alert('Not found any question to replace');
@@ -1835,18 +1367,18 @@ export default {
     async getMainsQuestions() {
       const response = await AssessmentController.mainsQuestions(
         this.assessmentId
-       
+
       );
-    
+
       //console.log("screening request", response);
-      if(response.data.success){
+      if (response.data.success) {
         this.mainsQuestions = response.data.data.skill_questions;
-      console.log("mains questions", this.mainsQuestions);
-      this.storingMainsQuestionIds();
-      this.mainItem=this.mainsQuestions.length
-      this.scrBtnShow=true
+        console.log("mains questions", this.mainsQuestions);
+        this.storingMainsQuestionIds();
+        this.mainItem = this.mainsQuestions.length
+        this.scrBtnShow = true
       }
-      else{
+      else {
         alert(response.data.error)
       }
     },
@@ -1881,55 +1413,55 @@ export default {
     },
     async createAssessment() {
       if (this.assessmentId == null) {
-      const response = await AssessmentController.createAssessment({
-        name: this.name,
-        score_type: "ASSESSMENT",
-        instructions: this.instructions,
-      });
-      
-      this.assessmentId = response.data.data.id;
-      return response.data.success;
-     }
-     else {
-      const response = await AssessmentController.updateAssessments({
-        name: this.name,
-        instructions: this.instructions,
-      }, this.assessmentId)
+        const response = await AssessmentController.createAssessment({
+          name: this.name,
+          score_type: "ASSESSMENT",
+          instructions: this.instructions,
+        });
 
-      return response.data.success;
-     }
+        this.assessmentId = response.data.data.id;
+        return response.data.success;
+      }
+      else {
+        const response = await AssessmentController.updateAssessments({
+          name: this.name,
+          instructions: this.instructions,
+        }, this.assessmentId)
+
+        return response.data.success;
+      }
     },
 
     async createConfigurations() {
       let response;
       let payload = {
-          skill_distributions: this.screeningConfiguration.skillsFields,
-          difficulty_level: this.screeningConfiguration.difficultyLevel,
-          total_no_of_questions:
-            this.screeningConfiguration.totalNumberQuestions,
-          level_id: this.screeningConfiguration.teachingLevel,
-          correct_score_answer: this.screeningConfiguration.correctAnswerScore,
-          negative_marking: this.screeningConfiguration.negativeMarking,
-          duration_of_assessment:
-            this.screeningConfiguration.assessmentDuration,
-          randomize_questions: this.screeningConfiguration.randomizeQuestions,
-          shuffle_questions: this.screeningConfiguration.shuffleOptions,
-          display_correct_answer:
-            this.screeningConfiguration.displayCorrectAnswer,
-          display_result: this.screeningConfiguration.displayResult,
-          passing_criteria: this.screeningConfiguration.passingCriteria,
-          time_up_first_remainder:
-            this.screeningConfiguration.timeUpFirstReminder,
-          time_up_last_remainder:
-            this.screeningConfiguration.timeUpLastReminder,
-        };
-      if(this.assessment_type == 'SCREENING') {
-        response = await AssessmentController.createScreening( payload, this.assessmentId );
+        skill_distributions: this.screeningConfiguration.skillsFields,
+        difficulty_level: this.screeningConfiguration.difficultyLevel,
+        total_no_of_questions:
+          this.screeningConfiguration.totalNumberQuestions,
+        level_id: this.screeningConfiguration.teachingLevel,
+        correct_score_answer: this.screeningConfiguration.correctAnswerScore,
+        negative_marking: this.screeningConfiguration.negativeMarking,
+        duration_of_assessment:
+          this.screeningConfiguration.assessmentDuration,
+        randomize_questions: this.screeningConfiguration.randomizeQuestions,
+        shuffle_questions: this.screeningConfiguration.shuffleOptions,
+        display_correct_answer:
+          this.screeningConfiguration.displayCorrectAnswer,
+        display_result: this.screeningConfiguration.displayResult,
+        passing_criteria: this.screeningConfiguration.passingCriteria,
+        time_up_first_remainder:
+          this.screeningConfiguration.timeUpFirstReminder,
+        time_up_last_remainder:
+          this.screeningConfiguration.timeUpLastReminder,
+      };
+      if (this.assessment_type == 'SCREENING') {
+        response = await AssessmentController.createScreening(payload, this.assessmentId);
         this.getScreeningQuestions();
       }
-      else if(this.assessment_type == 'MAINS') {
-        response = await AssessmentController.createMains( payload, this.assessmentId );
-        this.getMainsQuestions();        
+      else if (this.assessment_type == 'MAINS') {
+        response = await AssessmentController.createMains(payload, this.assessmentId);
+        this.getMainsQuestions();
       }
 
       return response.data.sucess;
@@ -1957,13 +1489,13 @@ export default {
         this.assessmentId
       );
 
-      
+
       console.log(response);
       return response;
     },
-    fetchAssessmentUsers(assessment){
+    fetchAssessmentUsers(assessment) {
       let type = assessment.assessment_configurations[0].assessment_type;
-      if(type == 'SCREENING') {
+      if (type == 'SCREENING') {
         this.fetchScreeningUsers(assessment.id);
       } else {
         this.fetchMainsUsers(assessment.id);
@@ -1978,15 +1510,15 @@ export default {
     async getSkills() {
       const response = await SkillsController.getSkills();
       //console.log(response);
-     
-      if(response.data.success){
+
+      if (response.data.success) {
         this.skillsList = response.data.data.rows;
       }
-      else{
+      else {
         alert(response.data.error)
       }
     },
-    cancelClicked () {
+    cancelClicked() {
       // this.fetchAssessment();
       // this.name = "";
       // this.instructions = "";
@@ -2012,12 +1544,12 @@ export default {
     async deleteAssessment(id) {
       const response = await AssessmentController.deleteAssessment(id);
       console.log(response.data);
-      if(response.data.success){
+      if (response.data.success) {
         this.deleteDialog = false;
         this.selected = [];
         this.fetchAssessment();
       }
-      else{
+      else {
         alert(response.data.error)
       }
     },
@@ -2025,30 +1557,30 @@ export default {
     async fetchAssessment() {
       const response = await AssessmentController.getAssessments();
       // console.log("response from ", response);   
-      if(response.data.success){
+      if (response.data.success) {
         this.assessments = response.data.data.rows;
-      this.assessments.reverse();
+        this.assessments.reverse();
       }
-      else{
+      else {
         alert(response.data.error)
       }
-       console.log(this.assessments);
+      console.log(this.assessments);
     },
     async fetchMainsUsers(id) {
       console.log("mains user clicked");
       this.showUsers = true;
       this.selectedId = id;
       const response = await AssessmentController.getMainsUser(id);
-      
-      if(response.data.success){
-              this.assessmentUsers = [];
-            this.assessmentUsers = response.data.data.user_assessments;
-            if (this.assessmentUsers != undefined) {
-              this.filterData();
-            }
-            console.log("filter data", this.assessmentUsers);
+
+      if (response.data.success) {
+        this.assessmentUsers = [];
+        this.assessmentUsers = response.data.data.user_assessments;
+        if (this.assessmentUsers != undefined) {
+          this.filterData();
+        }
+        console.log("filter data", this.assessmentUsers);
       }
-      else{
+      else {
         alert(response.data.error)
       }
     },
@@ -2057,26 +1589,26 @@ export default {
       this.showUsers = true;
       this.selectedId = id;
       const response = await AssessmentController.getScreeningUser(id);
-     
-      if(response.data.success){
-        this.assessmentUsers = response.data.data.user_assessments;
-      this.filterData();
 
-      // console.log(this.assessmentUsers);
+      if (response.data.success) {
+        this.assessmentUsers = response.data.data.user_assessments;
+        this.filterData();
+
+        // console.log(this.assessmentUsers);
       }
-      else{
+      else {
         alert(response.data.error)
       }
     },
 
     async getLevels() {
       const response = await LevelController.getLevel();
-   
-      if(response.data.success){
+
+      if (response.data.success) {
         this.levels = response.data.data.rows;
-      // console.log(this.assessmentUsers);
+        // console.log(this.assessmentUsers);
       }
-      else{
+      else {
         alert(response.data.error)
       }
       // console.log("level data", this.levelData.rows);
@@ -2109,7 +1641,7 @@ export default {
       console.log("mains questions", this.mainsQuestionsIds);
     },
 
-    async ApproveAssessment (assessment_id) {
+    async ApproveAssessment(assessment_id) {
       const response = await AssessmentController.updateAssessments(
         {
           status: 'PUBLISHED',
@@ -2117,12 +1649,12 @@ export default {
         assessment_id
       );
 
-      if(response.data.success){
+      if (response.data.success) {
         this.approveDialog = false;
         this.fetchAssessment();
       }
       else {
-        alert(response.data.error)        
+        alert(response.data.error)
         return false;
       }
     },
@@ -2139,15 +1671,15 @@ export default {
       );
       console.log(response);
       window.location.reload();
-      if(response.data.success){
+      if (response.data.success) {
         this.fetchAssessment();
-         return response.data.success;
+        return response.data.success;
       }
       else {
-        alert(response.data.error)        
+        alert(response.data.error)
         return false;
       }
-      
+
     },
     clearFilter() {
       this.selectedSkillsFilter = [];

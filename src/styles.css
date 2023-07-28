@@ -277,6 +277,30 @@ letter-spacing: 0.02em;
   color: #1B72E8 !important;
   background: rgba(27, 114, 232, 0.2) !important;
 }
+.my-clear {
+  color: #06C270!important;
+  background: #56c58233 !important;
+} 
+.my-progress {
+  color: #f28f0e !important;
+  background: #f6cd93 !important;
+}
+.my-notcleared{
+  color: #E5484D!important;
+  background: #FFEFEF!important;
+}
+.live{
+  color: #6E56CF!important;
+  background:#F5F2FF!important;
+}
+.publish{
+  color: #6E56CF!important;
+  background:#F5F2FF!important;
+}
+.user{
+  color: #DADADA;
+  background: #FFFFFF;
+}
 
 .liteblue {
   color: #1b72e8b3;
@@ -648,9 +672,20 @@ color: #4D4D4D;
 .custom-margin {
   margin-left: 80px;
 }
-.pointradius {
-  border-radius: 24px !important;
-}
+.content{
+ justify-content: space-around;
+ }
+ .cleared{
+  background-color: #06C270 !important;
+ }
+ .inprogress{
+  background-color: #FF9501!important;
+ }
+ .notcleared{
+  background-color: #E5484D!important;
+
+ }
+
 
 .status-container {
   display: flex;
