@@ -78,6 +78,10 @@
       <template v-slot:[`item.role`]="{ item }">
         {{ item.role.name }}
       </template>
+
+      <template v-slot:[`item.school`]="{ item }">
+        {{ item.school_name && item.school_name != '' ? item.school_name.join(',') : "N/A" }}
+      </template>
     
       
       <template v-slot:[`item.actions`]="{ item }">
@@ -212,7 +216,7 @@ export default {
     async getSchool() {
       const response = await SchoolController.getSchool();
       this.school = response.data.data;
-      this.count = this.school.length;
+      this.count = this.users.length;
       console.log(this.school);
     },
     redirectToEdit(item) {
