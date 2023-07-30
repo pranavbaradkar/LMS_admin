@@ -8,7 +8,10 @@ const instance = axios.create({
 export default {
     getAllClusters: async function () {
         try {
-            const response = await instance.get('meta/clusters')
+            const response = await instance.get('meta/clusters', {
+                params: { admin_id : AuthService.getUser().user_id }
+            })
+            
             return response;
         } catch (error) {
             return error.response;

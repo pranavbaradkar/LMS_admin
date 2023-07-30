@@ -362,7 +362,7 @@
         </div>
         </div>
         <div class="d-flex justify-end">          
-            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : 
+            <v-card-title v-if="user.role_type == 'SUPER_ADMIN' || (user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.is_approval)" class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : 
             showDialog(data.assessment_id)">
               {{assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE'}}
             </v-card-title>
