@@ -21,23 +21,7 @@
         <div class="mt-4" v-if="showUsers">
           <span class="m-4 cursor" @click="showUsers = false">Assessments</span>
           <v-icon>mdi-chevron-right</v-icon>
-          <span class="text--secondary">Assessment Name</span>
-          <v-icon>mdi-chevron-right</v-icon>
-          <select
-            @change="
-              () => {
-                screeningMainsUser == 'false'
-                  ? fetchMainsUsers(selectedId)
-                  : fetchScreeningUsers(selectedId);
-              }
-            "
-            v-model="screeningMainsUser"
-          >
-            <option value="true" selected>
-              Users in Screening Assessments
-            </option>
-            <option value="false">Users in Mains Assessments</option>
-          </select>
+          <span class="text--secondary">{{ selectedName }}</span>
         </div>
       </v-col>
       <v-col cols="4">
@@ -49,6 +33,7 @@
       ></v-col>
     </v-row>
 
+    <assessment-analytics v-if="showUsers" :id="selectedId"></assessment-analytics>
     <!-- assessment user table row with filter btn and color code -->
     <v-row justify="space-between" class="my-8" v-if="showUsers">
       <v-col cols="6" sm="6" md="" class="ma-0 pa-0 f-flex align-center">
@@ -378,8 +363,20 @@
       :headers="screeningHeaders"
       :items="assessmentUsers"
     >
-      <template v-slot:[`item.actions`]="{}">
-        <img width="30px" class="pt-2 cursor" src="../assets/todo.svg" />
+      <template v-slot:[`item.actions`]="{item}">
+        <a :href="`/#/users/profile/${item}`">
+        <img width="30px" class="pt-2 cursor" src="../assets/user.svg" />
+        </a>
+      </template>
+
+      <template v-slot:[`item.assessment_score`]="{item}">
+        {{ item.assessment_score }} / {{ item.assessment_score_total }}
+      </template>
+
+      <template v-slot:[`item.status`]="{item}">
+        <div class="success-badge" v-if="item.status == 'cleared'"><i class="dot me-2" />Cleared </div>
+        <div class="failed-badge" v-if="item.status == 'not_cleared'"><i class="dot me-2" />Not cleared </div>
+        <div class="warning-badge" v-if="item.status == 'in_progress'"><i class="dot me-2" />In progress</div>
       </template>
     </v-data-table>
 
@@ -1408,8 +1405,12 @@ import SkillsController from "@/controllers/SkillsController";
 import LevelController from "@/controllers/LevelController";
 import QuestionsController from '@/controllers/QuestionsController';
 import AuthService from "@/services/AuthService";
+import AssessmentAnalytics from "./components/AssessmentAnalytics.vue"
+import ChartsController from "@/controllers/ChartsController";
+
 
 export default {
+  components: { AssessmentAnalytics },
   mixins: [validationMixin],
 
   validations: {
@@ -1472,6 +1473,7 @@ export default {
         displayCorrectAnswer: "NO",
         displayResult: "NO",
         selectedId: null,
+        selectedName: null,
         passingCriteria: 40,
         timeUpFirstReminder: null,
         timeUpLastReminder: null,
@@ -1547,11 +1549,11 @@ export default {
       breadMenu: ["menu1", "menu2", "menu3"],
       breadData: "menu1",
       screeningHeaders: [
-        { text: "Name", value: "user.first_name" },
-        { text: "Email ID", value: "user.email" },
-        { text: "Cluser", value: "cluser" },
-        { text: "Brand", value: "score_type" },
-        { text: "Status", value: "screening_status" },
+        { text: "Name", value: "full_name" },
+        { text: "Email", value: "email" },
+        { text: "Assessment score", value: "assessment_score" },
+        { text: "Time taken", value: "time_taken" },
+        { text: "Status", value: "status" },
         { text: "Actions", value: "actions" },
       ],
       assessments: [],
@@ -1646,19 +1648,19 @@ export default {
     },
     filterData() {
       this.notCleared = this.assessmentUsers.filter(
-        (item) => item.screening_status == "FAILED"
+        (item) => item.status == "FAILED"
       );
       console.log("not cleared", this.notCleared);
       this.inProgress = this.assessmentUsers.filter(
-        (item) => item.screening_status == "STARTED"
+        (item) => item.status == "FINISHED"
       );
       console.log("inprogress", this.inProgress);
       this.yetToAttempt = this.assessmentUsers.filter(
-        (item) => item.screening_status == "PENDING"
+        (item) => item.status == "PENDING"
       );
       console.log("yet to attemp", this.yetToAttempt);
       this.cleared = this.assessmentUsers.filter(
-        (item) => item.screening_status == "FINISHED"
+        (item) => item.status == "PASSED"
       );
       console.log("cleared", this.cleared);
     },
@@ -1957,12 +1959,19 @@ export default {
       console.log(response);
       return response;
     },
-    fetchAssessmentUsers(assessment){
-      let type = assessment.assessment_configurations[0].assessment_type;
-      if(type == 'SCREENING') {
-        this.fetchScreeningUsers(assessment.id);
-      } else {
-        this.fetchMainsUsers(assessment.id);
+    async fetchAssessmentUsers(assessment){
+      this.showUsers = true;
+      this.selectedId = assessment.id;
+      this.selectedName = assessment.name;
+      const response = await ChartsController.getAssessmentUsersData({assessment_id:this.selectedId});
+      if(response.data.success){
+        this.assessmentUsers = response.data.data.rows;
+      this.filterData();
+      this.assessmentUsers = this.inProgress
+      // console.log(this.assessmentUsers);
+      }
+      else{
+        alert(response.data.error)
       }
     },
 
@@ -2029,40 +2038,6 @@ export default {
         alert(response.data.error)
       }
        console.log(this.assessments);
-    },
-    async fetchMainsUsers(id) {
-      console.log("mains user clicked");
-      this.showUsers = true;
-      this.selectedId = id;
-      const response = await AssessmentController.getMainsUser(id);
-      
-      if(response.data.success){
-              this.assessmentUsers = [];
-            this.assessmentUsers = response.data.data.user_assessments;
-            if (this.assessmentUsers != undefined) {
-              this.filterData();
-            }
-            console.log("filter data", this.assessmentUsers);
-      }
-      else{
-        alert(response.data.error)
-      }
-    },
-    async fetchScreeningUsers(id) {
-      console.log("screening clicked");
-      this.showUsers = true;
-      this.selectedId = id;
-      const response = await AssessmentController.getScreeningUser(id);
-     
-      if(response.data.success){
-        this.assessmentUsers = response.data.data.user_assessments;
-      this.filterData();
-
-      // console.log(this.assessmentUsers);
-      }
-      else{
-        alert(response.data.error)
-      }
     },
 
     async getLevels() {

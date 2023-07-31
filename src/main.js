@@ -5,6 +5,12 @@ import store from './store'
 import router from './router'
 import axios from 'axios';
 import CKEditor from 'ckeditor4-vue';
+import VueDatePicker from '@mathieustan/vue-datepicker';
+import '@mathieustan/vue-datepicker/dist/vue-datepicker.min.css';
+
+Vue.use(VueDatePicker, {
+  lang: 'fr'
+});
 
 Vue.use(CKEditor);
 Vue.config.productionTip = false
