@@ -283,7 +283,7 @@ letter-spacing: 0.02em;
 } 
 .my-progress {
   color: #f28f0e !important;
-  background: #f6cd93 !important;
+  background: rgba(255, 149, 1, 0.1) !important;
 }
 .my-notcleared{
   color: #E5484D!important;
@@ -370,6 +370,8 @@ input[type="file"] {
 }
 .assessmentIconColor {
   color: #000000a3 !important;
+  display: flex;
+  align-items: center;
 }
 .cursor {
   cursor: pointer;
@@ -760,4 +762,43 @@ color: #4D4D4D;
   border-radius: 50%;
   padding: 8px;
   background-color: var(--11-greys-30, #F6F6F6);
+}
+
+
+.v-application .purple-button-light {
+  color: #5746AF !important;
+  background-color: #F5F2FF !important;
+  font-size: 16px;
+  font-weight: 400;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.v-application .grey-color-application {
+  color: var(--11-greys-70, #7B7A7B) !important;
+}
+.grey-round {
+  border-radius: 16px;
+background: var(--grays-mauve-4, #EEEDEF);
+text-transform: capitalize;
+}
+.v-chip-custom {
+  height: 24px;
+}
+.v-application .font-weight-400 {
+  font-weight: 400;
+}
+.v-application .font-size-16 {
+  font-size: 16px;
+}
+.v-application .font-size-10 {
+  font-size: 10px;
+}
+.v-application .font-size-14 {
+  font-size: 14px;
+}
+.v-application .font-size-12 {
+  font-size: 12px;
 }

@@ -101,84 +101,80 @@
 
     <!------------------------------------------ Assessment card here---------------------------- -->
     <div class="d-flex flex-row pb-4 pointradius" id="myScroll-x" v-if="!showUsers">
-      <v-card width="427px" min-width="427px" height="auto" class="pa-5 ml-4 pb-8"
+      <v-card variant="tonal" width="312px" min-width="312px" height="auto" class="pa-4 ml-4"
         v-for="assessment in assessments.filter((item) => item.status == 'PUBLISHED')" :key="assessment.id">
-        <v-chip class="live pa-0">
-          <img src="../assets/radar.svg" alt="question Icon" />
-          Live
-        </v-chip>
-       
+        <div>
+          <v-chip class="live pa-3">
+            <img src="../assets/radar.svg" class="mr-1" alt="question Icon" />
+            Live
+          </v-chip>
+          <v-btn variant="tonal" class="grey-round ml-2"  elevation="0"  @click="fetchAssessmentUsers(assessment)" >
+            <svg class="mr-2" width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="Profile">
+              <path id="Stroke 1" fill-rule="evenodd" clip-rule="evenodd" d="M5.99028 9.22852C3.41187 9.22852 1.20996 9.61836 1.20996 11.1796C1.20996 12.7409 3.3979 13.1447 5.99028 13.1447C8.56869 13.1447 10.77 12.7542 10.77 11.1936C10.77 9.63296 8.58266 9.22852 5.99028 9.22852Z" stroke="#1A1523" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path id="Stroke 3" fill-rule="evenodd" clip-rule="evenodd" d="M5.98993 7.00262C7.68199 7.00262 9.05342 5.63056 9.05342 3.93849C9.05342 2.24643 7.68199 0.875 5.98993 0.875C4.29786 0.875 2.9258 2.24643 2.9258 3.93849C2.92008 5.62484 4.28262 6.9969 5.96834 7.00262H5.98993Z" stroke="#1A1523" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </svg>
+
+            321 Users
+          </v-btn>
+        </div>
         <v-card-title class="pa-0">
           <div style="width: 100%;" class="d-flex justify-space-between">
-            <div>
+            <div class="font-size-16">
               {{ assessment.name }}
             </div>
-            <v-btn outlined fab color="black" style="width: 24px; height: 24px;" @click="fetchAssessmentUsers(assessment)"
-              depressed>
-              <v-icon>mdi-information-symbol</v-icon>
-            </v-btn>
           </div>
         </v-card-title>
         <!-- assessment type -->
         <div v-for="data in assessment.assessment_configurations" :key="data.id"
-          class="d-flex justify-space-between flex-column" style="height: 85%;">
+          class="d-flex justify-space-between flex-column">
           <div>
-            <div class="my-2 text-subtitle-1">
+            <div class="mb-2 text-subtitle-1 grey-color-application font-size-14 font-weight-400">
               <!-- Assessment title -->
-              {{ data.level.name }}
+              {{ data.level.name }} <span v-if="data.subjects && data.subjects.length > 0">(<span style="font-weight: 400;" v-for="subject in data.subjects" :key="subject">{{ subject + ' ' }}</span>)</span>
             </div>
 
-            <div class="my-2 text-subtitle-1">
-              <!-- Assessment title -->
-              <span style="font-weight: 500;" v-for="subject in data.subjects" :key="subject">{{ subject + ' ' }}</span>
-            </div>
-            <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
-            <div class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 ">
-              <div class="assessmentIconColor">
-                <img src="../assets/marks.svg" alt="question Icon" />
+            <!-- <v-chip class="my-chip">{{ data.assessment_type }}</v-chip> -->
+            <div class="mb-2 d-flex flex-row grey--text justify-space-between mt-0 mb-0 ">
+              <div class="assessmentIconColor  font-size-12">
+                <img src="../assets/marks.svg" class="mr-1" alt="question Icon" />
                 {{ data.total_no_of_questions }} Questions
               </div>
-              <div class="assessmentIconColor">
-                <img src="../assets/question.svg" alt="question Icon" />
+              <div class="assessmentIconColor font-size-12">
+                <img src="../assets/question.svg" class="mr-1" alt="question Icon" />
                 {{ formatTime(data.duration_of_assessment) }}
               </div>
-              <div class="assessmentIconColor mb-5 pointradius">
-                <img src="../assets/clock.svg" alt=" clock Icon" />
+              <div class="assessmentIconColor pointradius font-size-12">
+                <img src="../assets/clock.svg" class="mr-1" alt="clock Icon" />
                 {{ data.correct_score_answer }} marks
               </div>
             </div>
-            <div>
-              <div class="d-flex content ">
-                <v-chip class="my-clear ">43 Cleared</v-chip>
-                <v-chip class="my-progress">43 In progress</v-chip>
-                <v-chip class="my-notcleared">43 Not Cleared</v-chip>
+            <div class="mb-2">
+              <div class="d-flex justify-space-between ">
+                <v-chip class="my-clear font-size-10 v-chip-custom">43 Cleared</v-chip>
+                <v-chip class="my-progress font-size-10 v-chip-custom">43 In progress</v-chip>
+                <v-chip class="my-notcleared font-size-10 v-chip-custom">43 Not Cleared</v-chip>
               </div>
             </div>
-            <v-card class="d-flex flex-row pa-0 ma-0 justify-content=space-evenly" width="100%" height="40px"
-              color="transparent" depressed elevation="0">
-              <v-card elevation="0" class="d-flex flex-row pa-0 ma-0" width="100%" height="0px" color="grey">
-              </v-card>
-            </v-card>
           </div>
 
           <div class="d-flex justify-space-between">
-            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor roletype publish"
-              @click="publishMethod(data.assessment_id, data.assessment_type)">PUBLISH RESULTS </v-card-title>
-            <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
+            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor roletype publish purple-button-light"
+              @click="publishMethod(data.assessment_id, data.assessment_type)">Publish Result </v-card-title>
+            <!-- <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
 
-            <img src="../assets/trash.svg" alt="Edit Icon" />
+            <img src="../assets/trash.svg" alt="Edit Icon" /> -->
 
           </div>
         </div>
-        <v-divider class="mt-2"></v-divider>
-        <!-- Assessment type -->
       </v-card>
     </div>
 
     <v-row justify="space-between" class="mb-4 mt-0" v-if="!showUsers">
       <v-col cols="4" sm="4" md="4">
         <div class="text-h5 ml-4">
-          Draft Assessments ({{ assessments.filter((item) => item.status != 'PUBLISHED').length }})
+          Assessments in Draft ({{ assessments.filter((item) => item.status != 'PUBLISHED').length }})
         </div>
       </v-col>
     </v-row>
