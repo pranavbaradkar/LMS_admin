@@ -156,7 +156,7 @@ export default {
       }
     },
     startInterview(item, user_id, recommended_level, levels, name, school_id) {
-      if(item.interview_feedback == '') {
+      // if(item.interview_feedback == '') {
         this.$router.push({
           path: '/candidates/form', query: {
             user_id: user_id,
@@ -166,7 +166,7 @@ export default {
             school_id: school_id
           }
         })
-      }
+      // }
       
     }
   },

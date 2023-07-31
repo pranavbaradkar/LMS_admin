@@ -14,25 +14,14 @@
         <div class="mt-4" v-if="showUsers">
           <span class="m-4 cursor" @click="showUsers = false">Assessments</span>
           <v-icon>mdi-chevron-right</v-icon>
-          <span class="text--secondary">Assessment Name</span>
-          <v-icon>mdi-chevron-right</v-icon>
-          <select @change="() => {
-              screeningMainsUser == 'false'
-                ? fetchMainsUsers(selectedId)
-                : fetchScreeningUsers(selectedId);
-            }
-            " v-model="screeningMainsUser">
-            <option value="true" selected>
-              Users in Screening Assessments
-            </option>
-            <option value="false">Users in Mains Assessments</option>
-          </select>
+          <span class="text--secondary">{{ selectedName }}</span>
         </div>
       </v-col>
       <v-col cols="4">
         <v-text-field v-if="!showUsers" label="Search" prepend-inner-icon="mdi-magnify"></v-text-field></v-col>
     </v-row>
 
+    <assessment-analytics v-if="showUsers" :id="selectedId"></assessment-analytics>
     <!-- assessment user table row with filter btn and color code -->
     <v-row justify="space-between" class="my-8" v-if="showUsers">
       <v-col cols="6" sm="6" md="" class="ma-0 pa-0 f-flex align-center">
@@ -266,9 +255,9 @@
             </div>
           </div>
           <div class="d-flex">
-            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment, data.assessment_id) :
-              showDialog(data.assessment_id)">
-              {{ assessment.status == 'PENDING' ? 'CREATE' : 'Publish' }}
+            <v-card-title v-if="user.role_type == 'SUPER_ADMIN' || (user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.is_approval)" class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment ,data.assessment_id) : 
+            showDialog(data.assessment_id)">
+              {{ assessment.status == 'PENDING' ? 'CREATE' : 'Approve' }}
               <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
               <img src="../assets/trash.svg" alt="Edit Icon" />
             </v-card-title>
@@ -971,8 +960,12 @@ import SkillsController from "@/controllers/SkillsController";
 import LevelController from "@/controllers/LevelController";
 import QuestionsController from '@/controllers/QuestionsController';
 import AuthService from "@/services/AuthService";
+import AssessmentAnalytics from "./components/AssessmentAnalytics.vue"
+import ChartsController from "@/controllers/ChartsController";
+
 
 export default {
+  components: { AssessmentAnalytics },
   mixins: [validationMixin],
 
   validations: {
@@ -1035,6 +1028,7 @@ export default {
         displayCorrectAnswer: "NO",
         displayResult: "NO",
         selectedId: null,
+        selectedName: null,
         passingCriteria: 40,
         timeUpFirstReminder: null,
         timeUpLastReminder: null,
@@ -1110,11 +1104,11 @@ export default {
       breadMenu: ["menu1", "menu2", "menu3"],
       breadData: "menu1",
       screeningHeaders: [
-        { text: "Name", value: "user.first_name" },
-        { text: "Email ID", value: "user.email" },
-        { text: "Cluser", value: "cluser" },
-        { text: "Brand", value: "score_type" },
-        { text: "Status", value: "screening_status" },
+        { text: "Name", value: "full_name" },
+        { text: "Email", value: "email" },
+        { text: "Assessment score", value: "assessment_score" },
+        { text: "Time taken", value: "time_taken" },
+        { text: "Status", value: "status" },
         { text: "Actions", value: "actions" },
       ],
       assessments: [],
@@ -1209,19 +1203,19 @@ export default {
     },
     filterData() {
       this.notCleared = this.assessmentUsers.filter(
-        (item) => item.screening_status == "FAILED"
+        (item) => item.status == "FAILED"
       );
       console.log("not cleared", this.notCleared);
       this.inProgress = this.assessmentUsers.filter(
-        (item) => item.screening_status == "STARTED"
+        (item) => item.status == "FINISHED"
       );
       console.log("inprogress", this.inProgress);
       this.yetToAttempt = this.assessmentUsers.filter(
-        (item) => item.screening_status == "PENDING"
+        (item) => item.status == "PENDING"
       );
       console.log("yet to attemp", this.yetToAttempt);
       this.cleared = this.assessmentUsers.filter(
-        (item) => item.screening_status == "FINISHED"
+        (item) => item.status == "PASSED"
       );
       console.log("cleared", this.cleared);
     },
@@ -1524,12 +1518,27 @@ export default {
       console.log(response);
       return response;
     },
-    fetchAssessmentUsers(assessment) {
+    async fetchAssessmentUsers(assessment){
+      this.showUsers = true;
+
       let type = assessment.assessment_configurations[0].assessment_type;
       if (type == 'SCREENING') {
         this.fetchScreeningUsers(assessment.id);
       } else {
         this.fetchMainsUsers(assessment.id);
+      }
+
+      this.selectedId = assessment.id;
+      this.selectedName = assessment.name;
+      const response = await ChartsController.getAssessmentUsersData({assessment_id:this.selectedId});
+      if(response.data.success){
+        this.assessmentUsers = response.data.data.rows;
+      this.filterData();
+      this.assessmentUsers = this.inProgress
+      // console.log(this.assessmentUsers);
+      }
+      else{
+        alert(response.data.error)
       }
     },
 

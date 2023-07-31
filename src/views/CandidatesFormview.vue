@@ -9,40 +9,103 @@
               <div>
                 <v-row>
                   <v-col cols="3" class="d-flex">
-                    <div >
-                       <v-avatar class="mt-0 ms-0">
-                        <img src="../assets/user.svg" alt="John">
+                    <div>
+                      <v-avatar class="mt-0 ms-0">
+                        <img src="../assets/user.svg" alt="John" />
                       </v-avatar>
-
                     </div>
                     <div>
-                      <span style="font-size: 18px;">{{ this.name }}</span>
+                      <span style="font-size: 18px">{{ this.name }}</span>
                       <div class="badge">
-                        <v-chip v-for="level in levels" :key="level" class="ma-1 fs" small>
+                        <v-chip
+                          v-for="level in levels"
+                          :key="level"
+                          class="ma-1 fs"
+                          small
+                        >
                           {{ level }}
                         </v-chip>
                       </div>
                     </div>
                   </v-col>
-                  <v-col v-if="this.recommended_level" cols="9" class="endsec justify-end d-flex mt-0 me-0 align-center">
-                    <p> <img src="../assets/Vector (10).svg" cols="" alt="" class="pe-2" /> <strong class="recommend text-color-green">Recommended</strong> <span>For</span> <strong>{{ this.recommended_level
-                    }}</strong></p>
+                  <v-col
+                    v-if="this.recommended_level"
+                    cols="9"
+                    class="endsec justify-end d-flex mt-0 me-0 align-center"
+                  >
+                    <p>
+                      <img
+                        src="../assets/Vector (10).svg"
+                        cols=""
+                        alt=""
+                        class="pe-2"
+                      />
+                      <strong class="recommend text-color-green"
+                        >Recommended</strong
+                      >
+                      <span>For</span>
+                      <strong>{{ this.recommended_level }}</strong>
+                    </p>
                   </v-col>
                 </v-row>
               </div>
             </v-card-text>
           </v-card>
         </v-col>
-
       </v-row>
       <!-- Job Seekers -->
       <v-row>
+        <v-col cols="12">
+          <v-card class="rounded-xl card-height" outlined>
+            <div class="d-flex align">
+              <V-col cols="1">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  1
+                </v-btn>
+              </V-col>
+              <v-col cols="3" class="ml-n8">
+                <strong class="d-flex">Position</strong>
+              </v-col>
+            </div>
+
+            <v-row>
+              <v-col cols="6" class="d-flex align-center">
+                <v-col cols="2" class="ms-3">
+                  <span>Applied For -</span>
+                </v-col>
+                <v-col cols="8">
+                  <v-select
+                    v-model="position_applied"
+                    :items="items"
+                    label=""
+                  ></v-select>
+                </v-col>
+              </v-col>
+              <v-col cols="6" class="d-flex align-center">
+                <v-col cols="2">
+                  <span>Selected For -</span>
+                </v-col>
+                <v-col cols="8">
+                  <v-select
+                    v-model="position_selected"
+                    :items="level"
+                    label=""
+                    item-text="name"
+                    item-value="id"
+                  ></v-select>
+                </v-col>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+      <!-- <v-row>
         <v-col cols="12">
           <v-card class="rounded-xl card-height " outlined>
             <div class="d-flex align">
               <V-col cols="1">
                 <v-btn class="mx-2 btn-gray" fab disable small color="">
-                  1
+                  2
                 </v-btn>
               </V-col>
               <v-col cols="3" class="ml-n8">
@@ -59,34 +122,57 @@
           </v-card>
         </v-col>
 
-      </v-row>
+      </v-row> -->
       <v-row>
         <v-col cols="12">
-          <v-card class="rounded-xl card-height " outlined>
+          <v-card class="rounded-xl card-height" outlined>
             <div class="d-flex align">
               <V-col cols="1">
-                <v-btn class="mx-2 btn-gray" fab disable small color="">
-                  2
-                </v-btn>
+                <v-btn class="mx-2 btn-gray" fab disable small> 2 </v-btn>
               </V-col>
               <v-col cols="3" class="ml-n8">
-                <strong class="d-flex   ">Candidate's Past Experiance *</strong>
+                <strong class="d-flex">Experience</strong>
               </v-col>
             </div>
 
             <v-row>
-              <v-col cols="12" class="px-10">
-                <v-text-field v-model="candidate_past" color="primary" label="Your Answer" variant="underlined"
-                  class="underline"></v-text-field>
+              <v-col cols="6" class="d-flex align-center">
+                <v-col cols="3" class="ms-3">
+                  <span>Total Experience -</span>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    v-model="total_experience"
+                    color="primary"
+                    placeholder=""
+                    variant="underlined"
+                    class="underline"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-col>
+              <v-col cols="6" class="d-flex align-center">
+                <v-col cols="3">
+                  <span>Relevant Experience -</span>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    v-model="relevant_experience"
+                    color="primary"
+                    placeholder=""
+                    variant="underlined"
+                    class="underline"
+                    required
+                  ></v-text-field>
+                </v-col>
               </v-col>
             </v-row>
           </v-card>
         </v-col>
-
       </v-row>
       <v-row>
         <v-col cols="12">
-          <v-card class="rounded-xl card-height " outlined>
+          <v-card class="rounded-xl card-height" outlined>
             <div class="d-flex align-center">
               <V-col cols="1">
                 <v-btn class="mx-2 btn-gray" fab disable small color="">
@@ -94,7 +180,9 @@
                 </v-btn>
               </V-col>
               <v-col cols="8" class="ml-n8">
-                <strong class="d-flex   ">Current CTC And Expected CTC of Candidate *</strong>
+                <strong class="d-flex"
+                  >Current CTC And Expected CTC of Candidate
+                </strong>
               </v-col>
             </div>
 
@@ -103,30 +191,90 @@
                 <v-row>
                   <v-col cols="6" class="d-flex flex-row">
                     <span class="ms-6 gray">Current CTC- </span>
-                    <v-text-field style="width: 20px;    padding-top: 0px;margin-top: 0px;" v-model="ctc_current" color="primary" variant="underlined"
-                      class="underline" maxLength="4" @keypress="isNumber($event)"></v-text-field>
+                    <v-text-field
+                      style="width: 20px; padding-top: 0px; margin-top: 0px"
+                      v-model="ctc_current"
+                      color="primary"
+                      variant="underlined"
+                      class="underline"
+                      maxLength="4"
+                      @keypress="isNumber($event)"
+                    ></v-text-field>
                     <span>LPA</span>
                   </v-col>
                 </v-row>
               </v-col>
               <v-col cols="3" class="d-flex flex-row">
                 <span class="ms-6 gray">Expected CTC- </span>
-                <v-text-field style="width: 20px;  padding-top: 0px;margin-top: 0px;" v-model="ctc_expected" color="primary" variant="underlined"
-                  class="underline" maxLength="4" @keypress="isNumber($event)"></v-text-field>
+                <v-text-field
+                  style="width: 20px; padding-top: 0px; margin-top: 0px"
+                  v-model="ctc_expected"
+                  color="primary"
+                  variant="underlined"
+                  class="underline"
+                  maxLength="4"
+                  @keypress="isNumber($event)"
+                ></v-text-field>
                 <span>LPA</span>
               </v-col>
             </v-row>
           </v-card>
         </v-col>
-
       </v-row>
       <v-row>
+        <v-col cols="12">
+          <v-card class="rounded-xl card-height" outlined>
+            <div class="d-flex align-center">
+              <V-col cols="1">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  4
+                </v-btn>
+              </V-col>
+              <v-col cols="8" class="ml-n8">
+                <strong class="d-flex">How soon can we expect to join?</strong>
+              </v-col>
+            </div>
+
+            <v-row>
+              <v-col cols="6">
+                <v-row>
+                  <v-col cols="6" class="d-flex flex-row">
+                    <span class="ms-6 gray">Notice Period - </span>
+                    <v-text-field
+                      style="width: 20px; padding-top: 0px; margin-top: 0px"
+                      v-model="notice_period"
+                      color="primary"
+                      variant="underlined"
+                      class="underline"
+                      maxLength="4"
+                      @keypress="isNumber($event)"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col cols="3" class="d-flex flex-row">
+                <span class="ms-6 gray">Expected CTC- </span>
+                <v-text-field
+                  style="width: 20px; padding-top: 0px; margin-top: 0px"
+                  v-model="expected_ctc"
+                  color="primary"
+                  variant="underlined"
+                  class="underline"
+                  maxLength="4"
+                  @keypress="isNumber($event)"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+      <!-- <v-row>
         <v-col cols="6">
           <v-card class="rounded-xl cross-card " outlined>
             <div class="d-flex align-center">
               <v-col cols="2">
                 <v-btn class="mx-2 btn-gray" fab disable small color="">
-                  4
+                  5
                 </v-btn>
               </v-col>
               <v-col cols="8" class="ml-n8">
@@ -160,7 +308,7 @@
             <div class="d-flex align-center">
               <v-col cols="2">
                 <v-btn class="mx-2 btn-gray" fab disable small color="">
-                  5
+                  6
                 </v-btn>
               </v-col>
               <v-col cols="8" class="ml-n8">
@@ -177,18 +325,19 @@
           </v-card>
         </v-col>
 
-      </v-row>
-      <v-row>
+      </v-row> -->
+      <!-- <v-row>
         <v-col cols="6">
           <v-card class="rounded-xl cross-card " outlined>
             <div class="d-flex align-center">
               <v-col cols="2">
                 <v-btn class="mx-2 btn-gray" fab disable small color="">
-                  6
+                  7
                 </v-btn>
               </v-col>
               <v-col cols="8" class="ml-n8">
                 <strong class="d-flex  ms-3 "> Confidences Score</strong>
+                <span class="ma-3 job-para">Dress appropriately, show positive attitude, be warm, friendly, energetic.</span>
               </v-col>
             </div>
 
@@ -206,11 +355,13 @@
             <div class="d-flex align-center">
               <v-col cols="2">
                 <v-btn class="mx-2 btn-gray" fab disable small color="">
-                  7
+                  8
                 </v-btn>
               </v-col>
-              <v-col cols="8" class="ml-n8">
+              <v-col cols="12" class="ml-n8">
                 <strong class="d-flex  ms-3 "> Appearance Score</strong>
+                <span class="ma-3 job-para">Attitude towards self & others, ability to get along with people, persuasion, coordination and influencing skills.</span>
+
               </v-col>
             </div>
             <v-row>
@@ -226,14 +377,314 @@
           </v-card>
         </v-col>
 
+      </v-row> -->
+      <v-row>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  5
+                </v-btn>
+              </v-col>
+              <v-col cols="8" class="ml-n8">
+                <strong class="d-flex ms-3"> Job Knowledge</strong>
+                <span class="ma-3 job-para"
+                  >Knowledge and relevance of experience in the job area.</span
+                >
+              </v-col>
+            </div>
+
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider
+                  v-model="job_knowledge"
+                  step="1"
+                  ticks
+                  max="10"
+                  show-ticks="always"
+                  tick-size="4"
+                  thumb-label="always"
+                  track-color="grey"
+                  color="#277BC0"
+                ></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+                <span>Remarks (Optional)</span>
+              </v-col>
+              <v-col cols="11" class="ms-5 remark">
+                <v-text-field
+                  v-model="job_knowledge_underline"
+                  color="primary"
+                  placeholder="Enter your remarks here"
+                  variant="underlined"
+                  class="underline"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row> </v-row>
+          </v-card>
+        </v-col>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  6
+                </v-btn>
+              </v-col>
+              <v-col cols="8" class="ml-n8">
+                <strong class="d-flex ms-3"> Communication Skills</strong>
+                <span class="ma-3 job-para"
+                  >Clarity & fluency of expression, method & manner of speech,
+                  listening ability.</span
+                >
+              </v-col>
+            </div>
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider
+                  v-model="communication_skills"
+                  step="1"
+                  ticks
+                  max="10"
+                  show-ticks="always"
+                  tick-size="4"
+                  thumb-label="always"
+                  track-color="grey"
+                  color="#277BC0"
+                ></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+                <span>Remarks (Optional)</span>
+              </v-col>
+              <v-col cols="11" class="ms-5 remark">
+                <v-text-field
+                  v-model="communication_skills_underline"
+                  color="primary"
+                  placeholder="Enter your remarks here"
+                  variant="underlined"
+                  class="underline"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  7
+                </v-btn>
+              </v-col>
+              <v-col cols="12" class="ml-n8">
+                <strong class="d-flex ms-3">
+                  Interpersonal & Team Skills</strong
+                >
+                <span class="ma-3 job-para"
+                  >Attitude towards self & others, ability to get along with
+                  people, persuasion, coordination and influencing skills.</span
+                >
+              </v-col>
+            </div>
+
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider
+                  v-model="interpersonal_and_team_skills"
+                  step="1"
+                  ticks
+                  max="10"
+                  show-ticks="always"
+                  tick-size="4"
+                  thumb-label="always"
+                  track-color="grey"
+                  color="#277BC0"
+                ></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+                <span>Remarks (Optional)</span>
+              </v-col>
+              <v-col cols="11" class="ms-5 remark">
+                <v-text-field
+                  v-model="personality_underline"
+                  color="primary"
+                  placeholder="Enter your remarks here"
+                  variant="underlined"
+                  class="underline"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row> </v-row>
+          </v-card>
+        </v-col>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  8
+                </v-btn>
+              </v-col>
+              <v-col cols="8" class="ml-n8">
+                <strong class="d-flex ms-3"> Personality & Attitude</strong>
+                <span class="ma-3 job-para"
+                  >Dress appropriately, show positive attitude, be warm,
+                  friendly, energetic.</span
+                >
+              </v-col>
+            </div>
+
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-10">
+                <v-slider
+                  v-model="personality_and_attitude"
+                  step="1"
+                  ticks
+                  max="10"
+                  show-ticks="always"
+                  tick-size="4"
+                  thumb-label="always"
+                  track-color="grey"
+                  color="#277BC0"
+                ></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+                <span>Remarks (Optional)</span>
+              </v-col>
+              <v-col cols="11" class="ms-5 remark">
+                <v-text-field
+                  v-model="personality_underline"
+                  color="primary"
+                  placeholder="Enter your remarks here"
+                  variant="underlined"
+                  class="underline"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  9
+                </v-btn>
+              </v-col>
+              <v-col cols="12" class="ml-n8">
+                <strong class="d-flex ms-3"> Analytical Skills</strong>
+                <span class="ma-3 job-para"
+                  >Logic in presenting opinions and views, interpretation of
+                  information, mental alertness, asking probing questions</span
+                >
+              </v-col>
+            </div>
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider
+                  v-model="analytical_skills"
+                  step="1"
+                  ticks
+                  max="10"
+                  show-ticks="always"
+                  tick-size="4"
+                  thumb-label="always"
+                  track-color="grey"
+                  color="#277BC0"
+                ></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+                <span>Remarks (Optional)</span>
+              </v-col>
+              <v-col cols="11" class="ms-5 remark">
+                <v-text-field
+                  v-model="analytical_skills_underline"
+                  color="primary"
+                  placeholder="Enter your remarks here"
+                  variant="underlined"
+                  class="underline"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  10
+                </v-btn>
+              </v-col>
+              <v-col cols="12" class="ml-n8">
+                <strong class="d-flex ms-3"> Leadership</strong>
+                <span class="ma-3 job-para"
+                  >Vision-setting, aligning structures, systems, people, leading
+                  by example, motivating teams.</span
+                >
+              </v-col>
+            </div>
+            <v-row>
+              <v-col cols="11" class="ms-5 mt-7">
+                <v-slider
+                  v-model="leadership_skills"
+                  step="1"
+                  ticks
+                  max="10"
+                  show-ticks="always"
+                  tick-size="4"
+                  thumb-label="always"
+                  track-color="grey"
+                  color="#277BC0"
+                ></v-slider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ms-5 remark">
+                <span>Remarks (Optional)</span>
+              </v-col>
+              <v-col cols="11" class="ms-5 remark">
+                <v-text-field
+                  v-model="remark_skills"
+                  color="primary"
+                  placeholder="Enter your remarks here"
+                  variant="underlined"
+                  class="underline"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
       </v-row>
       <v-row>
         <v-col cols="12">
-          <v-card class="rounded-xl card-height " outlined>
+          <v-card class="rounded-xl card-height" outlined>
             <div class="d-flex align-center">
               <V-col cols="1">
                 <v-btn class="mx-2 btn-gray" fab disable small color="">
-                  8
+                  11
                 </v-btn>
               </V-col>
               <v-col cols="3" class="ml-n8">
@@ -242,137 +693,230 @@
             </div>
 
             <v-row>
-              <v-col cols="12"  class="px-10">
-                <v-text-field v-model="interview_notes" color="primary" label="Your Answer" variant="underlined"
-                  class="underline"></v-text-field>
+              <v-col cols="12" class="px-10">
+                <v-text-field
+                  v-model="interview_notes"
+                  color="primary"
+                  label="Your Answer"
+                  variant="underlined"
+                  class="underline"
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-card>
         </v-col>
-
       </v-row>
       <v-row>
-        <v-col cols="6">
-          <v-card class="rounded-xl cross-card " outlined>
-            <div class="d-flex align-center">
-              <v-col cols="2">
-                <v-btn class="mx-2 btn-gray" fab disable small color="">
-                  9
-                </v-btn>
-              </v-col>
-              <v-col cols="8" class="ml-n8">
-                <strong class="d-flex  ms-3 "> Overall Rating</strong>
+        <v-col cols="12">
+          <v-card class="rounded-xl card-height" outlined>
+            <div class="d-flex align">
+              <V-col cols="1">
+                <v-btn class="mx-2 btn-gray" fab disable small> 12 </v-btn>
+              </V-col>
+              <v-col cols="3" class="ml-n8">
+                <strong class="d-flex">Head of the Department</strong>
               </v-col>
             </div>
 
+            <v-row>
+              <v-col cols="6" class="d-flex align-center">
+                <v-col cols="2" class="ms-3">
+                  <span>Name -</span>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    v-model="hod_name"
+                    color="primary"
+                    placeholder=""
+                    variant="underlined"
+                    class="underline"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-col>
+              <v-col cols="6" class="d-flex align-center">
+                <v-col cols="2">
+                  <span>Designation -</span>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    v-model="hod_designation"
+                    color="primary"
+                    placeholder=""
+                    variant="underlined"
+                    class="underline"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="6">
+          <v-card class="rounded-xl cross-card" outlined>
+            <div class="d-flex align-center">
+              <v-col cols="2">
+                <v-btn class="mx-2 btn-gray" fab disable small color="">
+                  13
+                </v-btn>
+              </v-col>
+              <v-col cols="8" class="ml-n8">
+                <strong class="d-flex ms-3"> Overall Rating</strong>
+              </v-col>
+            </div>
 
             <v-row>
               <v-col cols="11" class="ms-5 mt-8">
-                <v-slider v-model="overall_rating" step="1" ticks max="10" show-ticks="always" tick-size="4"
-                  thumb-label="always" track-color="grey" color="#277BC0"></v-slider>
+                <v-slider
+                  v-model="overall_rating"
+                  step="1"
+                  ticks
+                  max="10"
+                  show-ticks="always"
+                  tick-size="4"
+                  thumb-label="always"
+                  track-color="grey"
+                  color="#277BC0"
+                ></v-slider>
               </v-col>
             </v-row>
-
-
           </v-card>
         </v-col>
         <v-col cols="6">
-          <v-card class="rounded-xl cross-card " outlined>
+          <v-card class="rounded-xl cross-card" outlined>
             <div class="d-flex align-center">
               <v-col cols="2">
                 <v-btn class="mx-2 btn-gray" fab disable small color="">
-                  10
+                  14
                 </v-btn>
               </v-col>
               <v-col cols="8" class="ml-n8">
-                <strong class="d-flex  ms-3 "> Select For Offer ?</strong>
+                <strong class="d-flex ms-3"> Overall Recommendation</strong>
               </v-col>
             </div>
 
-            <v-row class=" ms-5 d-flex">
-              <v-radio-group v-model="offer_selection" row>
-                <v-radio label="Yes" value="YES" checked></v-radio>
-                <v-radio label="No" value="NO"></v-radio>
-                <v-radio label="Maybe" value="MAYBE"></v-radio>
+            <v-row class="ms-5 d-flex">
+              <v-radio-group v-model="overeall_recommendation" row>
+                <v-radio label="Strong Hired" value="YES" checked></v-radio>
+                <v-radio label="Meets Requirement" value="NO"></v-radio>
+                <v-radio label="Reject" value="MAYBE"></v-radio>
               </v-radio-group>
             </v-row>
           </v-card>
         </v-col>
-
       </v-row>
       <v-row>
         <v-col cols="2">
-          <v-btn @click="submitForm" class="submit-btn ">Submit </v-btn>
+          <v-btn @click="submitForm" class="submit-btn">Submit </v-btn>
         </v-col>
       </v-row>
-
     </v-container>
   </v-form>
 </template>
-  
+
 <script>
 // @ is an alias to /src
 
 import "../styles.css";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import InterviewController from '@/controllers/InterviewController'
+import InterviewController from "@/controllers/InterviewController";
 import GradeController from "@/controllers/GradeController";
 import BoardController from "@/controllers/BoardController";
+import LevelController from "@/controllers/LevelController";
 
 export default {
   name: "CandidatesFormview",
   mixins: [validationMixin],
-  components: {
-
-  },
+  components: {},
   validations: {
-    about_candidate: { required },
-    candidate_past: { required },
+    position_applied: { required },
+    position_selected: { required },
+    total_experience: { required },
+    relevant_experience: { required },
     ctc_current: { required },
     ctc_expected: { required },
-    teaching_grades: { required },
-    teaching_boards: { required },
-    confidence_score: { required },
-    appearence_score: { required },
+    notice_period: { required },
+    expected_ctc: { required },
+    job_knowledge: { required },
+    communication_skills: { required },
+    interpersonal_and_team_skills: { required },
+    personality_and_attitude: { required },
+    analytical_skills: { required },
+    leadership_skills: { required },
     interview_notes: { required },
+    hod_name: { required },
+    hod_designation: { required },
     overall_rating: { required },
-    offer_selection: { required },
+    overeall_recommendation: { required },
   },
   data() {
     return {
-      user_id: '',
-      recommended_level: '',
+      user_id: "",
+      recommended_level: "",
       levels: [],
-      name: '',
+      level: [],
+      name: "",
       gradeList: [],
       boardData: [],
       pageSize: 500,
       page: 1,
-      about_candidate: null,
-      candidate_past: null,
+      position_applied: null,
+      position_selected: null,
+      total_experience: null,
+      relevant_experience: null,
       ctc_current: null,
       ctc_expected: null,
-      teaching_grades: null,
-      teaching_boards: null,
-      confidence_score: 0,
-      appearence_score: 0,
+      notice_period: null,
+      expected_ctc: null,
+      job_knowledge: 0,
+      communication_skills: 0,
+      interpersonal_and_team_skills: 0,
+      personality_and_attitude: null,
+      analytical_skills: null,
+      leadership_skills: null,
       interview_notes: null,
-      overall_rating: 0,
-      offer_selection: "YES",
-      grades: ['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'],
-    }
+      hod_name: null,
+      hod_designation: null,
+      overall_rating: null,
+      overeall_recommendation: [],
+
+      grades: [
+        "Grade 1",
+        "Grade 2",
+        "Grade 3",
+        "Grade 4",
+        "Grade 5",
+        "Grade 6",
+        "Grade 7",
+        "Grade 8",
+        "Grade 9",
+        "Grade 10",
+        "Grade 11",
+        "Grade 12",
+      ],
+      items: [" Secondary"],
+      senior: ["Sr.Secondary"],
+    };
   },
   created() {
     this.getUserData();
     this.getGrades();
     this.getBoards();
+    this.getLevel();
   },
   methods: {
     isNumber(evt) {
-      evt = (evt) ? evt : window.event;
-      var charCode = (evt.which) ? evt.which : evt.keyCode;
-      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode;
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46
+      ) {
         evt.preventDefault();
       } else {
         return true;
@@ -380,8 +924,7 @@ export default {
     },
     getUserData() {
       const { user_id, name, levels, recommended_level } = this.$route.query;
-      this.user_id = user_id,
-      this.name = name;
+      (this.user_id = user_id), (this.name = name);
       console.log(levels);
       this.levels = levels.split(",");
 
@@ -391,21 +934,32 @@ export default {
       console.log(this.$refs.form);
       if (this.$refs.form.validate()) {
         const formData = {
-          about_candidate: this.about_candidate,
-          candidate_past: this.candidate_past,
+          position_applied: this.position_applied,
+          position_selected: this.position_selected,
+          total_experience: this.total_experience,
+          relevant_experience: this.relevant_experience,
           ctc_current: this.ctc_current,
           ctc_expected: this.ctc_expected,
-          teaching_grades: this.teaching_grades,
-          teaching_boards: this.teaching_boards,
-          confidence_score: this.confidence_score,
-          appearence_score: this.appearence_score,
+          notice_period: this.notice_period,
+          expected_ctc: this.expected_ctc,
+          job_knowledge: this.job_knowledge,
+          communication_skills: this.communication_skills,
+          interpersonal_and_team_skills: this.interpersonal_and_team_skills,
+          personality_and_attitude: this.personality_and_attitude,
+          analytical_skills: this.analytical_skills,
+          leadership_skills: this.leadership_skills,
           interview_notes: this.interview_notes,
+          hod_name: this.hod_name,
+          hod_designation: this.hod_designation,
           overall_rating: this.overall_rating,
-          offer_selection: this.offer_selection,
-        }
-        const response = await InterviewController.postCandidateData(formData, this.user_id);
+          overeall_recommendation: this.overeall_recommendation,
+        };
+        const response = await InterviewController.postCandidateData(
+          formData,
+          this.user_id
+        );
         if (response.data.success) {
-          window.location.href = '/#/interview/panel';
+          window.location.href = "/#/interview/panel";
         } else {
           alert("Something went wrong could you please check with admin");
         }
@@ -413,40 +967,43 @@ export default {
     },
     async getGrades() {
       const response = await GradeController.getAllGradesByPagination(
-          this.pageSize,
-        this.page);
-        if (response.data.success) {
-          this.gradeData = response.data.data;
-          this.gradeList = this.gradeData.rows;
-          this.count = response.data.data.count;
-      }
-      else {
-        alert(response.data.error)
+        this.pageSize,
+        this.page
+      );
+      if (response.data.success) {
+        this.gradeData = response.data.data;
+        this.gradeList = this.gradeData.rows;
+        this.count = response.data.data.count;
+      } else {
+        alert(response.data.error);
       }
     },
     async getBoards() {
       const response = await BoardController.getBoards();
       if (response.data.success) {
         this.boardData = response.data.data.rows;
+      } else {
+        alert(response.data.error);
       }
-      else {
-        alert(response.data.error)
-      }
-    }
+    },
+    async getLevel() {
+      const response = await LevelController.getLevel();
+      this.level = response.data.data.rows;
+      this.count = this.level.length;
+      console.log(this.level);
+    },
   },
-
 };
 </script>
-  
 
 <style>
 .v-slider__track-background.grey {
   border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px
+  border-bottom-right-radius: 30px;
 }
 .v-slider__track-fill {
   border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px
+  border-bottom-left-radius: 30px;
 }
 .v-slider--horizontal .v-slider__track-container {
   height: 25px;

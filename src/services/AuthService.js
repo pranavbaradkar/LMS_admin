@@ -44,8 +44,9 @@ export default {
   getUser: function () {
     const token = localStorage.getItem(TOKEN_KEY)
     if (token) {
-      const decoded = jwtDecode(token)
-      return decoded.user
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      return decoded
     }
     return null
   },

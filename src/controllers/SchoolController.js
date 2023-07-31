@@ -9,7 +9,10 @@ const instance = axios.create({
 export default {
     getSchool: async function () {
         try {
-            const response = await instance.get('meta/schools')
+            console.log(AuthService.getUser());
+            const response = await instance.get('meta/schools', {
+                params: { admin_id : AuthService.getUser().user_id }
+            })
             return response;
         } catch (error) {
             return error.response;

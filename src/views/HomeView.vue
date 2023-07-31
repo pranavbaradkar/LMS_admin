@@ -1,29 +1,192 @@
 <template>
   <div>
-    <v-container>
+    <v-container fluid class="pa-4 ml-2">
+      <v-row class="pb-0 mb-0">
+        <v-col cols="12" class="d-flex justify-space-between">
+          <div class="d-flex flex-row align-content-center">
+            <div style="font-size: 26px;">
+              Dashboard
+            </div>
+            <div class="ml-6">
+              <v-tabs
+            v-model="userType"
+            background-color="#0000000D"
+            class="ml-2 d-flex space-evenly rounded"
+            height="38"
+            hide-slider
+            @change="changeUserType"
+          >
+            <v-tab
+              active-class=" white ma-1 black--text"
+              class="rounded"
+            >
+              All
+            </v-tab>
+            <v-tab
+              active-class=" white ma-1 black--text"
+              class="rounded"
+            >
+              Internal Teacher
+            </v-tab>
+
+            <v-tab
+              active-class="white ma-1 black--text"
+              class="rounded"
+            >
+              Job Seeker
+            </v-tab>
+          </v-tabs>
+            </div>
+            <div class="ml-6">
+              <div style="font-size: 10px; font-weight: 500">
+                Select Campaigns/Schools
+              </div>
+              <v-menu :close-on-content-click="false" ref="menuRef" class="dropDown" location="bottom">
+      <template v-slot:activator="{}">
+        <div @click="() => {$refs.menuRef.isActive = true}" style="cursor: pointer;">
+          {{ selectedCampaign != -1 ? selectedCampaign : selectedSchool != -1 ? selectedSchool : 'Default' }}
+        </div>
+      </template>
+      <v-list height="100%">
+      <v-list-item @click="() => {
+        $refs.menuRef.isActive = false;
+        changeDataType('Default', null)
+        }">
+        <v-list-item-content>
+          <v-list-item-title v-text="'Default'"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-group
+        v-for="item in dataTypeItem"
+        :key="item.title"
+        v-model="item.active"
+        no-action
+      >
+        <template v-slot:activator>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+        <v-list-item
+          v-for="child in item.items"
+          :key="child.title"
+          style="height: 100%; padding-left: 4px"
+          @click="() => {
+            $refs.menuRef.isActive = false;
+            changeDataType(item.title,child)
+          }"
+        >
+          <v-list-item-avatar>
+            <v-icon v-if="item.title == 'Campaigns'">mdi-alpha-c-circle</v-icon>
+            <v-icon v-if="item.title == 'Schools'">mdi-alpha-s-circle</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-text="child.name"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-group>
+    </v-list>
+    </v-menu>
+            </div>
+          </div>
+
+          <div>
+            <v-select
+                label="Period"
+                rounded
+                style="width: 200px;"
+                :items="['Today', 'Last 7 days', 'Last 1 month', 'Custom']"
+                dense
+                outlined
+                v-model="period"
+                @change="changePeriod"
+                :menu-props="{
+                      closeOnClick: true,
+                      closeOnContentClick: true,
+                      }">
+            </v-select>
+            <VueDatePicker
+                    v-model="date"
+                    style="opacity: 0; top: -200px"
+                    v-if="period == 'Custom'"
+                    :visible="period == 'Custom'"
+                    range
+    @onChange="onClickOk()"
+    @onClose="onClose()"
+                    validate
+                    :locale="{lang: 'en'}"
+                    placeholder="Custom"/>
+          </div>
+        </v-col>
+      </v-row>
       <!-- VGOS -->
-      <v-row>
-        <v-col cols="6">
+      <v-row class="pl-4" style="margin-top: -28px;">
+        <v-col v-for="(item,index) in NudgeData" :key="index" class="white d-flex justify-start flex-row mr-4 rounded-xl pa-4">
+          <div style="height: 48px; width: 48px;" class="mr-4">
+            <v-img v-if="index == 0" src="@/assets/signup.svg"></v-img>
+            <v-img v-if="index == 1" src="@/assets/screening_c.svg"></v-img>
+            <v-img v-if="index == 2" src="@/assets/mains_c.svg"></v-img>
+            <v-img v-if="index == 3" src="@/assets/demo_c.svg"></v-img>
+            <v-img v-if="index == 4" src="@/assets/demo_c.svg"></v-img>
+          </div>
+          <div>
+            <div style="font-size: 12px; font-weight: 500;">
+              {{ item.title }}
+            </div>
+            <div style="font-style: 16px">
+              {{ item.value }} <span v-if="item.percentage" class="ml-1" style="font-size: 12px;color: #39AD37;">({{item.percentage}}%)</span>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row class="pt-0">
+        <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title>VGOS Screening</v-card-title>
+            <v-card-title style="font-weight: 400;">Teacher's Conversion</v-card-title>
+            <v-card-text style="text-align: center; position: relative;">
+              <div style="position: absolute; top: 74px;z-index: 1;left: 104px;">
+                <div style="font-size: 22px; font-weight: 700; color: black;">
+                  {{ NudgeData[3].value }}
+                </div>
+                <div style="color: black;">
+                  Teachers
+                </div>
+              </div>
+              <GChart
+                type="PieChart"
+                :data="pieChartDataForConversion"
+                :options="pieChartOptions"
+                :resizeDebounce="0"
+              >
+              </GChart>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="4">
+          <v-card class="rounded-xl" outlined>
+            <v-card-title style="font-weight: 400;">Interview/Demo success rate</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
+                :height="260"
                 type="ColumnChart"
-                :data="chartDataForVgosScreening"
+                :data="chartDataForInterview"
                 :options="chartOptionsForVgosScreening"
+                :resizeDebounce="0"
               />
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title>VGOS Mains</v-card-title>
-
+            <v-card-title style="font-weight: 400;">Success %</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
+                :height="260"
                 type="ColumnChart"
-                :data="chartDataForVgosMains"
-                :options="chartOptionsForVgosMains"
+                :data="chartDataForSuccess"
+                :options="chartOptionsForVgosScreening"
+                :resizeDebounce="0"
               />
             </v-card-text>
           </v-card>
@@ -31,28 +194,50 @@
       </v-row>
       <!-- Job Seekers -->
       <v-row>
-        <v-col cols="6">
+        <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title>Job Seekers Screening</v-card-title>
-
+            <v-card-title style="font-weight: 400;">Avg. Time To Answer</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
-                type="ColumnChart"
-                :data="chartDataForJobSeekerScreening"
-                :options="chartOptionsForJobSeekerScreening"
+                type="SteppedAreaChart"
+                :data="chartDataForTimeToAnswer"
+                :options="chartOptionsForAvgTime"
+                :resizeDebounce="0"
               />
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title>Job Seekers Mains</v-card-title>
-
+            <v-card-title style="font-weight: 400;">User</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
+                :height="260"
                 type="ColumnChart"
-                :data="chartDataForJobSeekrMains"
-                :options="chartOptionsForJobSeekerMains"
+                :data="chartDataForUsers"
+                :options="chartOptionsForVgosScreening"
+                :resizeDebounce="0"
+              />
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="4">
+          <v-card class="rounded-xl" outlined>
+            <v-card-title style="font-weight: 400;">Sign Up by Platform</v-card-title>
+            <v-card-text style="text-align: center; position: relative;">
+              <div style="position: absolute; top: 74px;z-index: 1;left: 104px;">
+                <div style="font-size: 22px; font-weight: 700; color: black;">
+                  265
+                </div>
+                <div style="color: black;">
+                  Teachers
+                </div>
+              </div>
+              <GChart
+                type="PieChart"
+                :data="pieChartDataForPlatform"
+                :options="pieChartOptions"
+                :resizeDebounce="0"
               />
             </v-card-text>
           </v-card>
@@ -66,7 +251,6 @@
 // @ is an alias to /src
 import { GChart } from "vue-google-charts/legacy";
 import ChartsController from "@/controllers/ChartsController";
-import AuthService from '@/services/AuthService';
 export default {
   name: "HomeView",
   components: {
@@ -74,118 +258,265 @@ export default {
   },
   data() {
     return {
-      chartDataForVgosScreening: [],
-      chartDataForVgosMains: [],
-      chartDataForJobSeekerScreening: [],
-      chartDataForJobSeekrMains: [],
-
-      chartData: [
-        ["Level", "Passed", "Failed", "In Progress", "Yet To Be Assessed"],
-        ["Pre Primary", 1000, 400, 200, 200],
-        ["Primary", 1170, 460, 250, 200],
-        ["Secondary", 660, 1120, 300, 200],
-        ["Sr. Secondary", 1030, 540, 350, 200],
+      dataTypeItem: [
+        {
+          items: this.campaignList,
+          title: 'Campaigns',
+        },
+        {
+          items: this.schoolListList,
+          title: 'Schools',
+        },
       ],
+      campaignList: [],
+      schoolList:[],
+      userType: 'ALL',
+      userTypeArray: ['ALL','TEACHER','JOB_SEEKER'],
+      dataType: 'Default',
+      selectedCampaign: -1,
+      selectedSchool: -1,
+      period: 'Last 1 month',
+      date: new Date(),
+      NudgeData: [
+        {
+        title: "Total Sign Up",
+        value: 4500,
+        percentage: 0,
+        },
+        {
+        title: "Screening Cleared",
+        value: 450,
+        percentage: 0,
+        },
+        {
+        title: "Mains Cleared",
+        value: 4500,
+        percentage: 0,
+        },
+        {
+        title: "Demo Cleared",
+        value: 450,
+        percentage: 0,
+        },
+        {
+        title: "Interview Cleared",
+        value: 45,
+        percentage: 0,
+        },
+      ],
+      chartDataForConversion: [],
+      chartDataForInterview: [],
+      chartDataForSuccess: [],
+      chartDataForUsers: [],
+      chartDataForTimeToAnswer: [],
+      pieChartDataForConversion: [],
+      pieChartDataForPlatform: [],
+      chartData: [
+        ["Level","Screening", "Mains"],
+        ["Pre Primary", 70, 89],
+        ["Foundational",100, 65],
+        ["Preperatory", 70, 89],
+        ["Middle", 70, 89],
+        ["Secondary", 100, 13],
+        ["Sr. Secondary", 52, 89],
+      ],
+      pieChartData: [
+          ['Status', 'No of users'],
+          ['Selected', 62],
+          ['Maybe', 47],
+          ['Not Selected', 156],
+      ],
+      pieChartOptions: {
+        legend: { position: "right"},
+        colors: ["#06C270", "#FF9F0A", "#FF453A"],
+        height: 200,
+        width: 385,
+        pieHole: 0.75,
+        chartArea: {width: '100%', height: '100%'},
+        pieSliceTextStyle: {color: 'black', fontSize: 14},
+        pieSliceText: 'none',
+      },
       chartOptionsForVgosScreening: {
         //title: "VGOS Screening",
         curveType: "function",
-
-        legend: { position: "right" },
-        colors: ["#06C270", "#e0440e", "#0967C6", "grey"],
-
-        height: 300,
+        legend: { position: "top", alignment: "end" },
+        colors: ["#467BCA", "#FFB200"],
+        height: 200,
+        width: 385,
+        chartArea: {width: '80%', height: '50%', left: 50},
+        vAxis: {title: 'No. of users', titleTextStyle: {fontSize: 10, italic: false}},
+        hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}}
       },
-      chartOptionsForVgosMains: {
-        //title: "VGOS Mains",
+      chartOptionsForAvgTime: {
+        //title: "VGOS Screening",
         curveType: "function",
-        legend: { position: "right" },
-        colors: ["#06C270", "#e0440e", "#0967C6", "grey"],
-        height: 300,
+        legend: { position: "top", alignment: "end" },
+        colors: ["#467BCA", "#FFB200"],
+        height: 200,
+        width: 385,
+        chartArea: {width: '80%', height: '50%', left: 50},
+        vAxis: {title: 'Avg time', titleTextStyle: {fontSize: 10, italic: false}},
+        hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}},
+        isStacked: true,
       },
-      chartOptionsForJobSeekerScreening: {
-        //title: "Job Seekers Screening",
-        curveType: "function",
-
-        legend: { position: "right" },
-        colors: ["#06C270", "#e0440e", "#0967C6", "grey"],
-
-        height: 300,
-      },
-      chartOptionsForJobSeekerMains: {
-        //title: "Job Seekers Mains",
-        curveType: "function",
-        legend: { position: "right" },
-
-        colors: ["#06C270", "#e0440e", "#0967C6", "grey"],
-        height: 300,
-      },
+      payload: {
+        user_type: 'ALL',
+        campaign_id: -1,
+        school_id: -1,
+        start_date: null,
+        end_date: null,
+      }
     };
   },
   methods: {
-    async getDashboardData() {
-      const response = await ChartsController.getDashboardData();
-      if(response.data=='Unauthorized'){
-        AuthService.logout();
+    changeDataType (title,item) {
+      console.log(title, item);
+      if (title == 'Campaigns') {
+        this.payload.school_id = -1;
+        this.payload.campaign_id = item.id;
+        this.selectedCampaign = item.name;
+        this.selectedSchool = -1;
       }
-      console.log(response);
-      this.chartDataForVgosScreening = this.convertData(
-        response.data.data.teacher.screening
-      );
-      this.chartDataForVgosMains = this.convertData(
-        response.data.data.teacher.mains
-      );
-
-      this.chartDataForJobSeekerScreening = this.convertData(
-        response.data.data.job_seeker.screening
-      );
-      this.chartDataForJobSeekrMains = this.convertData(
-        response.data.data.job_seeker.mains
-      );
+      else if (title == 'Schools') {
+        this.payload.school_id = item.id;
+        this.payload.campaign_id = -1;
+        this.selectedCampaign = -1;
+        this.selectedSchool = item.name;
+      }
+      else {
+        this.payload.school_id = -1;
+        this.payload.campaign_id = -1;
+        this.selectedCampaign = -1;
+        this.selectedSchool = -1;
+      }
+      this.getDashboardData(this.payload);
     },
-    convertData(data) {
+    onClose () {
+      // this.period = 'Last 30 days'
+    },
+    onClickOk() {
+      this.payload.start_date = this.date.start;
+      this.payload.end_date = this.date.end;
+      this.getDashboardData(this.payload)
+    },
+    changePeriod() {
+      console.log(this.period)
+      if (this.period == 'Today') {
+        const end_date = new Date();
+        const current_date = new Date();
+        const start_date = new Date(current_date.setDate(current_date.getDate() - 1));
+        this.payload.start_date = JSON.stringify(start_date).slice(1,11),
+        this.payload.end_date = JSON.stringify(end_date).slice(1,11),
+        this.getDashboardData(this.payload)
+      }
+      else if (this.period == 'Last 7 days') {
+        const end_date = new Date();
+        const current_date = new Date();
+        const start_date = new Date(current_date.setDate(current_date.getDate() - 7));
+        this.payload.start_date = JSON.stringify(start_date).slice(1,11),
+        this.payload.end_date = JSON.stringify(end_date).slice(1,11),
+        this.getDashboardData(this.payload)
+      }
+      else if (this.period == 'Last 1 month') {
+        const end_date = new Date();
+        const current_date = new Date();
+        const start_date = new Date(current_date.setDate(current_date.getDate() - 30));
+        this.payload.start_date = JSON.stringify(start_date).slice(1,11),
+        this.payload.end_date = JSON.stringify(end_date).slice(1,11),
+        this.getDashboardData(this.payload)
+      }
+    },
+    changeUserType() {
+      this.payload.user_type = this.userTypeArray[this.userType];
+      this.getDashboardData(this.payload)
+    },
+    async getDashboardData(data) {
+      const response = await ChartsController.getDashboardData(data);
+      if (response.data.success) {
+      this.NudgeData[0].value = response.data.data.total_sign_up;
+      this.NudgeData[1].value = response.data.data.screening_cleared;
+      this.NudgeData[1].percentage = Math.round((response.data.data.screening_cleared / this.NudgeData[0].value)*100);
+      this.NudgeData[2].value = response.data.data.mains_cleared;
+      this.NudgeData[2].percentage = Math.round((response.data.data.mains_cleared / this.NudgeData[0].value)*100);
+      this.NudgeData[3].value = response.data.data.demo_cleared;
+      this.NudgeData[3].percentage = Math.round((response.data.data.demo_cleared / this.NudgeData[0].value)*100);
+      this.NudgeData[4].value = response.data.data.interview_cleared;
+      this.NudgeData[4].percentage = Math.round((response.data.data.interview_cleared / this.NudgeData[0].value)*100);
+
+      this.chartDataForInterview = this.convertData(
+        response.data.data.interview, ['Level','Demo', 'Interview']
+      );
+      this.chartDataForSuccess = this.convertData(
+        response.data.data.success, ['Level','Screening', 'Mains']
+      );
+      
+      this.chartDataForTimeToAnswer = this.convertData(
+        response.data.data.time_to_answer, ['Level','Screening', 'Mains']
+      );
+      this.chartDataForUsers = this.convertData(
+        response.data.data.users, ['Level','Screening', 'Mains']
+      );
+      this.pieChartDataForConversion = this.convertData(
+        response.data.data.conversion, ['Offer selection','Count']
+      );
+      this.pieChartDataForPlatform = this.convertData(
+        response.data.data.platform, ['Platform','Count']
+      );
+      }
+    },
+    convertData(data, labels) {
       const result = [
-        ["Level", "Passed", "Failed", "In Progress", "Yet To Be Assessed"],
+        [...labels],
       ];
-      const levels = {};
-
-      // iterate over each category of data
-      Object.keys(data).forEach((category) => {
-        // iterate over each item in the category and group by level name
-        data[category].forEach((item) => {
-          if(item.level!=null){
-            const levelName = item.level.name;
-          if (!levels[levelName]) {
-            levels[levelName] = {
-              passed: 0,
-              failed: 0,
-              in_progress: 0,
-              yet_to_be_assessed: 0,
-            };
-          }
-          levels[levelName][category] += parseInt(item.users);
-          }
-        });
+      data.forEach(element => {
+        const dummy = [];
+        Object.keys(element).forEach((k) => {
+          dummy.push(element[k]);
+        })
+        result.push(dummy);
       });
-
-      // add each level's data to the result array
-      Object.keys(levels).forEach((levelName) => {
-        const levelData = levels[levelName];
-        result.push([
-          levelName,
-          levelData.passed,
-          levelData.failed,
-          levelData.in_progress,
-          levelData.yet_to_be_assessed,
-        ]);
-      });
-
       return result;
     },
+
+    async getCampaign() {
+      const response = await ChartsController.getCampaign();
+
+      if (response.data.success) {
+        this.dataTypeItem[0].items = response.data.data;
+      }
+      else {
+        alert('Error fetching the data')
+      }
+    },
+
+    async getSchool() {
+      const response = await ChartsController.getSchool();
+
+      if (response.data.success) {
+        this.dataTypeItem[1].items = response.data.data;
+      }
+      else {
+        alert('Error fetching the data')
+      }
+    }
    
   },
 
   created() {
-    this.getDashboardData();
+    this.getDashboardData({});
+    this.getCampaign();
+    this.getSchool();
   },
 };
 </script>
+
+<style>
+.vd-menu__content {
+    top: 60px !important;
+    left: 1200px !important;
+}
+.v-menu__content {
+  max-height: 300px;
+  max-width: 400px;
+}
+</style>

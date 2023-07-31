@@ -32,13 +32,17 @@
                       <v-text-field outlined class="rounded-xl" v-model="password" label="Password*"
                         :rules="[v => (
                           !!v || isEditId > 0) || 'Password name is required',
-                          v => ( v && v.length >= 8 ) || 'This field must have atleast 8 characters']" required></v-text-field>
+                          v => ( v && v.length >= 8 ) || isEditId > 0 || 'This field must have atleast 8 characters']" required></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row class="ms-5 ">
                     <v-col cols="6">
                       <v-select :items="rolesList" v-model="role_id" label="Select Role*"  :rules="[v => !!v || 'Role is required']"  outlined class="rounded-xl" item-text="name" item-value="id"></v-select>
                     </v-col>
+                    <v-col cols="5">
+                      <v-select :items="schoolList" v-model="school_ids"   multiple type="checkbox" label="School List"  :rules="[v => !!v || 'School is required']"  outlined class="rounded-xl" item-text="name" item-value="id"></v-select>
+                    </v-col>
+                    
                   </v-row>
                   <v-row class="ms-5 end-row mb-5">
                     <v-col cols="8">
@@ -73,11 +77,14 @@
 
 <script>
 import AdminController from "@/controllers/AdminController";
+import SchoolController from "@/controllers/SchoolController";
 export default {
   name: "CreateAdminView",
   data() {
     return {
       rolesList: [],
+      schoolList:[],
+      school_ids: [],
       first: null,
       last: null,
       email: null,
@@ -96,6 +103,11 @@ export default {
       console.log(response);
       this.rolesList = response.data && response.data.data ? response.data.data : []; 
     },
+    async getSchool() {
+      let response = await SchoolController.getSchool({ compact: true });
+      this.schoolList = response.data && response.data.data ? response.data.data.rows : [];
+      console.log(response);
+    },
     async createUser() {
       if (this.$refs.form.validate()) {
         this.loading = true;
@@ -105,6 +117,8 @@ export default {
           email: this.email,
           password: this.password,
           role_id: this.role_id,
+          school_ids: this.school_ids,
+          school_name:this.school_name,
           loading: false,
           role_type: 'USER'
         };
@@ -122,6 +136,7 @@ export default {
           first: this.first,
           last: this.last,
           role_id: this.role_id,
+          school_ids: this.school_ids,
           loading: false,
           role_type: 'USER'
         };
@@ -149,11 +164,14 @@ export default {
       this.email = result.email;
       this.originEmail = result.email;
       this.role_id = result.role_id; 
+      this.school_ids = result.school_ids;
       this.isEditId = id;
     },
+   
     redirectToHome() {
       window.location.href = '/#/admins'
     }
+    
   },
   created() {
 
@@ -161,6 +179,7 @@ export default {
     if (this.$route.params.id) {
       this.getSingleUser(this.$route.params.id);
     }
+    this.getSchool();
   },
 };
 </script>

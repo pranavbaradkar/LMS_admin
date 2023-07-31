@@ -6,7 +6,7 @@
 
     <v-main class="secondary">
       
-      <v-app-bar
+      <!-- <v-app-bar
         elevation="0"
         class="ml-8 mr-4 mt-4 white d-flex justify-end rounded-xl"
         v-if="this.$route.name != 'login'"
@@ -35,7 +35,7 @@
           <v-btn style="min-width: 100%;" @click="logout">logout</v-btn>
         </v-menu>
         
-      </v-app-bar>
+      </v-app-bar> -->
       <router-view> </router-view>
     </v-main>
   </v-app>
