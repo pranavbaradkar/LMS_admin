@@ -7,8 +7,8 @@
             <v-btn
               class="primary"
               large
-              rounded
-              color="primary"
+              rounded-lg
+             
               dark
               v-bind="attrs"
               v-on="on"
@@ -37,10 +37,7 @@
       <v-col cols="8" sm="8" md="8">
         <v-row justify="end">
           <!-- <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn> -->
-          <v-btn
-            class="primary mx-2"
-            rounded
-            :disabled="selected.length == 0"
+          <v-btn class="primary white--text mx-2" rounded-lg :disabled="selected.length == 0"
             ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
           >
           <!-- <v-btn
@@ -50,14 +47,14 @@
             :disabled="selected.length == 0"
             ><v-icon>mdi-email-sync-outline</v-icon>Resend Invite</v-btn
           > -->
-          
-          <v-btn class="primary mx-2" rounded
+
+          <v-btn class="primary white--text mx-2" rounded-lg
             ><v-icon>mdi-export</v-icon>Export</v-btn
           >
         </v-row>
       </v-col>
     </v-row>
-    
+
     <v-data-table
       v-model="selected"
       :headers="headers"
@@ -88,10 +85,12 @@
             src="../assets/edit.svg"
           />
           <img
-            @click="() => {
-              deleteDialog = true
-              selected = item
-            }"
+            @click="
+              () => {
+                deleteDialog = true;
+                selected = item;
+              }
+            "
             width="36px"
             height="36"
             class="cursor"
@@ -109,13 +108,14 @@
 
     <!-- Success Dialog -->
 
-
     <v-dialog v-model="deleteDialog" max-width="366px" persistent>
       <v-card fluid>
         <v-container fluid class="pa-0">
           <v-card-text class="text-center">
             <v-container></v-container>
-            <v-avatar color="secondary" size="90"><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar>
+            <v-avatar color="secondary" size="90"
+              ><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar
+            >
             <p class="text-h5 pt-6 pb-0">Delete Admin User</p>
             <p
               class="text-disabled grey--text text-subtitle-1 pt-3"
@@ -155,11 +155,7 @@
         </v-container>
       </v-card>
     </v-dialog>
-    
   </v-container>
-
-  
-
 </template>
 <script>
 import "../styles.css";
@@ -180,7 +176,7 @@ export default {
       deleteDialog: false,
       users: [],
       selected: {},
-      search:"",
+      search: "",
       headers: [
         { text: "Full Name", value: "first", cellClass: "w-10" },
         { text: "Email ID", value: "email", cellClass: "w-15" },
@@ -188,15 +184,14 @@ export default {
         { text: "Status", value: "status", cellClass: "w-15" },
         { text: "Role", value: "role", cellClass: "w-15" },
         { text: "Actions", value: "actions", cellClass: "w-10" },
-      ]
+      ],
     };
   },
- 
+
   methods: {
     getDate(timeStamp) {
       return new Date(timeStamp).toString().substring(0, 16);
     },
-  
 
     async getUsers() {
       const response = await AdminController.getUsers();
@@ -205,8 +200,8 @@ export default {
       console.log(this.users);
     },
     redirectToEdit(item) {
-      window.location.href=`/#/admin/edit/${item.id}`
-    },  
+      window.location.href = `/#/admin/edit/${item.id}`;
+    },
     formbtn() {
       return this.formbtnBool === false ? "Create" : "Update";
     },
@@ -214,7 +209,7 @@ export default {
     async deleteUser() {
       var response;
       // if (items.length == 1) {
-        response = await AdminController.deleteUser(this.selected.id);
+      response = await AdminController.deleteUser(this.selected.id);
       // } else {
       //   var ids = "";
 
@@ -233,8 +228,6 @@ export default {
       this.getUsers();
       this.deleteDialog = false;
     },
-
-
   },
 
   created() {

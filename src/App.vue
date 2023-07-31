@@ -5,48 +5,45 @@
     </div>
 
     <v-main class="secondary">
-      
       <v-app-bar
         elevation="0"
         class="ml-8 mr-4 mt-4 white d-flex justify-end rounded-xl"
         v-if="this.$route.name != 'login'"
       >
-
-
         <v-icon class="pa-2">mdi-bell-outline</v-icon>
-
-
-
-
-
 
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <div  v-on="on"> 
-            <v-btn color="primary" dark  v-bind="attrs"  text icon>
-              <v-avatar>
-                <v-icon class="pa-2">mdi-account-outline</v-icon> 
-              </v-avatar>
-            </v-btn>
-            {{ user.email }}
-          </div>
-            
+            <div v-on="on">
+              <v-btn color="primary" dark v-bind="attrs" text icon>
+                <v-avatar>
+                  <v-icon class="pa-2">mdi-account-outline</v-icon>
+                </v-avatar>
+              </v-btn>
+              {{ user.email }}
+            </div>
           </template>
-          <v-btn style="min-width: 100%;" @click="logout">logout</v-btn>
+          <v-btn style="min-width: 100%" @click="logout">logout</v-btn>
         </v-menu>
-        
       </v-app-bar>
       <router-view> </router-view>
     </v-main>
   </v-app>
 </template>
-<script type="text/javascript" rel="script" src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script> 
+<script
+  type="text/javascript"
+  rel="script"
+  src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"
+></script>
 
 <script>
-
 import NavDrawer from "./components/NavDrawer.vue";
 import AuthService from "./services/AuthService";
-CKEDITOR.plugins.addExternal('ckeditor_wiris', 'https://www.wiris.net/demo/plugins/ckeditor/', 'plugin.js');
+CKEDITOR.plugins.addExternal(
+  "ckeditor_wiris",
+  "https://www.wiris.net/demo/plugins/ckeditor/",
+  "plugin.js"
+);
 
 export default {
   name: "App",
@@ -56,7 +53,7 @@ export default {
   computed: {
     user() {
       return AuthService.getLoggedUser();
-    }
+    },
   },
   data() {
     return {
@@ -68,29 +65,28 @@ export default {
       index: 0,
       items: [
         {
-          text: 'Dashboard',
+          text: "Dashboard",
           disabled: false,
-          href: 'breadcrumbs_dashboard',
+          href: "breadcrumbs_dashboard",
         },
         {
-          text: 'Link 1',
+          text: "Link 1",
           disabled: false,
-          href: 'breadcrumbs_link_1',
+          href: "breadcrumbs_link_1",
         },
         {
-          text: 'Link 2',
+          text: "Link 2",
           disabled: true,
-          href: 'breadcrumbs_link_2',
+          href: "breadcrumbs_link_2",
         },
       ],
-    }
-
+    };
   },
   methods: {
-      logout() {
+    logout() {
       AuthService.logout();
       this.$router.push("/login");
-    }
-    }
+    },
+  },
 };
 </script>

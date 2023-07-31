@@ -2,7 +2,7 @@
   <v-container fluid class="pa-8">
     <v-row>
       <v-col class="d-flex align-center">
-        <v-btn to="/role/create" class="primary" large rounded
+        <v-btn to="/role/create" class="primary white--text" large rounded-lg
           ><v-icon>mdi-plus</v-icon>Create Role</v-btn
         >
       </v-col>
@@ -23,12 +23,12 @@
       <v-col>
         <v-row justify="end">
           <v-btn
-            class="primary mx-2"
+            class="primary white--text mx-2"
             :disabled="selected.length == 0"
-            rounded
+            rounded-lg
             @click="deleteDialog = true"
             ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-          ><v-btn class="primary mx-2" rounded
+          ><v-btn class="primary white--text mx-2" rounded-lg
             ><v-icon>mdi-export</v-icon>Export</v-btn
           >
         </v-row>

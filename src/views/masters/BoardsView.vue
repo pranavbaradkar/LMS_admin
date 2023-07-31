@@ -1,12 +1,23 @@
 <template>
   <v-container fluid class="pa-8">
-    <v-row>
+    <v-row justify="space-between">
       <v-col>
-        <v-btn v-if="(user_permission.master && user_permission.master.child.boards && user_permission.master.child.boards.create) || user.role_type == 'SUPER_ADMIN'"
+        <div class="text-h5">Boards</div>
+      </v-col>
+    </v-row>
+    <v-row style="align-items: center">
+      <v-col class="mb-1">
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.boards &&
+              user_permission.master.child.boards.create) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
           @click="(dialog = true), newCreateBoards()"
-          class="primary"
+          class="background_btn white--text"
           large
-          rounded
+          rounded-lg
           ><v-icon>mdi-plus</v-icon>Create Board</v-btn
         >
         <v-dialog max-width="887px" v-model="dialog" center>
@@ -83,7 +94,8 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   rounded
-                  width="102px" height="48px"
+                  width="102px"
+                  height="48px"
                   outlined
                   class="pa-4"
                   @click="
@@ -95,13 +107,13 @@
                   >Cancel</v-btn
                 >
                 <v-btn
-               
                   rounded
-                  width="102px" height="48px"
+                  width="102px"
+                  height="48px"
                   @click="getPreSignedUrl"
                   :loading="loading"
                   class="primary pa-4"
-                  :disabled="selectedFile==null"
+                  :disabled="selectedFile == null"
                   >{{ formbtn() }}</v-btn
                 >
               </v-card-actions>
@@ -111,32 +123,28 @@
           <!---------------------- subject upload section starts here --------------------------->
         </v-dialog>
       </v-col>
-      <v-col cols="4">
+      <v-col class="d-flex" style="align-items: center">
         <v-text-field
           label="Search"
           prepend-inner-icon="mdi-magnify"
           v-model="searchBoards"
           clearable
-        ></v-text-field
-      ></v-col>
-    </v-row>
-    <v-row justify="space-between" class="my-4">
-      <v-col>
-        <div class="text-h5">Boards</div>
-      </v-col>
-
-      <v-col>
-        <v-row justify="end">
-          <v-btn v-if="(user_permission.master && user_permission.master.child.boards && user_permission.master.child.boards.delete) || user.role_type == 'SUPER_ADMIN'"
-            class="primary mx-2"
-            rounded
-            :disabled="selected.length == 0"
-            @click="deleteDialog = true"
-            ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-          ><v-btn class="primary mx-2" rounded
-            ><v-icon>mdi-export</v-icon>Export</v-btn
-          >
-        </v-row>
+        ></v-text-field>
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.boards &&
+              user_permission.master.child.boards.delete) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          class="background_btn white--text mx-2"
+          rounded-lg
+          :disabled="selected.length == 0"
+          @click="deleteDialog = true"
+          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+        ><v-btn class="background_btn white--text mx-2" rounded-lg
+          ><v-icon>mdi-export</v-icon>Export</v-btn
+        >
       </v-col>
     </v-row>
 
@@ -149,21 +157,30 @@
       :search="search"
       :options.sync="options"
       :footer-props="{
-      itemsPerPageOptions: [5, 10, 20, 50,100]
-      }"  
-      :server-items-length="count" 
+        itemsPerPageOptions: [5, 10, 20, 50, 100],
+      }"
+      :server-items-length="count"
     >
       <template v-slot:[`item.created_at`]="{ item }">
         {{ getDate(item.created_at) }}
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn v-if="(user_permission.master && user_permission.master.child.boards && user_permission.master.child.boards.update) || user.role_type == 'SUPER_ADMIN'"
-         icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.boards &&
+              user_permission.master.child.boards.update) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          icon
+          class="mr-2 pa-4"
+          @click="updateData(item)"
+        >
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
 
-      <template v-slot:[`item.boardIcon`]="{item}">
+      <template v-slot:[`item.boardIcon`]="{ item }">
         <v-img
           height="30px"
           width="30px"
@@ -202,7 +219,7 @@
                 @click="deleteDialog = false"
                 >CANCEL</v-btn
               >
-              <v-btn 
+              <v-btn
                 class="black white--text"
                 depressed
                 large
@@ -242,7 +259,7 @@
         <v-container fluid class="pa-8">
           <v-card-text class="text-center">
             <v-icon color="#228B22" size="96">mdi-check-circle-outline</v-icon>
-            <p class="text-h5 py-4">Board {{ formbtnValue()}}</p>
+            <p class="text-h5 py-4">Board {{ formbtnValue() }}</p>
             <v-btn
               class="primary"
               large
@@ -276,9 +293,9 @@ export default {
       dialogTitle: "Dialog Title",
       input1: "",
       input2: "",
-      preSignedUrl:'',
+      preSignedUrl: "",
       name: null,
-      selectedFile:null,
+      selectedFile: null,
       loading: false,
       singleSelect: false,
       iconURl: "NA",
@@ -290,8 +307,8 @@ export default {
       image: "",
       editId: null,
       formbtnBool: false,
-      searchBoards:'',
-      searchBool:false,
+      searchBoards: "",
+      searchBool: false,
       headers: [
         { text: "Board Icon", value: "boardIcon" },
         { text: "Board Name", value: "name" },
@@ -307,7 +324,7 @@ export default {
     },
     user_permission() {
       return AuthService.getPermissions();
-    }
+    },
   },
   watch: {
     options: {
@@ -315,33 +332,33 @@ export default {
         console.log(this.options);
         this.pageSize = this.options.itemsPerPage;
         this.page = this.options.page;
-        if(this.searchBool){
+        if (this.searchBool) {
           this.searchData(this.searchBoards);
-        }else{
+        } else {
           this.getBoards();
         }
       },
       deep: true,
     },
-    searchBoards(newValue){
+    searchBoards(newValue) {
       console.log(newValue);
-        this.searchBool=true
-        this.pageSize = this.options.itemsPerPage;
-        this.page = this.options.page;
-        this.options.page=1;
-        this.searchData(newValue);
-        if(newValue=="" || newValue==null){
-          this.getBoards();
-          this.searchBool=false;
-        }
-    }
+      this.searchBool = true;
+      this.pageSize = this.options.itemsPerPage;
+      this.page = this.options.page;
+      this.options.page = 1;
+      this.searchData(newValue);
+      if (newValue == "" || newValue == null) {
+        this.getBoards();
+        this.searchBool = false;
+      }
+    },
   },
   methods: {
-    async searchData(search){
+    async searchData(search) {
       const response = await BoardController.searchBoard(
         this.pageSize,
         this.page,
-        search,
+        search
       );
       console.log(response.data);
       console.log(this.searchBool);
@@ -356,7 +373,7 @@ export default {
       this.formbtnBool = true; // change update/create btn value
       this.dialog = true;
       this.name = item.name;
-      this.image=item.logo
+      this.image = item.logo;
     },
 
     formbtn() {
@@ -367,16 +384,15 @@ export default {
     },
     async newCreateBoards() {
       this.name = null;
-      this.formbtnBool=false;
-      this.selectedFile=null;
-      this.image=null
-
+      this.formbtnBool = false;
+      this.selectedFile = null;
+      this.image = null;
     },
 
     async saveInputs() {
       if (this.$refs.form.validate()) {
-        console.log("valiadhd")
-  
+        console.log("valiadhd");
+
         var res;
         this.loading = true;
         // checking case for update/create
@@ -409,7 +425,7 @@ export default {
           this.errorMessage = res.data.error;
         }
         this.getBoards();
-        this.name='';
+        this.name = "";
         this.removeFile();
       }
     },
@@ -452,7 +468,6 @@ export default {
       this.boardData = response.data.data;
       this.tableData = this.boardData.rows;
       this.count = response.data.data.count;
-
     },
 
     onDrop: function (e) {
@@ -464,7 +479,6 @@ export default {
     onChange(e) {
       this.selectedFile = e.target.files[0];
       this.createFile(this.selectedFile);
-
     },
     createFile(file) {
       if (!file.type.match("image.*")) {
@@ -479,11 +493,10 @@ export default {
         vm.image = e.target.result;
       };
       reader.readAsDataURL(file);
-
     },
     removeFile() {
       this.image = "";
-      this.iconURl="";
+      this.iconURl = "";
     },
     async getPreSignedUrl() {
       this.loading = true;
@@ -497,7 +510,7 @@ export default {
         uuid: "123-456-7",
       });
       this.preSignedUrl = response.data.data.signed_request;
-      this.iconURl=response.data.data.url;
+      this.iconURl = response.data.data.url;
       this.uploadToS3();
     },
     async uploadToS3() {

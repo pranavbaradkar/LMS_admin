@@ -11,9 +11,9 @@
               isEdit = false;
             }
           "
-          class="primary"
+          class="primary white--text"
           large
-          rounded
+          rounded-lg
           elevation="0"
           ><v-icon>mdi-plus</v-icon>Create Assessment</v-btn
         >
@@ -106,7 +106,7 @@
           class="ma-0 pa-0"
           prepend-inner-icon="mdi-magnify"
         ></v-text-field>
-        <v-btn class="primary ml-2" rounded>
+        <v-btn class="primary white--text ml-2" rounded-lg>
           <v-icon>mdi-tune</v-icon>Filter</v-btn
         >
       </v-col>
@@ -120,10 +120,10 @@
       </v-col>
       <v-col cols="8" sm="8" class="d-flex justify-end">
         <div>
-          <v-btn class="primary mx-2" rounded @click="filterDialog = true"
+          <v-btn class="primary white--text mx-2" rounded-lg @click="filterDialog = true"
             ><v-icon>mdi-tune</v-icon>Filter</v-btn
           >
-          <v-btn class="primary mx-2" rounded
+          <v-btn class="primary white--text mx-2" rounded-lg
             ><v-icon>mdi-export</v-icon>Export</v-btn
           >
         </div>

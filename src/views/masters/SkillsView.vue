@@ -4,9 +4,9 @@
       <v-col>
         <v-btn v-if="(user_permission.master && user_permission.master.child.skills && user_permission.master.child.skills.create)  || user.role_type== 'SUPER_ADMIN'"
           @click="(dialog = true), newCreateSkills()"
-          class="primary"
+          class="background_btn white--text"
           large
-          rounded
+          rounded-lg
           ><v-icon>mdi-plus</v-icon>Create Skill</v-btn
         >
         <v-dialog max-width="887px" v-model="dialog" center>
@@ -192,15 +192,15 @@
 
       <v-col>
         <v-row justify="end">
-          <v-btn class="primary mx-2" rounded @click="filterDialog = true"
+          <v-btn class="background_btn white--text mx-2" rounded-lg @click="filterDialog = true"
             ><v-icon>mdi-tune</v-icon>Filter</v-btn
           ><v-btn v-if="(user_permission.master && user_permission.master.child.skills && user_permission.master.child.skills.delete)  || user.role_type== 'SUPER_ADMIN'"
-            class="primary mx-2"
-            rounded
+            class="background_btn white--text mx-2"
+            rounded-lg
             :disabled="selected.length == 0"
             @click="deleteDialog = true"
             ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-          ><v-btn class="primary mx-2" rounded
+          ><v-btn class="background_btn white--text mx-2" rounded-lg
             ><v-icon>mdi-export</v-icon>Export</v-btn
           >
           <v-dialog v-model="deleteDialog" max-width="366px" persistent>
