@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-8 secondary">
-    <v-row>
-      <v-col class="d-flex align-center">
+    <v-row cols="12" sm="12" md="" class="ma-0 pa-0 ">
+      <v-col cols="8" class="d-flex align-center">
         <v-btn
           v-if="((user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.create) || user.role_type == 'SUPER_ADMIN') && !showUsers"
           @click="() => {
@@ -68,15 +68,45 @@
 
     <!-- Assessment row and fiter and export btn -->
 
-    <v-row justify="space-between" class="my-0" v-if="!showUsers">
+    <!-- <v-row justify="space-between" class="my-0" v-if="!showUsers">
       <v-col cols="4" sm="4" md="4">
         <div class="text-h5 ml-4">Assessments</div>
       </v-col>
-      <v-col cols="8" sm="8" class="d-flex justify-end">
+      
+    </v-row> -->
+
+    <v-row cols="12" sm="12" md="" class="ma-0 pa-0 f-flex align-center" v-if="!showUsers">
+      <v-col cols="6" sm="6" class="d-flex justify-end">
+        <div class="m-tab">
+          <v-tabs
+            background-color="#0000000D"
+            class="ml-2 d-flex space-evenly tab-style"
+            height="38"
+            hide-slider
+          >
+            <v-tab
+              active-class=" white ma-1 black--text text-transform-cap"
+              class="rounded  text-transform-cap"
+              v-on:click="onClickRecommendation('TEACHER')"
+            >
+              Screening
+            </v-tab>
+
+            <v-tab
+              active-class=" white ma-1 black--text "
+              class="rounded text-transform-cap"
+              v-on:click="onClickRecommendation('JOB_SEEKER')"
+            >
+              Mains
+            </v-tab>
+          </v-tabs>
+        </div>
+      </v-col>
+      <v-col cols="6" sm="6" class="d-flex justify-end">
         <div>
 
-          <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn>
-          <v-btn class="primary mx-2" rounded><v-icon>mdi-export</v-icon>Export</v-btn>
+          <v-btn class="purple-button-light lightPurple purple-button-light-height-large mx-2"  elevation="0" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn>
+          <v-btn class="purple-button-light lightPurple purple-button-light-height-large mx-2" elevation="0" rounded><v-icon>mdi-export</v-icon>Export</v-btn>
         </div>
       </v-col>
     </v-row>
@@ -89,14 +119,14 @@
         </div>
       </v-col>
 
-      <v-col cols="8" sm="8" class="d-flex justify-end align-center">
+      <!-- <v-col cols="8" sm="8" class="d-flex justify-end align-center">
         <v-icon color="#06C270CC" class="mr-2 ml-4">mdi-circle</v-icon> Cleared
         <v-icon class="mr-2 ml-4" color="#1B72E8B2">mdi-circle</v-icon> In
         progress
         <v-icon class="mr-2 ml-4" color="#FF9501CC">mdi-circle</v-icon> Not
         Cleared<v-icon class="mr-2 ml-4" color="#0000001F">mdi-circle</v-icon>
         Yet to attempt
-      </v-col>
+      </v-col> -->
     </v-row>
 
     <!------------------------------------------ Assessment card here---------------------------- -->

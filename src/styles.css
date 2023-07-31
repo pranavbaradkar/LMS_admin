@@ -765,15 +765,26 @@ color: #4D4D4D;
 }
 
 
-.v-application .purple-button-light {
+.v-application .purple-button-light,
+.v-application .v-btn.purple-button-light {
   color: #5746AF !important;
-  background-color: #F5F2FF !important;
+  background-color: #F5F2FF;
   font-size: 16px;
+  text-transform: capitalize;
   font-weight: 400;
   padding-left: 20px !important;
   padding-right: 20px !important;
   height: 40px;
   border-radius: 4px;
+}
+
+.v-application .purple-button-light-height-large,
+.v-application .v-btn.purple-button-light-height-large {
+  height: 48px;
+}
+
+.text-transform-cap {
+  text-transform: capitalize !important;
 }
 
 .v-application .grey-color-application {
@@ -786,6 +797,11 @@ text-transform: capitalize;
 }
 .v-chip-custom {
   height: 24px;
+}
+.tab-style .v-slide-group {
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.05) inset, 0px 0px 4px 0px rgba(0, 0, 0, 0.05) inset, 0px 0px 2px 0px rgba(0, 0, 0, 0.05) inset;
 }
 .v-application .font-weight-400 {
   font-weight: 400;
