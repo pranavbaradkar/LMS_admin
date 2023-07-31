@@ -107,6 +107,7 @@
           <img src="../assets/radar.svg" alt="question Icon" />
           Live
         </v-chip>
+       
         <v-card-title class="pa-0">
           <div style="width: 100%;" class="d-flex justify-space-between">
             <div>
@@ -169,7 +170,7 @@
 
           </div>
         </div>
-        <v-divider class="mb-4 mt-2"></v-divider>
+        <v-divider class="mt-2"></v-divider>
         <!-- Assessment type -->
       </v-card>
     </div>
@@ -196,7 +197,6 @@
                 v-if="((user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.update) || user.role_type == 'SUPER_ADMIN')"
                 fab color="white" style="width: 32px; height: 32px;"
                 @click="getAssesmentDetails(assessment, assessment.id)" depressed>
-                <v-icon>mdi-pencil</v-icon>
               </v-btn>
 
               <v-btn
@@ -205,7 +205,6 @@
                   deleteDialog = true
                   selectedId = assessment.id;
                 }" depressed>
-                <v-icon color="red">mdi-delete-outline</v-icon>
               </v-btn>
             </div>
           </div>
@@ -226,20 +225,26 @@
             <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
             <div class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 ">
               <div class="assessmentIconColor">
-                <v-icon class="pr-0 ">mdi-help-circle-outline</v-icon>{{ data.total_no_of_questions }} Questions
+                <img src="../assets/marks.svg" alt="question Icon" />
+                {{ data.total_no_of_questions }} Questions
+              </div>
+              
+              <div class="assessmentIconColor">
+                <img src="../assets/question.svg" alt="question Icon" />
+                {{ formatTime(data.duration_of_assessment) }}
               </div>
               <div class="assessmentIconColor">
-                <v-icon class="pr-0 pl-4">mdi-clock-outline</v-icon>{{ formatTime(data.duration_of_assessment) }}
-              </div>
-              <div class="assessmentIconColor">
-                <v-icon class="pr-0 pl-4">mdi-alpha-a-circle-outline</v-icon>{{ data.correct_score_answer }} marks
+                <img src="../assets/clock.svg" alt=" clock Icon" />
+                {{ data.correct_score_answer }} marks
               </div>
             </div>
           </div>
-          <div class="d-flex justify-end">
+          <div class="d-flex">
             <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor" @click="assessment.status == 'PENDING' ? getAssesmentDetails(assessment, data.assessment_id) :
               showDialog(data.assessment_id)">
-              {{ assessment.status == 'PENDING' ? 'CREATE' : 'APPROVE' }}
+              {{ assessment.status == 'PENDING' ? 'CREATE' : 'Publish' }}
+              <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
+              <img src="../assets/trash.svg" alt="Edit Icon" />
             </v-card-title>
           </div>
         </div>
