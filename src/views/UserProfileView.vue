@@ -92,7 +92,7 @@
                 :key="`${key}-scr`" class="col-6">
                 <div class="skill" :class="`color-${index+1}`">
                   <div class="skill-title">{{ key }} </div>
-                  <div class="skill-score">{{value}}/10</div>
+                  <div class="skill-score">{{value}}/{{ screeningData.skill_total && screeningData.skill_total[index] ? screeningData.skill_total[index] : 0 }}</div>
                 </div>
               </div>
             </div>
@@ -127,7 +127,7 @@
                 :key="`${key}-scr`" class="col-4">
                 <div class="skill" :class="`color-${index+1}`">
                   <div class="skill-title">{{ key }} </div>
-                  <div class="skill-score">{{value}}/10</div>
+                  <div class="skill-score">{{value}}/{{ mainsData.skill_total && mainsData.skill_total[index] ? mainsData.skill_total[index] : 0 }}</div>
                 </div>
               </div>
               
@@ -160,7 +160,7 @@
                     <div class="failed-badge" v-if="value.status == 'DISAGREE'"><i class="dot me-2" />Demo Video Not Selected </div>
                     <div class="warning-badge" v-if="value.status == 'PENDING'"><i class="dot me-2" />Demo Video Pending</div>
                     <div class="warning-badge" v-if="value.status == 'SUBMITTED'"><i class="dot me-2" />Demo Video Submitted </div>
-                    <div class="profile-title">{{ value.assessment.name }} </div>
+                    <div class="profile-title">Demo Video</div>
                   </div>
                   
                   <div>
@@ -482,6 +482,7 @@ export default {
             }
             
           }
+          this.mainsData.skill_total.splice(1, 0, 112);
         }
         console.log(this.userData,this.screeningData, this.mainsData);
 
