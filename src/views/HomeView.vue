@@ -38,12 +38,56 @@
           </v-tabs>
             </div>
             <div class="ml-6">
-              <v-select
-                style="width: 100px;"
-                :items="['Default', 'Campaign', 'School']"
-                dense
-                v-model="dataType"
-              ></v-select>
+              <div style="font-size: 10px; font-weight: 500">
+                Select Campaigns/Schools
+              </div>
+              <v-menu :close-on-content-click="false" ref="menuRef" class="dropDown" location="bottom">
+      <template v-slot:activator="{}">
+        <div @click="() => {$refs.menuRef.isActive = true}" style="cursor: pointer;">
+          {{ selectedCampaign != -1 ? selectedCampaign : selectedSchool != -1 ? selectedSchool : 'Default' }}
+        </div>
+      </template>
+      <v-list height="100%">
+      <v-list-item @click="() => {
+        $refs.menuRef.isActive = false;
+        changeDataType('Default', null)
+        }">
+        <v-list-item-content>
+          <v-list-item-title v-text="'Default'"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-group
+        v-for="item in dataTypeItem"
+        :key="item.title"
+        v-model="item.active"
+        no-action
+      >
+        <template v-slot:activator>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+        <v-list-item
+          v-for="child in item.items"
+          :key="child.title"
+          style="height: 100%; padding-left: 4px"
+          @click="() => {
+            $refs.menuRef.isActive = false;
+            changeDataType(item.title,child)
+          }"
+        >
+          <v-list-item-avatar>
+            <v-icon v-if="item.title == 'Campaigns'">mdi-alpha-c-circle</v-icon>
+            <v-icon v-if="item.title == 'Schools'">mdi-alpha-s-circle</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-text="child.name"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-group>
+    </v-list>
+    </v-menu>
             </div>
           </div>
 
@@ -68,8 +112,8 @@
                     v-if="period == 'Custom'"
                     :visible="period == 'Custom'"
                     range
-    @onChange="onClickOk('-- date changed --')"
-    @onClose="onClose('-- datepicker closed --')"
+    @onChange="onClickOk()"
+    @onClose="onClose()"
                     validate
                     :locale="{lang: 'en'}"
                     placeholder="Custom"/>
@@ -80,7 +124,11 @@
       <v-row class="pl-4" style="margin-top: -28px;">
         <v-col v-for="(item,index) in NudgeData" :key="index" class="white d-flex justify-start flex-row mr-4 rounded-xl pa-4">
           <div style="height: 48px; width: 48px;" class="mr-4">
-
+            <v-img v-if="index == 0" src="@/assets/signup.svg"></v-img>
+            <v-img v-if="index == 1" src="@/assets/screening_c.svg"></v-img>
+            <v-img v-if="index == 2" src="@/assets/mains_c.svg"></v-img>
+            <v-img v-if="index == 3" src="@/assets/demo_c.svg"></v-img>
+            <v-img v-if="index == 4" src="@/assets/demo_c.svg"></v-img>
           </div>
           <div>
             <div style="font-size: 12px; font-weight: 500;">
@@ -210,9 +258,23 @@ export default {
   },
   data() {
     return {
+      dataTypeItem: [
+        {
+          items: this.campaignList,
+          title: 'Campaigns',
+        },
+        {
+          items: this.schoolListList,
+          title: 'Schools',
+        },
+      ],
+      campaignList: [],
+      schoolList:[],
       userType: 'ALL',
       userTypeArray: ['ALL','TEACHER','JOB_SEEKER'],
       dataType: 'Default',
+      selectedCampaign: -1,
+      selectedSchool: -1,
       period: 'Last 1 month',
       date: new Date(),
       NudgeData: [
@@ -297,18 +359,45 @@ export default {
         hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}},
         isStacked: true,
       },
+      payload: {
+        user_type: 'ALL',
+        campaign_id: -1,
+        school_id: -1,
+        start_date: null,
+        end_date: null,
+      }
     };
   },
   methods: {
+    changeDataType (title,item) {
+      console.log(title, item);
+      if (title == 'Campaigns') {
+        this.payload.school_id = -1;
+        this.payload.campaign_id = item.id;
+        this.selectedCampaign = item.name;
+        this.selectedSchool = -1;
+      }
+      else if (title == 'Schools') {
+        this.payload.school_id = item.id;
+        this.payload.campaign_id = -1;
+        this.selectedCampaign = -1;
+        this.selectedSchool = item.name;
+      }
+      else {
+        this.payload.school_id = -1;
+        this.payload.campaign_id = -1;
+        this.selectedCampaign = -1;
+        this.selectedSchool = -1;
+      }
+      this.getDashboardData(this.payload);
+    },
     onClose () {
       // this.period = 'Last 30 days'
     },
     onClickOk() {
-      this.getDashboardData({
-        start_date: this.date.start,
-        end_date: this.date.end,
-        user_type: this.userTypeArray[this.userType]
-      })
+      this.payload.start_date = this.date.start;
+      this.payload.end_date = this.date.end;
+      this.getDashboardData(this.payload)
     },
     changePeriod() {
       console.log(this.period)
@@ -316,36 +405,30 @@ export default {
         const end_date = new Date();
         const current_date = new Date();
         const start_date = new Date(current_date.setDate(current_date.getDate() - 1));
-        this.getDashboardData({
-          start_date: JSON.stringify(start_date).slice(1,11),
-          end_date: JSON.stringify(end_date).slice(1,11),
-          user_type: this.userTypeArray[this.userType]
-        })
+        this.payload.start_date = JSON.stringify(start_date).slice(1,11),
+        this.payload.end_date = JSON.stringify(end_date).slice(1,11),
+        this.getDashboardData(this.payload)
       }
       else if (this.period == 'Last 7 days') {
         const end_date = new Date();
         const current_date = new Date();
         const start_date = new Date(current_date.setDate(current_date.getDate() - 7));
-
-        this.getDashboardData({
-          start_date: JSON.stringify(start_date).slice(1,11),
-          end_date: JSON.stringify(end_date).slice(1,11),
-          user_type: this.userTypeArray[this.userType]
-        })
+        this.payload.start_date = JSON.stringify(start_date).slice(1,11),
+        this.payload.end_date = JSON.stringify(end_date).slice(1,11),
+        this.getDashboardData(this.payload)
       }
       else if (this.period == 'Last 1 month') {
         const end_date = new Date();
         const current_date = new Date();
         const start_date = new Date(current_date.setDate(current_date.getDate() - 30));
-        this.getDashboardData({
-          start_date: JSON.stringify(start_date).slice(1,11),
-          end_date: JSON.stringify(end_date).slice(1,11),
-          user_type: this.userTypeArray[this.userType]
-        })
+        this.payload.start_date = JSON.stringify(start_date).slice(1,11),
+        this.payload.end_date = JSON.stringify(end_date).slice(1,11),
+        this.getDashboardData(this.payload)
       }
     },
     changeUserType() {
-      this.getDashboardData({user_type: this.userTypeArray[this.userType]})
+      this.payload.user_type = this.userTypeArray[this.userType];
+      this.getDashboardData(this.payload)
     },
     async getDashboardData(data) {
       const response = await ChartsController.getDashboardData(data);
@@ -394,11 +477,35 @@ export default {
       });
       return result;
     },
+
+    async getCampaign() {
+      const response = await ChartsController.getCampaign();
+
+      if (response.data.success) {
+        this.dataTypeItem[0].items = response.data.data;
+      }
+      else {
+        alert('Error fetching the data')
+      }
+    },
+
+    async getSchool() {
+      const response = await ChartsController.getSchool();
+
+      if (response.data.success) {
+        this.dataTypeItem[1].items = response.data.data;
+      }
+      else {
+        alert('Error fetching the data')
+      }
+    }
    
   },
 
   created() {
     this.getDashboardData({});
+    this.getCampaign();
+    this.getSchool();
   },
 };
 </script>
@@ -407,5 +514,9 @@ export default {
 .vd-menu__content {
     top: 60px !important;
     left: 1200px !important;
+}
+.v-menu__content {
+  max-height: 300px;
+  max-width: 400px;
 }
 </style>

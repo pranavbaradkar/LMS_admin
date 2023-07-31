@@ -34,8 +34,33 @@ export default {
     },
     getAssessmentUsersData: async function (formdata) {
         try {
-            const response = await instance.get('admin/assessment/users/reports',{
-                params: formdata,
+            const response = await instance.get(`admin/assessment/${formdata.assessment_id}/users/reports`,{
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
+
+    getCampaign: async function () {
+        try {
+            const response = await instance.get('admin/campaigns/dropdown',{
+                headers: {
+                    'Authorization': AuthService.getToken()
+                }
+            })
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    },
+
+    getSchool: async function () {
+        try {
+            const response = await instance.get('admin/schools/dropdown',{
                 headers: {
                     'Authorization': AuthService.getToken()
                 }

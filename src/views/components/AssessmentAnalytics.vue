@@ -5,7 +5,10 @@
         <v-row class="pl-4">
           <v-col v-for="(item,index) in NudgeData" :key="index" class="white d-flex justify-start flex-row mr-4 rounded-xl pa-4">
             <div style="height: 48px; width: 48px;" class="mr-4">
-  
+                <v-img v-if="index == 0" src="@/assets/attended.svg"></v-img>
+                <v-img v-if="index == 1" src="@/assets/progress.svg"></v-img>
+                <v-img v-if="index == 2" src="@/assets/cleared.svg"></v-img>
+                <v-img v-if="index == 3" src="@/assets/cleared.svg"></v-img>
             </div>
             <div>
               <div style="font-style: 16px">
@@ -138,18 +141,22 @@
           {
           title: "Users Attended Assessment",
           value: 4500,
+          icon: '@/assets/attended.svg'
           },
           {
           title: "Users In Progress",
           value: 450,
+          icon: '@/assets/progress.svg'
           },
           {
           title: "Users Cleared Assessment",
           value: 4500,
+          icon: '@/assets/cleared.svg'
           },
           {
           title: "Users Failed Assessment",
           value: 450,
+          icon: '@/assets/cleared.svg'
           },
         ],
         chartDataForConversion: [],
@@ -239,6 +246,9 @@
       };
     },
     methods: {
+      getImage(path) {
+        return (path);
+      },
       changeUserType() {
         this.getDashboardData({user_type: this.userTypeArray[this.usertType]})
       },

@@ -1548,7 +1548,7 @@ export default {
       breadMenu: ["menu1", "menu2", "menu3"],
       breadData: "menu1",
       screeningHeaders: [
-        { text: "Name", value: "name" },
+        { text: "Name", value: "full_name" },
         { text: "Email", value: "email" },
         { text: "Assessment score", value: "assessment_score" },
         { text: "Time taken", value: "time_taken" },
@@ -1647,11 +1647,11 @@ export default {
     },
     filterData() {
       this.notCleared = this.assessmentUsers.filter(
-        (item) => item.status == "not_cleared"
+        (item) => item.status == "FAILED"
       );
       console.log("not cleared", this.notCleared);
       this.inProgress = this.assessmentUsers.filter(
-        (item) => item.status == "in_progress"
+        (item) => item.status == "FINISHED"
       );
       console.log("inprogress", this.inProgress);
       this.yetToAttempt = this.assessmentUsers.filter(
@@ -1659,7 +1659,7 @@ export default {
       );
       console.log("yet to attemp", this.yetToAttempt);
       this.cleared = this.assessmentUsers.filter(
-        (item) => item.status == "cleared"
+        (item) => item.status == "PASSED"
       );
       console.log("cleared", this.cleared);
     },
