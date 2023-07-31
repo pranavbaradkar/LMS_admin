@@ -8,7 +8,7 @@
             <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
             <p class="text-h5 py-4">New Campaign {{ campaignButtonValues() }}</p>
             <v-btn
-              class="primary"
+              class="primary" 
               large
               width="157px"
               rounded
@@ -525,10 +525,10 @@
       </v-col>
       <v-col cols="8" sm="8" class="d-flex justify-end">
         <div>
-          <v-btn class="primary mx-2" rounded
+          <v-btn class="primary white--text mx-2" rounded-lg
             ><v-icon>mdi-tune</v-icon>Filter</v-btn
           >
-          <v-btn class="primary mx-2" rounded
+          <v-btn class="primary white--text mx-2" rounded-lg
             ><v-icon>mdi-export</v-icon>Export</v-btn
           >
         </div>
@@ -960,10 +960,10 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           v-if="((user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.create) || user.role_type == 'SUPER_ADMIN')"
-          class="primary mx-2 m-fab"
+          class="primary white--text mx-2 m-fab"
           v-bind="attrs"
           v-on="on"
-          rounded
+          rounded-lg
           dark
           large
           ><v-icon>mdi-plus</v-icon> Create New CAMPAIGN</v-btn

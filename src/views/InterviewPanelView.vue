@@ -22,7 +22,7 @@
             clearable></v-text-field>
         </div>
         <div>
-          <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn>
+          <v-btn class="primary white--text mx-2" rounded-lg @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn>
         </div>
       </v-col>
     </v-row>
@@ -99,7 +99,7 @@
                   v-if="((user_permission.interview && user_permission.interview.panel && user_permission.interview.panel.create) || user.role_type == 'SUPER_ADMIN')"
                   @click="startInterview(item, item.user_id, item.recommended_level, item.levels_string.join(','), item.user.first_name + ' ' + item.user.last_name, 0)"
 
-                  class=" end-btn start-interview">  {{ item.interview_feedback != '' ? 'Response Submitted' : 'Start Interview' }} <span
+                  class=" end-btn primary white--text">  {{ item.interview_feedback != '' ? 'Response Submitted' : 'Start Interview' }} <span
                     v-if="item.status === 'PENDING'" class="ms-2 me-2"> <img src="../assets/Vector (11).svg" cols=""
                       alt=""> </span></v-btn>
               </v-col>

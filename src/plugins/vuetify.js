@@ -12,9 +12,8 @@ export default new Vuetify({
                 background:'#faf8ee',
                 success:'#228B22',
                 purple:'#6E56CF',
-                lightPurple: "#EDE9FE"
-                
-
+                lightPurple: "#EDE9FE",
+                background_btn:'#6E56CF'
             }
         }
     }

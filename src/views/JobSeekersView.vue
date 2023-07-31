@@ -5,9 +5,8 @@
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                class="primary" large rounded
-                color="primary"
-                dark
+                class="primary white--text" large rounded-lg
+                
                 v-bind="attrs"
                 v-on="on"
                 v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.create) || user.role_type == 'SUPER_ADMIN')"
@@ -43,17 +42,17 @@
               ><v-icon>mdi-tune</v-icon>Filter</v-btn
             > -->
             <v-btn
-            class="primary mx-2"
-            rounded
+            class="primary white--text mx-2"
+            rounded-lg
             @click="deleteDialog=true"
             :disabled="selected.length == 0"
             v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.delete) || user.role_type == 'SUPER_ADMIN')"
             ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
           ><v-btn 
           v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.delete) || user.role_type == 'SUPER_ADMIN')"
-           class="primary mx-2" rounded @click="resendInvite" :disabled="selected.length == 0"
+           class="primary mx-2" rounded-lg @click="resendInvite" :disabled="selected.length == 0"
           ><v-icon>mdi-email-sync-outline</v-icon>Resend Invite</v-btn
-        ><v-btn class="primary mx-2" rounded
+        ><v-btn class="primary white--text mx-2" rounded-lg
               ><v-icon>mdi-export</v-icon>Export</v-btn
             >
           </v-row>

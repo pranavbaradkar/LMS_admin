@@ -746,12 +746,11 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 v-if="((user_permission().question_bank && user_permission().question_bank.panel && user_permission().question_bank.panel.create) || user().role_type == 'SUPER_ADMIN')"
-                class="primary"
+                class="primary white--text"
                 @click="clearValue"
                 large
-                rounded
-                color="primary"
-                dark
+                rounded-lg
+               
                 v-bind="attrs"
                 v-on="on"
               >
@@ -790,16 +789,16 @@
         </v-col>
         <v-col class="mt-2">
           <v-row justify="end">
-            <v-btn class="primary mx-2" rounded @click="filterDialog = true"
+            <v-btn class="primary white--text mx-2" rounded-lg @click="filterDialog = true"
               ><v-icon>mdi-tune</v-icon>Filter</v-btn
             ><v-btn
               v-if="((user_permission().question_bank && user_permission().question_bank.panel && user_permission().question_bank.panel.delete) || user().role_type == 'SUPER_ADMIN')"
-              class="primary mx-2"
-              rounded
+              class="primary white--text mx-2"
+              rounded-lg
               @click="deleteDialog = true"
               :disabled="selectedTableItems.length == 0"
               ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-            ><v-btn class="primary mx-2" rounded
+            ><v-btn class="primary white--text mx-2" rounded-lg
               ><v-icon>mdi-export</v-icon>Export</v-btn
             >
             <v-dialog v-model="deleteDialog" max-width="366px" persistent>

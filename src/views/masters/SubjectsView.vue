@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <v-btn v-if="(user_permission.master && user_permission.master.child.subject && user_permission.master.child.subject.create)  || user.role_type== 'SUPER_ADMIN'"
-        @click="dialog = true, newSubjectCreate()" class="primary" large rounded><v-icon>mdi-plus</v-icon>Create
+        @click="dialog = true, newSubjectCreate()" class="background_btn white--text" large rounded-lg><v-icon>mdi-plus</v-icon>Create
           Subject</v-btn>
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
@@ -169,12 +169,12 @@
 
       <v-col>
         <v-row justify="end">
-          <v-btn class="primary mx-2" rounded @click="filterDialog = true"
+          <v-btn class="background_btn white--text mx-2" rounded-lg @click="filterDialog = true"
           ><v-icon>mdi-tune</v-icon>Filter</v-btn
         ><v-btn v-if="(user_permission.master && user_permission.master.child.subject && user_permission.master.child.subject.delete)  || user.role_type== 'SUPER_ADMIN'"
-        class="primary mx-2" rounded :disabled="selected.length == 0"
-            @click="deleteDialog = true"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn class="primary mx-2"
-            rounded><v-icon>mdi-export</v-icon>Export</v-btn>
+        class="background_btn white--text mx-2" rounded-lg :disabled="selected.length == 0"
+            @click="deleteDialog = true"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn class="background_btn white--text mx-2"
+            rounded-lg><v-icon>mdi-export</v-icon>Export</v-btn>
         </v-row>
       </v-col>
     </v-row>

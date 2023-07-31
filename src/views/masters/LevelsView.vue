@@ -1,30 +1,79 @@
 <template>
   <v-container fluid class="pa-8">
-    <v-row>
+    <v-row justify="space-between">
       <v-col>
-        <v-btn v-if="(user_permission.master && user_permission.master.child.levels && user_permission.master.child.levels.create) || user.role_type == 'SUPER_ADMIN'"
-         @click="dialog = true, newLevelValue()" class="primary" large rounded><v-icon>mdi-plus</v-icon> 
-         Create Level</v-btn>
+        <div class="text-h5">Levels</div>
+      </v-col>
+    </v-row>
+    <v-row style="align-items: center;">
+      <v-col class="mb-1">
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.levels &&
+              user_permission.master.child.levels.create) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          @click="(dialog = true), newLevelValue()"
+          class="primary white--text"
+          large
+          rounded-lg
+          ><v-icon>mdi-plus</v-icon> Create Level</v-btn
+        >
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
             <v-card>
-              <v-card-title class="secondary mb-8">{{formbtn()}} Level</v-card-title>
+              <v-card-title class="secondary mb-8"
+                >{{ formbtn() }} Level</v-card-title
+              >
               <v-card-text class="px-6 pb-0">
-                <v-text-field outlined class="rounded-xl" v-model="name" label="Enter Level*"
-                  :rules="[v => !!v || 'Level is required']" required></v-text-field>
-                <v-autocomplete v-model="grades" clearable deletable-chips label="Select or Search Grades" outlined
-                  class="rounded-xl" small-chips :items="gradeData" multiple item-text="name" item-value="id">
+                <v-text-field
+                  outlined
+                  class="rounded-xl"
+                  v-model="name"
+                  label="Enter Level*"
+                  :rules="[(v) => !!v || 'Level is required']"
+                  required
+                ></v-text-field>
+                <v-autocomplete
+                  v-model="grades"
+                  clearable
+                  deletable-chips
+                  label="Select or Search Grades"
+                  outlined
+                  class="rounded-xl"
+                  small-chips
+                  :items="gradeData"
+                  multiple
+                  item-text="name"
+                  item-value="id"
+                >
                 </v-autocomplete>
               </v-card-text>
               <v-card-actions class="px-6 pb-6">
                 <small>*All fields are mandatory</small>
                 <v-spacer></v-spacer>
-                <v-btn  width="102px" height="48px" rounded outlined class="pa-4" @click="dialog = false">Cancel</v-btn>
-                <v-btn width="102px" height="48px" rounded @click="saveInputs" class="primary pa-4" :loading="loading">{{ formbtn() }}</v-btn>
+                <v-btn
+                  width="102px"
+                  height="48px"
+                  rounded
+                  outlined
+                  class="pa-4"
+                  @click="dialog = false"
+                  >Cancel</v-btn
+                >
+                <v-btn
+                  width="102px"
+                  height="48px"
+                  rounded
+                  @click="saveInputs"
+                  class="primary pa-4"
+                  :loading="loading"
+                  >{{ formbtn() }}</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-form>
-
         </v-dialog>
         <!-- filter dialog-->
         <v-dialog v-model="filterDialog" max-width="400px">
@@ -36,13 +85,21 @@
                 </v-col>
                 <v-spacer></v-spacer>
                 <v-col>
-                  <div @click="clearFilter" class="text-body1 font-weight-bold black--text cursor">
+                  <div
+                    @click="clearFilter"
+                    class="text-body1 font-weight-bold black--text cursor"
+                  >
                     CLEAR FILTER
                   </div>
                 </v-col>
               </v-row>
               <div>
-                <v-card height="450px" elevation="0" id="myScroll" class="pt-5 ,pb-5">
+                <v-card
+                  height="450px"
+                  elevation="0"
+                  id="myScroll"
+                  class="pt-5 ,pb-5"
+                >
                   <v-row class="pl-1">
                     <v-col>
                       <div class="text-body1 font-weight-normal black--text">
@@ -50,8 +107,18 @@
                       </div>
                     </v-col>
                   </v-row>
-                  <v-chip-group v-model="selectedGradeFilter" active-class="primary" column :multiple="true">
-                    <v-chip v-for="(gradeType, index) in gradeData" :key="index" :value="gradeType" elevated>
+                  <v-chip-group
+                    v-model="selectedGradeFilter"
+                    active-class="primary"
+                    column
+                    :multiple="true"
+                  >
+                    <v-chip
+                      v-for="(gradeType, index) in gradeData"
+                      :key="index"
+                      :value="gradeType"
+                      elevated
+                    >
                       {{ gradeType.name }}
                     </v-chip>
                   </v-chip-group>
@@ -59,8 +126,19 @@
                 <div>
                   <v-card-actions class="px-6 pb-6">
                     <v-spacer></v-spacer>
-                    <v-btn rounded outlined class="pa-4" @click="filterDialog = false">Cancel</v-btn>
-                    <v-btn rounded class="primary pa-4" @click="filterLevel(selectedGradeFilter)">Apply</v-btn>
+                    <v-btn
+                      rounded
+                      outlined
+                      class="pa-4"
+                      @click="filterDialog = false"
+                      >Cancel</v-btn
+                    >
+                    <v-btn
+                      rounded
+                      class="primary pa-4"
+                      @click="filterLevel(selectedGradeFilter)"
+                      >Apply</v-btn
+                    >
                   </v-card-actions>
                 </div>
               </div>
@@ -68,57 +146,113 @@
           </v-card>
         </v-dialog>
       </v-col>
-      <v-col cols="4">
-        <v-text-field label="Search" prepend-inner-icon="mdi-magnify" v-model="search" clearable></v-text-field></v-col>
-    </v-row>
-    <v-row justify="space-between" class="my-4">
-      <v-col>
-        <div class="text-h5">Levels</div>
+      <v-col class="d-flex" style="align-items: center">
+        <v-text-field
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          v-model="search"
+          clearable
+        ></v-text-field>
+        <v-btn
+          class="background_btn white--text mx-2"
+          rounded-lg
+          @click="filterDialog = true"
+          ><v-icon>mdi-tune</v-icon>Filter</v-btn
+        >
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.levels &&
+              user_permission.master.child.levels.delete) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          class="background_btn white--text mx-2"
+          rounded-lg
+          :disabled="selected.length == 0"
+          @click="deleteDialog = true"
+          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+        ><v-btn class="background_btn white--text mx-2" rounded-lg
+          ><v-icon>mdi-export</v-icon>Export</v-btn
+        >
       </v-col>
+    </v-row>
 
-      <v-col>
-        <v-row justify="end">
-          <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn>
-          <v-btn v-if="(user_permission.master && user_permission.master.child.levels && user_permission.master.child.levels.delete) || user.role_type == 'SUPER_ADMIN'"
-            class="primary mx-2" rounded :disabled="selected.length == 0"
-            @click="deleteDialog = true"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn class="primary mx-2"
-            rounded><v-icon>mdi-export</v-icon>Export</v-btn>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-data-table v-model="selected" :headers="headers" :items="tableData" show-select :single-select="singleSelect"
-      :options.sync="options" :footer-props="{
-        itemsPerPageOptions: [5, 10, 20, 50, 100]
-      }" :server-items-length="count">
+    <v-data-table
+      v-model="selected"
+      :headers="headers"
+      :items="tableData"
+      show-select
+      :single-select="singleSelect"
+      :options.sync="options"
+      :footer-props="{
+        itemsPerPageOptions: [5, 10, 20, 50, 100],
+      }"
+      :server-items-length="count"
+    >
       <template v-slot:[`item.created_at`]="{ item }">
         {{ getDate(item.created_at) }}
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn v-if="(user_permission.master && user_permission.master.child.levels && user_permission.master.child.levels.update) || user.role_type == 'SUPER_ADMIN'"
-        icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.levels &&
+              user_permission.master.child.levels.update) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          icon
+          class="mr-2 pa-4"
+          @click="updateData(item)"
+        >
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
       <template v-slot:[`item.grade_`]="{ item }">
-        <span v-for="data in item.gradeIds" :key="data.id">{{ data.name }}, </span>
+        <span v-for="data in item.gradeIds" :key="data.id"
+          >{{ data.name }},
+        </span>
       </template>
       <!-- v-for="data in item.gradeIds" :key="data.id" -->
-
     </v-data-table>
     <v-dialog v-model="deleteDialog" max-width="366px" persistent>
       <v-card fluid>
         <v-container fluid class="pa-0">
           <v-card-text class="text-center">
             <v-container></v-container>
-            <v-avatar color="secondary" size="90"><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar>
+            <v-avatar color="secondary" size="90"
+              ><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar
+            >
 
             <p class="text-h5 pt-6 pb-0">Delete Level</p>
-            <p class="text-disabled grey--text text-subtitle-1 pt-3" color="rgba(0, 0, 0, 0.6)" disabled>This action will
-              permanently delete the item . This cannot be undone</p>
+            <p
+              class="text-disabled grey--text text-subtitle-1 pt-3"
+              color="rgba(0, 0, 0, 0.6)"
+              disabled
+            >
+              This action will permanently delete the item . This cannot be
+              undone
+            </p>
 
-            <div class="d-flex justify-space-between pt-4 pb-2" fluid> <v-btn depressed class="secondary black--text" large
-                width="157px" rounded @click="deleteDialog = false">CANCEL</v-btn> <v-btn class="black white--text"
-                depressed large width="157px" rounded :loading="dLoading" @click="deleteData(selected)">DELETE</v-btn>
+            <div class="d-flex justify-space-between pt-4 pb-2" fluid>
+              <v-btn
+                depressed
+                class="secondary black--text"
+                large
+                width="157px"
+                rounded
+                @click="deleteDialog = false"
+                >CANCEL</v-btn
+              >
+              <v-btn
+                class="black white--text"
+                depressed
+                large
+                width="157px"
+                rounded
+                :loading="dLoading"
+                @click="deleteData(selected)"
+                >DELETE</v-btn
+              >
             </div>
           </v-card-text>
         </v-container>
@@ -132,7 +266,14 @@
             <v-icon color="error" size="96">mdi-close-circle-outline</v-icon>
             <p class="text-h5 pt-2 font-weight-medium">Error</p>
             <p class="text-h6 py-3 font-weight-regular">{{ errorMessage }}</p>
-            <v-btn class="primary" large width="157px" rounded @click="errorDialog = false">OK</v-btn>
+            <v-btn
+              class="primary"
+              large
+              width="157px"
+              rounded
+              @click="errorDialog = false"
+              >OK</v-btn
+            >
           </v-card-text>
         </v-container>
       </v-card>
@@ -144,7 +285,14 @@
           <v-card-text class="text-center">
             <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
             <p class="text-h5 py-4">Level {{ formbtnValue() }}</p>
-            <v-btn class="primary" large width="157px" rounded @click="successDialog = false">OK</v-btn>
+            <v-btn
+              class="primary"
+              large
+              width="157px"
+              rounded
+              @click="successDialog = false"
+              >OK</v-btn
+            >
           </v-card-text>
         </v-container>
       </v-card>
@@ -183,9 +331,9 @@ export default {
       selected: [],
       filterDialog: false,
       selectedGradeFilter: [],
-      filterData:false,
-      search:'',
-      searchBool:false,
+      filterData: false,
+      search: "",
+      searchBool: false,
       headers: [
         { text: "Level Names", value: "name" },
         { text: "Grades", value: "grade_" },
@@ -204,7 +352,7 @@ export default {
     },
     user_permission() {
       return AuthService.getPermissions();
-    }
+    },
   },
   watch: {
     options: {
@@ -212,36 +360,35 @@ export default {
         console.log(this.options);
         this.pageSize = this.options.itemsPerPage;
         this.page = this.options.page;
-        if(this.filterData){
+        if (this.filterData) {
           this.filterLevel(this.selectedGradeFilter);
-        }else if(this.searchBool){
+        } else if (this.searchBool) {
           this.searchData(this.search);
-        }
-        else{
+        } else {
           this.getLevel();
         }
       },
       deep: true,
     },
-    search(newValue){
+    search(newValue) {
       console.log(newValue);
-        this.searchBool=true
-        this.pageSize = this.options.itemsPerPage;
-        this.page = this.options.page;
-        this.options.page=1;
-        this.searchData(newValue);
-        if(newValue=="" || newValue==null){
-          this.getLevel();
-          this.searchBool=false;
-        }
-    }
+      this.searchBool = true;
+      this.pageSize = this.options.itemsPerPage;
+      this.page = this.options.page;
+      this.options.page = 1;
+      this.searchData(newValue);
+      if (newValue == "" || newValue == null) {
+        this.getLevel();
+        this.searchBool = false;
+      }
+    },
   },
   methods: {
-    async searchData(search){
+    async searchData(search) {
       const response = await LevelController.searchLevel(
         this.pageSize,
         this.page,
-        search,
+        search
       );
       console.log(response.data);
       console.log(this.searchBool);
@@ -259,25 +406,22 @@ export default {
       this.name = item.name;
       this.description = item.level_description;
       this.grades = item.gradeIds;
-
     },
     async getGrades() {
       const response = await GradeController.getAllGrades();
       console.log(response);
       if (response.data.success) {
         this.gradeData = response.data.data.rows;
-      }
-      else {
-        alert(response.data.error)
+      } else {
+        alert(response.data.error);
       }
     },
 
     newLevelValue() {
-      this.name = '';
-      this.description = '';
+      this.name = "";
+      this.description = "";
       this.grades = [];
-      this.formbtnBool=false
-
+      this.formbtnBool = false;
     },
 
     formbtn() {
@@ -293,29 +437,26 @@ export default {
         // checking case for update/create
         if (this.formbtnBool == false) {
           const response = await LevelController.createLevel({
-            "name": this.name,
-            "school_id": "-1",
-            "level_description": "NA",
-            "board_id": -1,
-            "gradeIds": this.grades
-          }
-
-
-          );
+            name: this.name,
+            school_id: "-1",
+            level_description: "NA",
+            board_id: -1,
+            gradeIds: this.grades,
+          });
           console.log(response);
           res = response;
         } else {
           const response = await LevelController.updateLevel(
             {
-              "name": this.name,
-              "school_id": "-1",
-              "level_description": "NA",
-              "board_id": -1,
-              "gradeIds": this.grades
+              name: this.name,
+              school_id: "-1",
+              level_description: "NA",
+              board_id: -1,
+              gradeIds: this.grades,
             },
             this.editId
           );
-          res = response
+          res = response;
           console.log(response);
         }
         // Close the dialog
@@ -329,7 +470,6 @@ export default {
           this.errorDialog = true;
           this.errorMessage = res.data.error;
         }
-        
       }
     },
 
@@ -342,18 +482,16 @@ export default {
         // if block for check resposne  status
         if (response.data.success) {
           this.getLevel();
+        } else {
+          alert(response.data.error);
         }
-        else {
-          alert(response.data.error)
-        }
-      }
-      else {
-        // else block for bulk delete 
+      } else {
+        // else block for bulk delete
         var ids = "";
         for (var i = 0; i < data.length; i++) {
           ids = ids + data[i].id;
           if (i != data.length - 1) {
-            ids = ids + ","
+            ids = ids + ",";
           }
         }
 
@@ -361,29 +499,27 @@ export default {
 
         if (response.data.success) {
           this.getLevel();
-        }
-        else {
-          alert(response.data.error)
+        } else {
+          alert(response.data.error);
         }
       }
       this.deleteDialog = false;
-      this.dLoading = false
-      this.selected = []
-
+      this.dLoading = false;
+      this.selected = [];
     },
 
     async getLevel() {
       const response = await LevelController.getLevelByPagination(
         this.pageSize,
-        this.page);
-      // this.levelData = response.data.data;     
+        this.page
+      );
+      // this.levelData = response.data.data;
       if (response.data.success) {
         this.tableData = response.data.data.rows;
-      console.log("table data", this.tableData);
-      this.count = response.data.data.count;
-      }
-      else {
-        alert(response.data.error)
+        console.log("table data", this.tableData);
+        this.count = response.data.data.count;
+      } else {
+        alert(response.data.error);
       }
 
       // console.log("level data", this.levelData.rows);
@@ -392,25 +528,28 @@ export default {
       this.selectedGradeFilter = [];
       this.getLevel();
       this.filterDialog = false;
-      this.filterData=false
+      this.filterData = false;
     },
     async filterLevel(selectGrades) {
       console.log("filter function call");
       var gradesIds = "";
       selectGrades.forEach((item) => {
         gradesIds = gradesIds + item.id + ",";
-      })
+      });
       gradesIds = gradesIds.slice(0, -1);
-      const response = await LevelController.filterLevel(gradesIds,this.pageSize,
-        this.page);
+      const response = await LevelController.filterLevel(
+        gradesIds,
+        this.pageSize,
+        this.page
+      );
       console.log(response);
       this.filterDialog = false;
       this.schoolData = response.data.data;
       this.tableData = this.schoolData.rows;
       console.log("GradeIds", gradesIds);
       this.count = response.data.data.count;
-      this.filterData=true
-    }
+      this.filterData = true;
+    },
   },
   created() {
     this.getLevel();

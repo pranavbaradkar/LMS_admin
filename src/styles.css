@@ -8,7 +8,7 @@
 }
  /* table css here */
 thead tr {
-  background-color: #000000;
+  background-color: #EDE9FE; 
 }
 .usertable > .v-data-table__wrapper > table > thead  >tr th:nth-child(2) {
 
@@ -130,10 +130,10 @@ color: rgba(0, 0, 0, 0.4)
 .theme--light.v-data-table>.v-data-table__wrapper>table>thead>tr>th {
   color: rgb(255, 255, 255);
 }
-th :hover
+/* th :hover
 {
   color: white !important;
-}
+} */
 .v-input--selection-controls:not(.v-input--is-disabled):not(.v-input--is-focused) .v-input__control {
   border-bottom-color: transparent;
 }
@@ -142,7 +142,7 @@ th :hover
 }
 th
 {
-  color: white !important;
+  color: black !important;
 }
 
 .m-bread > .v-input__control {
@@ -316,7 +316,7 @@ letter-spacing: 0.02em;
 .drawerIcon {
   position: fixed !important;
 right: -16px;
-color: grey !important;
+color: #6E56CF !important;
 
 }
 .mytextFiled{
@@ -324,7 +324,7 @@ color: grey !important;
 }
 
 .drawerIconRight {
-  color: grey !important;
+  color: #6E56CF !important;
   margin-top: -10px;
 }
 .v-navigation-drawer__border {
@@ -353,6 +353,7 @@ color: grey !important;
 .theme--light.v-icon {
   color: unset;
 }
+
 
 .v-application .rounded-xl {
   border-radius: 12px !important;
@@ -825,4 +826,24 @@ text-transform: capitalize;
 .job-para{
   font-size: 14px;
   color: gray;
+}
+
+.v-data-table > .v-data-table__wrapper > table {
+  border-spacing: 0 0.5rem;
+  border: none;
+}
+
+.theme--light.v-data-table {
+  background-color: #F9F8F9;
+}
+
+tbody tr:nth-child(even),
+tbody tr:nth-child(odd) {
+  background-color : #fff !important;
+}
+
+.theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:not(.v-data-table__mobile-row), 
+.theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > th:not(.v-data-table__mobile-row) {
+  border-bottom: thin solid rgba(0, 0, 0, 0.12);
+  border-top:  thin solid rgba(0, 0, 0, 0.12);
 }

@@ -1,10 +1,17 @@
 <template>
   <v-container fluid class="pa-8">
-    <v-row>
+    <v-row justify="space-between">
       <v-col>
+        <div class="text-h5">Brands</div>
+      </v-col>
+
+      
+    </v-row>
+    <v-row style="align-items: center">
+      <v-col class="mb-1">
         <v-btn 
         v-if="(user_permission.master && user_permission.master.child.brands && user_permission.master.child.brands.create) || user.role_type == 'SUPER_ADMIN'" 
-        @click="dialog = true ,newCreateBrands()" class="primary" large rounded><v-icon>mdi-plus</v-icon>Create Brand</v-btn>
+        @click="dialog = true ,newCreateBrands()" class="background_btn white--text" large rounded-lg><v-icon>mdi-plus</v-icon>Create Brand</v-btn>
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
             <v-card>
@@ -26,25 +33,19 @@
 
         </v-dialog>
       </v-col>
-      <v-col cols="4">
-        <v-text-field label="Search" prepend-inner-icon="mdi-magnify" clearable v-model="search"></v-text-field></v-col>
+      <v-col class="d-flex" style="align-items: center;">
+        <v-text-field label="Search" prepend-inner-icon="mdi-magnify" clearable v-model="search"></v-text-field>
+       <v-btn   v-if="(user_permission.master && user_permission.master.child.brands && user_permission.master.child.brands.delete) || user.role_type == 'SUPER_ADMIN'"
+       class="background_btn white--text mx-2" 
+       :disabled="selected.length == 0"
+       rounded-lg
+         @click="deleteDialog = true"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn class="background_btn white--text mx-2"
+         rounded-lg><v-icon>mdi-export</v-icon>Export</v-btn>
+    
+   </v-col>
+      
     </v-row>
-    <v-row justify="space-between" class="my-4">
-      <v-col>
-        <div class="text-h5">Brands</div>
-      </v-col>
-
-      <v-col>
-        <v-row justify="end">
-          <v-btn   v-if="(user_permission.master && user_permission.master.child.brands && user_permission.master.child.brands.delete) || user.role_type == 'SUPER_ADMIN'"
-          class="primary mx-2" 
-          :disabled="selected.length == 0"
-          rounded
-            @click="deleteDialog = true"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn class="primary mx-2"
-            rounded><v-icon>mdi-export</v-icon>Export</v-btn>
-        </v-row>
-      </v-col>
-    </v-row>
+    
     <v-data-table v-model="selected" :headers="headers" :items="tableData" show-select :single-select="singleSelect" :options.sync="options"
     :footer-props="{
     itemsPerPageOptions: [5, 10, 20, 50,100]

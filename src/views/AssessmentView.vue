@@ -9,7 +9,13 @@
               e1 = 1;
               isEdit = false;
             }
-            " class="primary" large rounded elevation="0"><v-icon>mdi-plus</v-icon>Create Assessment</v-btn>
+          "
+          class="primary white--text"
+          large
+          rounded-lg
+          elevation="0"
+          ><v-icon>mdi-plus</v-icon>Create Assessment</v-btn
+        >
 
         <div class="mt-4" v-if="showUsers">
           <span class="m-4 cursor" @click="showUsers = false">Assessments</span>
