@@ -21,7 +21,7 @@
         <div class="mt-4" v-if="showUsers">
           <span class="m-4 cursor" @click="showUsers = false">Assessments</span>
           <v-icon>mdi-chevron-right</v-icon>
-          <span class="text--secondary">Assessment Name</span>
+          <span class="text--secondary">{{ selectedName }}</span>
         </div>
       </v-col>
       <v-col cols="4">
@@ -1473,6 +1473,7 @@ export default {
         displayCorrectAnswer: "NO",
         displayResult: "NO",
         selectedId: null,
+        selectedName: null,
         passingCriteria: 40,
         timeUpFirstReminder: null,
         timeUpLastReminder: null,
@@ -1961,6 +1962,7 @@ export default {
     async fetchAssessmentUsers(assessment){
       this.showUsers = true;
       this.selectedId = assessment.id;
+      this.selectedName = assessment.name;
       const response = await ChartsController.getAssessmentUsersData({assessment_id:this.selectedId});
       if(response.data.success){
         this.assessmentUsers = response.data.data.rows;
