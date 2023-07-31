@@ -73,10 +73,10 @@
                   </v-row>
                  
                   <v-row class="ms-2 teacher-onboarding"  v-if="index == 'master'">
-                    <v-col cols="4">
+                    <v-col cols="3">
                       <span class="text-capit">{{ "Panel" }}</span>
                     </v-col>
-                    <v-col cols="8" class="d-flex permissions-item">
+                    <v-col cols="9" class="d-flex permissions-item">
                       
                       <v-col cols="2">
                         <v-checkbox
@@ -117,10 +117,10 @@
 
                   <v-row class="ms-2 teacher-onboarding" v-for="(ele, eleIndex) in (index == 'master' ? item.child : item)"
                           :key="eleIndex">
-                    <v-col cols="4">
+                    <v-col cols="3">
                       <span class="text-capit">{{ eleIndex }}</span>
                     </v-col>
-                    <v-col cols="8" class="d-flex permissions-item">
+                    <v-col cols="9" class="d-flex permissions-item">
                       
                       <v-col cols="2">
                         <v-checkbox
@@ -168,6 +168,16 @@
                           label="Is Approval"
                         ></v-checkbox>
                       </v-col>
+
+                      <v-col cols="2" v-if="index == 'assessments'">
+                        <v-checkbox
+                        class="mt-0"
+                          v-model="item.panel.is_publish"
+                          label="Result Publish"
+                        ></v-checkbox>
+                      </v-col>
+
+                      
 
                     </v-col>
                   </v-row>
@@ -297,7 +307,8 @@ export default {
             "view": true,
             "update": false,
             "delete": false,
-            "is_approval": false
+            "is_approval": false,
+            "is_publish": false
           }
         },
         "campaigns": {

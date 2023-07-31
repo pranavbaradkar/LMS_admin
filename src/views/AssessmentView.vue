@@ -269,7 +269,7 @@
       </div>
           <div class="d-flex justify-end">
           
-            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
+            <v-card-title v-if="user.role_type == 'SUPER_ADMIN' || (user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.is_publish)" class="pa-0 cursor" @click="publishMethod(data.assessment_id,data.assessment_type)">PUBLISH RESULTS</v-card-title>
           </div>
         </div>
         <v-divider class="mb-4 mt-2"></v-divider>
