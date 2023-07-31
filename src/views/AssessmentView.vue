@@ -21,7 +21,7 @@
         <div class="mt-4" v-if="showUsers">
           <span class="m-4 cursor" @click="showUsers = false">Assessments</span>
           <v-icon>mdi-chevron-right</v-icon>
-          <span class="text--secondary">{{ this.selectedName }}</span>
+          <span class="text--secondary">Assessment Name</span>
         </div>
       </v-col>
       <v-col cols="4">
@@ -134,13 +134,15 @@
     </v-row>
 
     <!------------------------------------------ Assessment card here---------------------------- -->
-    <v-row class="pb-4" v-if="!showUsers">
-      <v-col cols="4" 
-        v-for="assessment in assessments.filter((item) => item.status == 'PUBLISHED')"
-        :key="assessment.id">
+    <div class="d-flex flex-row pb-4" id="myScroll-x" v-if="!showUsers">
       <v-card
-        height="350px"
-        class="pa-5 ml-4 pb-8 mb-4"
+        width="427px"
+        min-width="427px"
+        height="auto"
+        class="pa-5 ml-4 pb-8"
+        v-for="assessment in assessments.filter((item) => item.status == 'PUBLISHED')"
+        
+        :key="assessment.id"
       >
         <v-card-title class="pa-0">
         <div style="width: 100%;" class="d-flex justify-space-between">
@@ -258,8 +260,7 @@
         <v-divider class="mb-4 mt-2"></v-divider>
         <!-- Assessment type -->
       </v-card>
-    </v-col>
-    </v-row>
+    </div>
 
     <v-row justify="space-between" class="mb-4 mt-0" v-if="!showUsers">
       <v-col cols="4" sm="4" md="4">
@@ -270,13 +271,15 @@
     </v-row>
 
     <!------------------------------------------ Assessment card here---------------------------- -->
-    <v-row class="pb-4"  v-if="!showUsers">
-      <v-col cols="4" 
-        v-for="assessment in assessments.filter((item) => item.status != 'PUBLISHED')"
-        :key="assessment.id">
+    <div class="d-flex flex-row pb-4" id="myScroll-x" v-if="!showUsers">
       <v-card
-        height="300px"
-        class="pa-5 ml-4 pb-8 mb-4"
+        width="427px"
+        min-width="427px"
+        height="auto"
+        class="pa-5 ml-4 pb-8"
+        v-for="assessment in assessments.filter((item) => item.status != 'PUBLISHED')"
+        
+        :key="assessment.id"
       >
       <v-card-title class="pa-0">
         <div style="width: 100%;" class="d-flex justify-space-between">
@@ -353,8 +356,7 @@
         <v-divider class="mb-4 mt-2"></v-divider>
         <!-- Assessment type -->
       </v-card>
-    </v-col>
-    </v-row>
+    </div>
 
     <v-data-table
       v-if="showUsers"
@@ -1471,7 +1473,6 @@ export default {
         displayCorrectAnswer: "NO",
         displayResult: "NO",
         selectedId: null,
-        selectedName: null,
         passingCriteria: 40,
         timeUpFirstReminder: null,
         timeUpLastReminder: null,
@@ -1646,11 +1647,11 @@ export default {
     },
     filterData() {
       this.notCleared = this.assessmentUsers.filter(
-        (item) => item.status == "not cleared"
+        (item) => item.status == "not_cleared"
       );
       console.log("not cleared", this.notCleared);
       this.inProgress = this.assessmentUsers.filter(
-        (item) => item.status == "in progress"
+        (item) => item.status == "in_progress"
       );
       console.log("inprogress", this.inProgress);
       this.yetToAttempt = this.assessmentUsers.filter(
@@ -1960,7 +1961,6 @@ export default {
     async fetchAssessmentUsers(assessment){
       this.showUsers = true;
       this.selectedId = assessment.id;
-      this.selectedName = assessment.name;
       const response = await ChartsController.getAssessmentUsersData({assessment_id:this.selectedId});
       if(response.data.success){
         this.assessmentUsers = response.data.data.rows;
