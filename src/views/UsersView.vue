@@ -1,99 +1,8 @@
 <template>
   <v-container fluid class="pa-8">
-    <v-row>
-      <v-col>
-        <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-if="
-                (user_permission.users &&
-                  user_permission.users.panel &&
-                  user_permission.users.panel.create) ||
-                user.role_type == 'SUPER_ADMIN'
-              "
-              class="primary white--text"
-              large
-              rounded-lg
-             
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>mdi-plus</v-icon>
-              <div class="pl-1">Create</div>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item
-              @click="
-                () => {
-                  formbtnBool = false;
-                  dialog = true;
-                }
-              "
-            >
-              <v-list-item-title>
-                <v-icon>mdi-email-plus-outline</v-icon>CREATE NEW USER
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-title>
-                <v-icon>mdi-email-plus-outline</v-icon> INVITE NEW ADMIN
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-title>
-                <v-icon>mdi-account-multiple-plus </v-icon> CREATE USERS IN BULK
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-col>
-      <v-col cols="4">
-        <v-text-field
-          label="Search"
-          prepend-inner-icon="mdi-magnify"
-          v-model="search"
-          clearable
-        ></v-text-field
-      ></v-col>
-    </v-row>
-    <v-row justify="space-between" class="my-4">
+    <v-row justify="space-between">
       <v-col cols="4" sm="4" md="4">
         <div class="text-h5">All Users</div>
-      </v-col>
-
-      <v-col cols="8" sm="8" md="8">
-        <v-row justify="end">
-          <!-- <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn> -->
-          <v-btn
-            v-if="
-              (user_permission.users &&
-                user_permission.users.panel &&
-                user_permission.users.panel.delete) ||
-              user.role_type == 'SUPER_ADMIN'
-            "
-            class="primary white--text mx-2"
-            rounded-lg
-            @click="deleteDialog = true"
-            :disabled="selected.length == 0"
-            ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-          >
-          <v-btn
-            v-if="
-              (user_permission.users &&
-                user_permission.users.panel &&
-                user_permission.users.panel.delete) ||
-              user.role_type == 'SUPER_ADMIN'
-            "
-            class="primary white--text mx-2"
-            rounded-lg
-            @click="resendInvite"
-            :disabled="selected.length == 0"
-            ><v-icon>mdi-email-sync-outline</v-icon>Resend Invite</v-btn
-          ><v-btn class="primary white--text mx-2" rounded-lg
-            ><v-icon>mdi-export</v-icon>Export</v-btn
-          >
-        </v-row>
       </v-col>
 
       <v-dialog v-model="deleteDialog" max-width="366px" persistent>
@@ -145,6 +54,92 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <v-row style="align-items: center">
+      <v-col class="mb-1">
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-if="
+                (user_permission.users &&
+                  user_permission.users.panel &&
+                  user_permission.users.panel.create) ||
+                user.role_type == 'SUPER_ADMIN'
+              "
+              class="primary white--text"
+              large
+              rounded-lg
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-plus</v-icon>
+              <div class="pl-1">Create</div>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              @click="
+                () => {
+                  formbtnBool = false;
+                  dialog = true;
+                }
+              "
+            >
+              <v-list-item-title>
+                <v-icon>mdi-email-plus-outline</v-icon>CREATE NEW USER
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>
+                <v-icon>mdi-email-plus-outline</v-icon> INVITE NEW ADMIN
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>
+                <v-icon>mdi-account-multiple-plus </v-icon> CREATE USERS IN BULK
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-col>
+      <v-col cols="8" sm="8" md="8" class="d-flex" style="align-items: center">
+        <v-text-field
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          v-model="search"
+          clearable
+        ></v-text-field>
+        <!-- <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn> -->
+        <v-btn
+          v-if="
+            (user_permission.users &&
+              user_permission.users.panel &&
+              user_permission.users.panel.delete) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          class="primary white--text mx-2"
+          rounded-lg
+          @click="deleteDialog = true"
+          :disabled="selected.length == 0"
+          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+        >
+        <v-btn
+          v-if="
+            (user_permission.users &&
+              user_permission.users.panel &&
+              user_permission.users.panel.delete) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          class="primary white--text mx-2"
+          rounded-lg
+          @click="resendInvite"
+          :disabled="selected.length == 0"
+          ><v-icon>mdi-email-sync-outline</v-icon>Resend Invite</v-btn
+        ><v-btn class="primary white--text mx-2" rounded-lg
+          ><v-icon>mdi-export</v-icon>Export</v-btn
+        >
+      </v-col>
+    </v-row>
+
     <v-data-table
       v-model="selected"
       :headers="headers"

@@ -1,32 +1,41 @@
 <template>
   <v-container fluid class="pa-8">
+    <v-row justify="space-between">
+            <v-col>
+              <div class="text-h5">Question Bank</div>
+            </v-col>
+          </v-row>
     <v-dialog v-model="uploadingDialog" max-width="366px" persistent>
-        <v-card>
-          <v-container fluid class="pa-8">
-            <v-card-text class="text-center">  
-              <v-icon v-if="uploadingMsg != 'File Uploading...' " color="success" size="96"
-                >mdi-check-circle-outline</v-icon
-              >           
-              <p  class="text-h5 py-4">{{ uploadingMsg }}</p> 
-              <v-progress-circular
-      :size="50"
-      color="primary"
-      indeterminate
-      v-if="uploadingMsg == 'File Uploading...' "
-    ></v-progress-circular>          
-              <v-btn
-                class="primary"
-                large
-                width="157px"
-                rounded
-                @click="uploadingDialog = false"              
-                v-if="uploadingMsg != 'File Uploading...' "
-                >OK</v-btn
-              >
-            </v-card-text>
-          </v-container>
-        </v-card>
-      </v-dialog>
+      <v-card>
+        <v-container fluid class="pa-8">
+        
+          <v-card-text class="text-center">
+            <v-icon
+              v-if="uploadingMsg != 'File Uploading...'"
+              color="success"
+              size="96"
+              >mdi-check-circle-outline</v-icon
+            >
+            <p class="text-h5 py-4">{{ uploadingMsg }}</p>
+            <v-progress-circular
+              :size="50"
+              color="primary"
+              indeterminate
+              v-if="uploadingMsg == 'File Uploading...'"
+            ></v-progress-circular>
+            <v-btn
+              class="primary"
+              large
+              width="157px"
+              rounded
+              @click="uploadingDialog = false"
+              v-if="uploadingMsg != 'File Uploading...'"
+              >OK</v-btn
+            >
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog>
     <div v-if="createQuestionDialog">
       <v-card class="secondary" :height="getHeight + 'px'" elevation="0">
         <v-card-title class="pt-0">
@@ -60,6 +69,7 @@
             <v-card-text>
               <v-card class="ma-4 pa-4" elevation="0">
                 <!-- Select Question Type -->
+              
                 <v-row>
                   <v-col class="py-0">
                     <div class="text-body-1 my-2">Question Type*</div>
@@ -77,24 +87,30 @@
                 </v-row>
                 <v-row>
                   <v-col class="py-0">
-                    <v-row align="center" class="d-flex flex-row justify-space-between">
-                
-                        <div class="text-body-1 my-2">Question*</div>
+                    <v-row
+                      align="center"
+                      class="d-flex flex-row justify-space-between"
+                    >
+                      <div class="text-body-1 my-2">Question*</div>
                       <div class="d-flex flex-row align-center">
-                      <a v-if="questionAssetUrl" :href="questionAssetUrl" target="_blank" class="font-weight-bold me-5 text-uppercase">Attached File</a>
-                      <v-btn text class="float-right my-2"
-                          >
-                          
-                          <v-icon>mdi-attachment</v-icon> 
-                          <span v-if="selectedFile != null
-                          ">{{selectedFile.name}}</span>
-                          <span v-else >Attach
-                          Audio/Video/Image</span>
+                        <a
+                          v-if="questionAssetUrl"
+                          :href="questionAssetUrl"
+                          target="_blank"
+                          class="font-weight-bold me-5 text-uppercase"
+                          >Attached File</a
+                        >
+                        <v-btn text class="float-right my-2">
+                          <v-icon>mdi-attachment</v-icon>
+                          <span v-if="selectedFile != null">{{
+                            selectedFile.name
+                          }}</span>
+                          <span v-else>Attach Audio/Video/Image</span>
                           <input
-                              type="file"
-                              name="image"
-                              @change="onChange"
-                              accept="image/*, audio/*, video/*"
+                            type="file"
+                            name="image"
+                            @change="onChange"
+                            accept="image/*, audio/*, video/*"
                           />
                         </v-btn>
                       </div>
@@ -116,7 +132,6 @@
                       required
                     >
                     </ckeditor>
-                    
                   </v-col>
                 </v-row>
                 <!-- Single Select Answers -->
@@ -745,12 +760,16 @@
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                v-if="((user_permission().question_bank && user_permission().question_bank.panel && user_permission().question_bank.panel.create) || user().role_type == 'SUPER_ADMIN')"
+                v-if="
+                  (user_permission().question_bank &&
+                    user_permission().question_bank.panel &&
+                    user_permission().question_bank.panel.create) ||
+                  user().role_type == 'SUPER_ADMIN'
+                "
                 class="primary white--text"
                 @click="clearValue"
                 large
                 rounded-lg
-               
                 v-bind="attrs"
                 v-on="on"
               >
@@ -758,12 +777,14 @@
               </v-btn>
             </template>
             <v-list>
-              <a href="/#/create/question" target="_blank"> <v-list-item >
-                <v-list-item-title>
-                  <!-- <a href="/#/create-question"> -->
-                    <v-icon >mdi-book-open-variant </v-icon>CREATE NEW QUESTION
-                </v-list-item-title>
-              </v-list-item></a>
+              <a href="/#/create/question" target="_blank">
+                <v-list-item>
+                  <v-list-item-title>
+                    <!-- <a href="/#/create-question"> -->
+                    <v-icon>mdi-book-open-variant </v-icon>CREATE NEW QUESTION
+                  </v-list-item-title>
+                </v-list-item></a
+              >
 
               <v-list-item>
                 <v-list-item-title>
@@ -774,83 +795,81 @@
             </v-list>
           </v-menu></v-col
         >
-        <v-col cols="4">
+        <v-col class="d-flex" style="align-items: center">
           <v-text-field
             label="Search"
             prepend-inner-icon="mdi-magnify"
             v-model="search"
             clearable
-          ></v-text-field
-        ></v-col>
-      </v-row>
-      <v-row justify="space-between" class="my-4">
-        <v-col>
-          <div class="text-h5">Question Bank</div>
-        </v-col>
-        <v-col class="mt-2">
-          <v-row justify="end">
-            <v-btn class="primary white--text mx-2" rounded-lg @click="filterDialog = true"
-              ><v-icon>mdi-tune</v-icon>Filter</v-btn
-            ><v-btn
-              v-if="((user_permission().question_bank && user_permission().question_bank.panel && user_permission().question_bank.panel.delete) || user().role_type == 'SUPER_ADMIN')"
-              class="primary white--text mx-2"
-              rounded-lg
-              @click="deleteDialog = true"
-              :disabled="selectedTableItems.length == 0"
-              ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-            ><v-btn class="primary white--text mx-2" rounded-lg
-              ><v-icon>mdi-export</v-icon>Export</v-btn
-            >
-            <v-dialog v-model="deleteDialog" max-width="366px" persistent>
-              <v-card fluid>
-                <v-container fluid class="pa-0">
-                  <v-card-text class="text-center">
-                    <v-icon size="70" class="pt-4"
-                      >mdi-trash-can-outline</v-icon
-                    >
-                    <p class="text-h5 pt-4 pb-0">Delete Question</p>
-                    <p
-                      class="text-disabled grey--text text-subtitle-1"
-                      color="rgba(0, 0, 0, 0.6)"
-                      disabled
-                    >
-                      This action will permanently delete the item . This cannot
-                      be undone
-                    </p>
+          ></v-text-field>
+          <v-btn
+            class="primary white--text mx-2"
+            rounded-lg
+            @click="filterDialog = true"
+            ><v-icon>mdi-tune</v-icon>Filter</v-btn
+          ><v-btn
+            v-if="
+              (user_permission().question_bank &&
+                user_permission().question_bank.panel &&
+                user_permission().question_bank.panel.delete) ||
+              user().role_type == 'SUPER_ADMIN'
+            "
+            class="primary white--text mx-2"
+            rounded-lg
+            @click="deleteDialog = true"
+            :disabled="selectedTableItems.length == 0"
+            ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+          ><v-btn class="primary white--text mx-2" rounded-lg
+            ><v-icon>mdi-export</v-icon>Export</v-btn
+          >
+          <v-dialog v-model="deleteDialog" max-width="366px" persistent>
+            <v-card fluid>
+              <v-container fluid class="pa-0">
+                <v-card-text class="text-center">
+                  <v-icon size="70" class="pt-4">mdi-trash-can-outline</v-icon>
+                  <p class="text-h5 pt-4 pb-0">Delete Question</p>
+                  <p
+                    class="text-disabled grey--text text-subtitle-1"
+                    color="rgba(0, 0, 0, 0.6)"
+                    disabled
+                  >
+                    This action will permanently delete the item . This cannot
+                    be undone
+                  </p>
 
-                    <div class="d-flex justify-space-between" fluid>
-                      <v-btn
-                        depressed
-                        class="secondary black--text"
-                        large
-                        width="157px"
-                        rounded
-                        @click="
-                          () => {
-                            deleteDialog = false;
-                            formbtnBool = false;
-                          }
-                        "
-                        >CANCEL</v-btn
-                      >
-                      <v-btn
-                        class="black white--text"
-                        depressed
-                        large
-                        width="157px"
-                        rounded
-                        :disabled="selectedTableItems.length == 0"
-                        @click="deleteData(selectedTableItems)"
-                        >DELETE</v-btn
-                      >
-                    </div>
-                  </v-card-text>
-                </v-container>
-              </v-card>
-            </v-dialog>
-          </v-row>
+                  <div class="d-flex justify-space-between" fluid>
+                    <v-btn
+                      depressed
+                      class="secondary black--text"
+                      large
+                      width="157px"
+                      rounded
+                      @click="
+                        () => {
+                          deleteDialog = false;
+                          formbtnBool = false;
+                        }
+                      "
+                      >CANCEL</v-btn
+                    >
+                    <v-btn
+                      class="black white--text"
+                      depressed
+                      large
+                      width="157px"
+                      rounded
+                      :disabled="selectedTableItems.length == 0"
+                      @click="deleteData(selectedTableItems)"
+                      >DELETE</v-btn
+                    >
+                  </div>
+                </v-card-text>
+              </v-container>
+            </v-card>
+          </v-dialog>
         </v-col>
       </v-row>
+
       <v-data-table
         v-model="selectedTableItems"
         :headers="headers"
@@ -882,7 +901,12 @@
         <template v-slot:[`item.actions`]="{ item }">
           <div class="d-flex flex-row">
             <img
-              v-if="((user_permission().question_bank && user_permission().question_bank.panel && user_permission().question_bank.panel.update) || user().role_type == 'SUPER_ADMIN')"
+              v-if="
+                (user_permission().question_bank &&
+                  user_permission().question_bank.panel &&
+                  user_permission().question_bank.panel.update) ||
+                user().role_type == 'SUPER_ADMIN'
+              "
               width="36px"
               height="36px"
               @click="editQuestion(item.id)"
@@ -1158,8 +1182,6 @@
           </v-container>
         </v-card>
       </v-dialog>
-     
-
     </div>
     <!-- Error Dialog -->
     <v-dialog v-model="errorDialog" max-width="366px" persistent>
@@ -1255,12 +1277,12 @@ import SubjectController from "@/controllers/SubjectController";
 import SkillsController from "@/controllers/SkillsController";
 import LevelController from "@/controllers/LevelController";
 import AuthService from "@/services/AuthService";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 export default {
   name: "QuestionBankView",
   data() {
     return {
-      questionUuid:'',
+      questionUuid: "",
       editorConfig: {
         extraPlugins: "ckeditor_wiris",
       },
@@ -1340,28 +1362,28 @@ export default {
           option_value: "Option 1",
           option_type: "TEXT",
           is_correct: false,
-          option_uuid: uuidv4()
+          option_uuid: uuidv4(),
         },
         {
           option_key: "B",
           option_value: "Option 2",
           option_type: "TEXT",
           is_correct: false,
-          option_uuid: uuidv4()
+          option_uuid: uuidv4(),
         },
         {
           option_key: "C",
           option_value: "Option 3",
           option_type: "TEXT",
           is_correct: false,
-          option_uuid: uuidv4()
+          option_uuid: uuidv4(),
         },
         {
           option_key: "D",
           option_value: "Option 4",
           option_type: "TEXT",
           is_correct: false,
-          option_uuid: uuidv4()
+          option_uuid: uuidv4(),
         },
       ],
       headers: [
@@ -1410,25 +1432,25 @@ export default {
       selectedtags: [],
       mtfAnswers: [
         {
-          answer_key: 'A',
+          answer_key: "A",
           answer_value: "Answer 1",
           answer_type: "TEXT",
           answer_uuid: uuidv4(),
         },
         {
-          answer_key: 'B',
+          answer_key: "B",
           answer_value: "Answer 2",
           answer_type: "TEXT",
           answer_uuid: uuidv4(),
         },
         {
-          answer_key: 'C',
+          answer_key: "C",
           answer_value: "Answer 3",
           answer_type: "TEXT",
           answer_uuid: uuidv4(),
         },
         {
-          answer_key: 'D',
+          answer_key: "D",
           answer_value: "Answer 4",
           answer_type: "TEXT",
           answer_uuid: uuidv4(),
@@ -1523,7 +1545,7 @@ export default {
       return String.fromCharCode(65 + num);
     },
     getLastPart(url) {
-      const parts = url.split('/');
+      const parts = url.split("/");
       return parts.at(-1);
     },
     clearValue() {
@@ -1595,8 +1617,8 @@ export default {
     },
     onChange(e) {
       this.selectedFile = e.target.files[0];
-      this.uploadingMsg = 'File Uploading...'
-      console.log("selected file",this.selectedFile)
+      this.uploadingMsg = "File Uploading...";
+      console.log("selected file", this.selectedFile);
       this.uploadingDialog = true;
       this.getPreSignedUrl();
     },
@@ -1608,14 +1630,16 @@ export default {
         file_type: this.selectedFile.type,
         business_type: "b2c",
         question_uuid: this.questionUuid,
-        option_uuid: this.uploadingForOption?  this.options[this.editedOptionIndex].option_uuid:'',
+        option_uuid: this.uploadingForOption
+          ? this.options[this.editedOptionIndex].option_uuid
+          : "",
       });
       this.preSignedUrl = response.data.data.signed_request;
-     
+
       this.uploadToS3(response.data.data.url);
     },
     async uploadToS3(imgUrl) {
-      console.log("Image URL: ",imgUrl);
+      console.log("Image URL: ", imgUrl);
       console.log("Pre-Signed URL: ", this.preSignedUrl);
       const uploadResponse = await UploadController.uploadFile(
         this.preSignedUrl,
@@ -1631,7 +1655,7 @@ export default {
       }
       this.uploadingForOption = false;
       this.uploadingMsg = "File uploaded";
-      this.selectedFile = null
+      this.selectedFile = null;
       console.log("Upload Response: ", uploadResponse);
     },
     formbtn() {
@@ -1649,12 +1673,14 @@ export default {
           skill_id: this.skillId,
           subject_id: this.subject,
           correct_answer_score: this.correctAnswerScore,
-          estimated_time: this.estimatedTime != '' ? parseInt(this.estimatedTime) : 0 ,
+          estimated_time:
+            this.estimatedTime != "" ? parseInt(this.estimatedTime) : 0,
           blooms_taxonomy: this.bloomsTaxonomy,
           knowledge_level: this.knowledgeLevel,
           complexity_level: this.complexityLevel,
           difficulty_level: this.difficultyLevel,
-          question_mtf_answers: this.questionType == 'MATCH_THE_FOLLOWING' ? this.mtfAnswers : null,
+          question_mtf_answers:
+            this.questionType == "MATCH_THE_FOLLOWING" ? this.mtfAnswers : null,
           level_id: this.level,
           // correct_answer: this.getCorrectAnswer(),
           hint: this.hint,
@@ -1684,16 +1710,22 @@ export default {
       this.questionType = item.question_type;
       this.skillId = item.skill_id;
       this.correctAnswerScore = item.correct_answer_score;
-      
-      this.estimatedTime = item.estimated_time != '' ? parseInt(item.estimated_time) : 0 ;
-      this.bloomsTaxonomy = item.blooms_taxonomy != '' ? item.blooms_taxonomy : null;
-      this.knowledgeLevel = item.knowledge_level != '' ? item.knowledge_level : null;
-      this.complexityLevel = item.complexity_level != '' ? item.complexity_level : null;
-      this.difficultyLevel = item.difficulty_level != '' ? item.difficulty_level : null;
+
+      this.estimatedTime =
+        item.estimated_time != "" ? parseInt(item.estimated_time) : 0;
+      this.bloomsTaxonomy =
+        item.blooms_taxonomy != "" ? item.blooms_taxonomy : null;
+      this.knowledgeLevel =
+        item.knowledge_level != "" ? item.knowledge_level : null;
+      this.complexityLevel =
+        item.complexity_level != "" ? item.complexity_level : null;
+      this.difficultyLevel =
+        item.difficulty_level != "" ? item.difficulty_level : null;
       this.correct_answer = item.correct_answer;
       this.hint = item.hint;
       this.subject = item.subject_id;
-      this.proficiencyLevel = item.proficiency_level != '' ? item.proficiency_level : null;
+      this.proficiencyLevel =
+        item.proficiency_level != "" ? item.proficiency_level : null;
       this.level = item.level_id;
       this.options = item.question_options;
       this.mtfAnswers = item.question_mtf_answers;
@@ -1768,7 +1800,7 @@ export default {
         option_value: "Option " + (this.options.length + 1),
         option_type: "TEXT",
         is_correct: false,
-        option_uuid: uuidv4()
+        option_uuid: uuidv4(),
       });
       console.log(this.options);
     },
@@ -1808,7 +1840,7 @@ export default {
           return this.trueFalseCorrectAnswer;
 
         case "MATCH_THE_FOLLOWING":
-          return 'NA';
+          return "NA";
 
         default:
           break;
@@ -1857,12 +1889,12 @@ export default {
         console.log(selectTags);
         this.isCreatingQuestion = true;
         const response = await QuestionsController.createQuestion({
-          uuid:this.questionUuid,
+          uuid: this.questionUuid,
           statement: this.questionName,
           question_type: this.questionType,
           questionDescription: this.questionDescription,
           s3_asset_urls: this.questionAssetUrl,
-          mime_type:this.questionAssetType,
+          mime_type: this.questionAssetType,
           lo_ids: this.selectedLOs,
           skill_id: this.skillId,
           subject_id: this.subject,
@@ -1873,15 +1905,16 @@ export default {
           complexity_level: this.complexityLevel,
           difficulty_level: this.difficultyLevel,
           proficiency_level: this.proficiencyLevel,
-           correct_answer: this.getCorrectAnswer(), 
-           question_mtf_answers: this.questionType == 'MATCH_THE_FOLLOWING' ? this.mtfAnswers : null,
+          correct_answer: this.getCorrectAnswer(),
+          question_mtf_answers:
+            this.questionType == "MATCH_THE_FOLLOWING" ? this.mtfAnswers : null,
           level_id: this.level,
           hint: this.hint,
           tags: selectTags,
           answer_explanation: this.answerExplanation,
           question_options: this.getOptions(),
         });
-        console.log("create question res",response.data.success);
+        console.log("create question res", response.data.success);
         if (response.data.success) {
           this.isCreatingQuestion = false;
           this.successDialog = true;
@@ -1948,8 +1981,8 @@ export default {
       this.filterDialog = false;
       this.filterData = false;
     },
-    editQuestion (id) {
-      window.location.href = `/#/edit/question/${id}`
+    editQuestion(id) {
+      window.location.href = `/#/edit/question/${id}`;
     },
     async filterQuestions(
       questionTypeIds,
@@ -2028,7 +2061,7 @@ export default {
     this.getSubjects();
     this.getSkills();
     this.getLevels();
-    this.questionUuid=uuidv4();
+    this.questionUuid = uuidv4();
   },
 };
 </script>

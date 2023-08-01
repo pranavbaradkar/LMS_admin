@@ -1,39 +1,35 @@
 <template>
   <v-container fluid class="pa-8">
-    <v-row>
+    <v-row justify="space-between">
+      <v-col>
+        <div class="text-h5">Roles</div>
+      </v-col>
+    </v-row>
+    <v-row style="align-items: center">
       <v-col class="d-flex align-center">
         <v-btn to="/role/create" class="primary white--text" large rounded-lg
           ><v-icon>mdi-plus</v-icon>Create Role</v-btn
         >
       </v-col>
-      <v-col cols="4">
+      <v-col class="d-flex" style="align-items: center">
         <v-text-field
           label="Search"
           prepend-inner-icon="mdi-magnify"
           clearable
           v-model="search"
-        ></v-text-field
-      ></v-col>
-    </v-row>
-    <v-row justify="space-between" class="my-4">
-      <v-col>
-        <div class="text-h5">Roles</div>
+        ></v-text-field>
+        <v-btn
+          class="primary white--text mx-2"
+          :disabled="selected.length == 0"
+          rounded-lg
+          @click="deleteDialog = true"
+          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+        ><v-btn class="primary white--text mx-2" rounded-lg
+          ><v-icon>mdi-export</v-icon>Export</v-btn
+        >
       </v-col>
+    </v-row>
 
-      <v-col>
-        <v-row justify="end">
-          <v-btn
-            class="primary white--text mx-2"
-            :disabled="selected.length == 0"
-            rounded-lg
-            @click="deleteDialog = true"
-            ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-          ><v-btn class="primary white--text mx-2" rounded-lg
-            ><v-icon>mdi-export</v-icon>Export</v-btn
-          >
-        </v-row>
-      </v-col>
-    </v-row>
     <v-data-table
       v-model="selected"
       :headers="headers"
@@ -59,10 +55,12 @@
             src="../assets/edit.svg"
           />
           <img
-            @click="() => {
-              deleteDialog = true
-              selected = item
-            }"
+            @click="
+              () => {
+                deleteDialog = true;
+                selected = item;
+              }
+            "
             width="36px"
             height="36"
             class="cursor"
@@ -135,7 +133,6 @@
         </v-container>
       </v-card>
     </v-dialog>
-
   </v-container>
 </template>
 <script>
@@ -179,8 +176,8 @@ export default {
   },
   watch: {},
   methods: {
-    async searchData(search) { 
-      console.log(search)
+    async searchData(search) {
+      console.log(search);
     },
     getDate(timeStamp) {
       return new Date(timeStamp).toString().substring(0, 16);
@@ -200,8 +197,8 @@ export default {
       return this.formbtnBool === false ? "Created" : "Updated";
     },
     redirectToEdit(item) {
-      window.location.href=`/#/role/edit/${item.id}`
-    },  
+      window.location.href = `/#/role/edit/${item.id}`;
+    },
     async fetchAllRoles() {
       const response = await AdminController.getRoles();
       if (response.data.success) {
