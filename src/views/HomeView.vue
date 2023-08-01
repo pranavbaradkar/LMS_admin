@@ -141,7 +141,7 @@
     </v-menu>
             <VueDatePicker
                     v-model="date"
-                    style="opacity: 100; top: -200px"
+                    style="opacity: 0; top: -200px"
                     v-if="calenderVisible"
                     :visible="calenderVisible"
                     range
