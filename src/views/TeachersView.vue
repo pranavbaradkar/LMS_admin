@@ -72,7 +72,7 @@
           rounded-lg
           @click="deleteDialog = true"
           :disabled="selected.length == 0"
-          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+          ><img src="../assets/trash.svg" alt="Edit Icon" />Delete</v-btn
         ><v-btn
           v-if="
             (user_permission.users &&
