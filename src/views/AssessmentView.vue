@@ -62,17 +62,17 @@
             <v-tab
               active-class="white ma-1 black--text"
               class="rounded"
-              v-on:click="assessmentUsers = yetToAttempt"
+              v-on:click="assessmentUsers = notCleared"
             >
               Not Cleared
             </v-tab>
-            <v-tab
+            <!-- <v-tab
               active-class="ma-1 white black--text"
               class="rounded"
               v-on:click="assessmentUsers = yetToAttempt"
             >
               Yet To Attempt
-            </v-tab>
+            </v-tab> -->
           </v-tabs>
         </div>
       </v-col>
@@ -87,6 +87,7 @@
 
         <v-spacer></v-spacer>
         <v-text-field
+         v-model="searchParams"
           label="Search"
           class="ma-0 pa-0"
           prepend-inner-icon="mdi-magnify"
@@ -364,7 +365,7 @@
       :items="assessmentUsers"
     >
       <template v-slot:[`item.actions`]="{item}">
-        <a :href="`/#/users/profile/${item}`">
+        <a :href="`/#/users/profile/${item.id}`">
         <img width="30px" class="pt-2 cursor" src="../assets/user.svg" />
         </a>
       </template>
@@ -374,9 +375,9 @@
       </template>
 
       <template v-slot:[`item.status`]="{item}">
-        <div class="success-badge" v-if="item.status == 'cleared'"><i class="dot me-2" />Cleared </div>
-        <div class="failed-badge" v-if="item.status == 'not_cleared'"><i class="dot me-2" />Not cleared </div>
-        <div class="warning-badge" v-if="item.status == 'in_progress'"><i class="dot me-2" />In progress</div>
+        <div class="success-badge" v-if="item.status == 'PASSED'"><i class="dot me-2" />Cleared </div>
+        <div class="failed-badge" v-if="item.status == 'FAILED'"><i class="dot me-2" />Not cleared </div>
+        <div class="warning-badge" v-if="item.status == 'FINISHED'"><i class="dot me-2" />In progress</div>
       </template>
     </v-data-table>
 
@@ -1422,6 +1423,7 @@ export default {
       rules: {
         required: (value) => !!value || "Field is required",
       },
+      searchParams:"",
       approveDialog: false,
       current_assessment: null,
       successMessage:'New Assessment Created',
@@ -1563,6 +1565,11 @@ export default {
       mainsQuestionsIds: [],
       editedSkill: null,
     };
+  },
+  watch: {
+    searchParams(newValue){
+      this.searchResult(newValue);
+    }
   },
   computed: {
     user() {
@@ -1958,6 +1965,20 @@ export default {
       
       console.log(response);
       return response;
+    },
+
+    async searchResult (p) {
+      console.log(p);
+      const response = await ChartsController.getAssessmentUsersData({assessment_id:this.selectedId, searchData: {search: p}});
+      if(response.data.success){
+        this.assessmentUsers = response.data.data.rows;
+      this.filterData();
+      this.assessmentUsers = this.inProgress
+      // console.log(this.assessmentUsers);
+      }
+      else{
+        alert(response.data.error)
+      }
     },
     async fetchAssessmentUsers(assessment){
       this.showUsers = true;

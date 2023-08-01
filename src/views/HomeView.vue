@@ -39,54 +39,65 @@
             </div>
             <div class="ml-6">
               <div style="font-size: 10px; font-weight: 500">
-                Select Campaigns/Schools
+                {{ selectedCampaign != 'ALL' ? 'Campaign' : selectedSchool != 'ALL' ? 'School' : 'Select campaign/school' }} 
               </div>
-              <v-menu :close-on-content-click="false" ref="menuRef" class="dropDown" location="bottom">
+              <v-menu :close-on-content-click="false" ref="menuRef" class="dropDown" location="bottom" :offset-y="true">
       <template v-slot:activator="{}">
         <div @click="() => {$refs.menuRef.isActive = true}" style="cursor: pointer;">
-          {{ selectedCampaign != -1 ? selectedCampaign : selectedSchool != -1 ? selectedSchool : 'Default' }} 
+          {{ selectedCampaign != 'ALL' ? selectedCampaign : selectedSchool != 'ALL' ? selectedSchool : 'Default' }} 
           <span> <v-icon>mdi-menu-down</v-icon> </span>
         </div>
       </template>
       <v-list height="100%">
-      <v-list-item @click="() => {
+      <v-list-item 
+      style="border-bottom: 1px solid rgba(0, 0, 0, 0.10);"
+      @click="() => {
         $refs.menuRef.isActive = false;
         changeDataType('Default', null)
-        }">
-        <v-list-item-content>
+        }" :class="selectedCampaign == 'ALL' && selectedSchool == 'ALL' ? 'highlight' : ''">
+        <v-list-item-content :class="selectedCampaign == 'ALL' && selectedSchool == 'ALL' ? 'highlight' : ''">
           <v-list-item-title v-text="'Default'"></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-group
-        v-for="item in dataTypeItem"
-        :key="item.title"
-        v-model="item.active"
-        no-action
-      >
-        <template v-slot:activator>
-          <v-list-item-content>
+      <v-list-item style="border-bottom: 1px solid rgba(0, 0, 0, 0.10);" class="pr-0" v-for="(item,index) in dataTypeItem" :key="index" :class="(item.title === 'Campaigns' && selectedCampaign != 'ALL' ) || (item.title === 'Schools' && selectedSchool != 'ALL') ? 'highlight' : ''">
+        <v-list-item-content>
+      <v-menu open-on-hover :close-on-content-click="false" ref="menuRefL" class="dropDown ml-12" location="right" :offset-x="true">
+      <template v-slot:activator="{on}">
+        <div v-on="on" style="cursor: pointer;" class="d-flex justify-space-between align-center">
+          <div :class="(item.title === 'Campaigns' && selectedCampaign != 'ALL' ) || (item.title === 'Schools' && selectedSchool != 'ALL') ? 'highlight' : ''">
+          {{ item.title }} 
+          </div>
+          <div class="mr-2"> <v-icon>mdi-chevron-right</v-icon> </div>
+        </div>
+      </template>
+      <v-list>
+        <v-list-item style="border-bottom: 1px solid rgba(0, 0, 0, 0.10);">
+          <v-list-item-content style="font-weight: 500">
             <v-list-item-title v-text="item.title"></v-list-item-title>
           </v-list-item-content>
-        </template>
-
+        </v-list-item>
         <v-list-item
           v-for="child in item.items"
           :key="child.title"
-          style="height: 100%; padding-left: 4px"
+          style="height: 100%; padding-left: 4px; border-bottom: 1px solid rgba(0, 0, 0, 0.10);"
           @click="() => {
             $refs.menuRef.isActive = false;
             changeDataType(item.title,child)
           }"
+          :class="(selectedCampaign === child.name || selectedSchool === child.name) ? 'highlight' : ''"
         >
           <v-list-item-avatar>
-            <v-icon v-if="item.title == 'Campaigns'">mdi-alpha-c-circle</v-icon>
-            <v-icon v-if="item.title == 'Schools'">mdi-alpha-s-circle</v-icon>
+            <v-icon color="#6E56CF" v-if="item.title == 'Campaigns'">mdi-alpha-c-circle</v-icon>
+            <v-icon color="#6E56CF" v-if="item.title == 'Schools'">mdi-alpha-s-circle</v-icon>
           </v-list-item-avatar>
-          <v-list-item-content>
+          <v-list-item-content :class="selectedCampaign == child.name || selectedSchool == child.name ? 'highlight' : ''">
             <v-list-item-title v-text="child.name"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </v-list-group>
+      </v-list>
+      </v-menu>
+       </v-list-item-content>
+      </v-list-item>
     </v-list>
     </v-menu>
             </div>
@@ -97,7 +108,7 @@
       <div style="font-size: 12px; font-weight: 500; color: rgba(0, 0, 0, 0.40)" class="mr-2">
           Period
       </div>
-      <v-menu :close-on-content-click="false" ref="menuRefp" class="dropDown" location="bottom">
+      <v-menu :close-on-content-click="false" ref="menuRefp" class="dropDown" location="bottom" :offset-y="true">
       <template v-slot:activator="{}">
         <div @click="() => {$refs.menuRefp.isActive = true}" style="cursor: pointer;">
           {{ date.end && period == 'Custom' ? `${date.start} - ${date.end}` : period }} 
@@ -107,18 +118,18 @@
       <v-list height="100%">
       <v-list-item @click="() => {
         $refs.menuRefp.isActive = false;
-        changePeriod('Today')
-        }">
-        <v-list-item-content>
-          <v-list-item-title v-text="'Today'"></v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item @click="() => {
-        $refs.menuRefp.isActive = false;
         changePeriod('Last 7 days')
         }">
         <v-list-item-content>
           <v-list-item-title v-text="'Last 7 days'"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item @click="() => {
+        $refs.menuRefp.isActive = false;
+        changePeriod('Last 15 days')
+        }">
+        <v-list-item-content>
+          <v-list-item-title v-text="'Last 15 days'"></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-list-item @click="() => {
@@ -179,7 +190,7 @@
           <v-card class="rounded-xl" outlined>
             <v-card-title style="font-weight: 400;">Teacher's Conversion</v-card-title>
             <v-card-text style="text-align: center; position: relative;">
-              <div style="position: absolute; top: 74px;z-index: 1;left: 104px;">
+              <div style="position: absolute; top: 78px;z-index: 1;left: 107px;">
                 <div style="font-size: 22px; font-weight: 700; color: black;">
                   {{ NudgeData[3].value }}
                 </div>
@@ -213,13 +224,13 @@
         </v-col>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Success %</v-card-title>
+            <v-card-title style="font-weight: 400;">Assessment success rate</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
                 :height="260"
                 type="ColumnChart"
                 :data="chartDataForSuccess"
-                :options="chartOptionsForVgosScreening"
+                :options="chartOptionsForVgosScreeningCount"
                 :resizeDebounce="0"
               />
             </v-card-text>
@@ -230,7 +241,7 @@
       <v-row>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Avg. Time To Answer</v-card-title>
+            <v-card-title style="font-weight: 400;">Avg. Time To Answer (sec)</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
                 type="SteppedAreaChart"
@@ -243,13 +254,13 @@
         </v-col>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">User</v-card-title>
+            <v-card-title style="font-weight: 400;">Assessment attempted count</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
                 :height="260"
                 type="ColumnChart"
                 :data="chartDataForUsers"
-                :options="chartOptionsForVgosScreening"
+                :options="chartOptionsForVgosScreeningCount"
                 :resizeDebounce="0"
               />
             </v-card-text>
@@ -259,7 +270,7 @@
           <v-card class="rounded-xl" outlined>
             <v-card-title style="font-weight: 400;">Sign Up by Platform</v-card-title>
             <v-card-text style="text-align: center; position: relative;">
-              <div style="position: absolute; top: 74px;z-index: 1;left: 104px;">
+              <div style="position: absolute; top: 78px;z-index: 1;left: 107px;">
                 <div style="font-size: 22px; font-weight: 700; color: black;">
                   265
                 </div>
@@ -308,8 +319,8 @@ export default {
       userType: 'ALL',
       userTypeArray: ['ALL','TEACHER','JOB_SEEKER'],
       dataType: 'Default',
-      selectedCampaign: -1,
-      selectedSchool: -1,
+      selectedCampaign: 'ALL',
+      selectedSchool: 'ALL',
       period: 'Last 1 month',
       date: new Date(),
       NudgeData: [
@@ -379,6 +390,17 @@ export default {
         height: 200,
         width: 385,
         chartArea: {width: '80%', height: '50%', left: 50},
+        vAxis: {title: 'Percentage', titleTextStyle: {fontSize: 10, italic: false}},
+        hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}}
+      },
+      chartOptionsForVgosScreeningCount: {
+        //title: "VGOS Screening",
+        curveType: "function",
+        legend: { position: "top", alignment: "end" },
+        colors: ["#467BCA", "#FFB200"],
+        height: 200,
+        width: 385,
+        chartArea: {width: '80%', height: '50%', left: 50},
         vAxis: {title: 'No. of users', titleTextStyle: {fontSize: 10, italic: false}},
         hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}}
       },
@@ -390,14 +412,14 @@ export default {
         height: 200,
         width: 385,
         chartArea: {width: '80%', height: '50%', left: 50},
-        vAxis: {title: 'Avg time', titleTextStyle: {fontSize: 10, italic: false}},
+        vAxis: {title: 'Avg time (sec)', titleTextStyle: {fontSize: 10, italic: false}},
         hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}},
         isStacked: true,
       },
       payload: {
         user_type: 'ALL',
-        campaign_id: -1,
-        school_id: -1,
+        campaign_id: 'ALL',
+        school_id: 'ALL',
         start_date: JSON.stringify(new Date(new Date().setDate(new Date().getDate() - 30))).slice(0,11),
         end_date: JSON.stringify(new Date()).slice(0,11),
       }
@@ -407,22 +429,22 @@ export default {
     changeDataType (title,item) {
       console.log(title, item);
       if (title == 'Campaigns') {
-        this.payload.school_id = -1;
+        this.payload.school_id = 'ALL';
         this.payload.campaign_id = item.id;
         this.selectedCampaign = item.name;
-        this.selectedSchool = -1;
+        this.selectedSchool = 'ALL';
       }
       else if (title == 'Schools') {
         this.payload.school_id = item.id;
-        this.payload.campaign_id = -1;
-        this.selectedCampaign = -1;
+        this.payload.campaign_id = 'ALL';
+        this.selectedCampaign = 'ALL';
         this.selectedSchool = item.name;
       }
       else {
-        this.payload.school_id = -1;
-        this.payload.campaign_id = -1;
-        this.selectedCampaign = -1;
-        this.selectedSchool = -1;
+        this.payload.school_id = 'ALL';
+        this.payload.campaign_id = 'ALL';
+        this.selectedCampaign = 'ALL';
+        this.selectedSchool = 'ALL';
       }
       this.getDashboardData(this.payload);
     },
@@ -438,10 +460,10 @@ export default {
     changePeriod(p) {
       console.log(p)
       this.period = p;
-      if (this.period == 'Today') {
+      if (this.period == 'Last 15 days') {
         const end_date = new Date();
         const current_date = new Date();
-        const start_date = new Date(current_date.setDate(current_date.getDate() - 1));
+        const start_date = new Date(current_date.setDate(current_date.getDate() - 15));
         this.payload.start_date = JSON.stringify(start_date).slice(1,11),
         this.payload.end_date = JSON.stringify(end_date).slice(1,11),
         this.date = new Date();
@@ -561,5 +583,10 @@ export default {
 .v-menu__content {
   max-height: 300px;
   max-width: 400px;
+  min-width: 100px;
+}
+.highlight {
+  background-color: #F5F2FF;
+  color: #6E56CF;
 }
 </style>
