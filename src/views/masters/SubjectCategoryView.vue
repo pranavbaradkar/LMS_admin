@@ -1,59 +1,132 @@
 <template>
   <v-container fluid class="pa-8">
-    <v-row>
+    <v-row justify="space-between">
       <v-col>
-        <v-btn v-if="(user_permission.master && user_permission.master.child.subject_category && user_permission.master.child.subject_category.create)  || user.role_type== 'SUPER_ADMIN'"
-         @click="dialog = true, newCreateSubCatValue()" class="background_btn white--text" large
-          rounded-lg><v-icon>mdi-plus</v-icon>Create Subject Category</v-btn>
+        <div class="text-h5">Subject Category</div>
+      </v-col>
+    </v-row>
+    <v-row style="align-items: center">
+      <v-col class="mb-1">
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.subject_category &&
+              user_permission.master.child.subject_category.create) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          @click="(dialog = true), newCreateSubCatValue()"
+          class="background_btn white--text"
+          large
+          rounded-lg
+          ><v-icon>mdi-plus</v-icon>Create Subject Category</v-btn
+        >
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
             <v-card>
-              <v-card-title class="secondary mb-8">{{ formbtn() }} Subject Category</v-card-title>
+              <v-card-title class="secondary mb-8"
+                >{{ formbtn() }} Subject Category</v-card-title
+              >
               <v-card-text class="px-6 pb-0">
-                <v-text-field outlined class="rounded-xl" v-model="subCategory" label="Enter Subject Category*" required
-                :rules="[v => !!v || 'Subject Category is required']"></v-text-field>
-                <v-text-field outlined class="rounded-xl pb-0" v-model="subDescription" label="Description*"
-                :rules="[v => !!v || 'Description is required']" required></v-text-field>
+                <v-text-field
+                  outlined
+                  class="rounded-xl"
+                  v-model="subCategory"
+                  label="Enter Subject Category*"
+                  required
+                  :rules="[(v) => !!v || 'Subject Category is required']"
+                ></v-text-field>
+                <v-text-field
+                  outlined
+                  class="rounded-xl pb-0"
+                  v-model="subDescription"
+                  label="Description*"
+                  :rules="[(v) => !!v || 'Description is required']"
+                  required
+                ></v-text-field>
               </v-card-text>
               <v-card-actions class="px-6 pb-6">
                 <small>*All fields are mandatory</small>
                 <v-spacer></v-spacer>
-                <v-btn width="102px" height="48px" rounded outlined class="pa-4" @click="() => { dialog = false; formbtnBool = false }">Cancel</v-btn>
-                <v-btn width="102px" height="48px" rounded @click="saveInputs" class="primary pa-4" :loading="loading">{{ formbtn() }}</v-btn>
+                <v-btn
+                  width="102px"
+                  height="48px"
+                  rounded
+                  outlined
+                  class="pa-4"
+                  @click="
+                    () => {
+                      dialog = false;
+                      formbtnBool = false;
+                    }
+                  "
+                  >Cancel</v-btn
+                >
+                <v-btn
+                  width="102px"
+                  height="48px"
+                  rounded
+                  @click="saveInputs"
+                  class="primary pa-4"
+                  :loading="loading"
+                  >{{ formbtn() }}</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-form>
-
         </v-dialog>
       </v-col>
-      <v-col cols="4">
-        <v-text-field label="Search" prepend-inner-icon="mdi-magnify" v-model="search" clearable></v-text-field></v-col>
-    </v-row>
-    <v-row justify="space-between" class="my-4">
-      <v-col>
-        <div class="text-h5">Subject Category</div>
+      <v-col class="d-flex" style="align-items: center">
+        <v-text-field
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          v-model="search"
+          clearable
+        ></v-text-field>
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.subject_category &&
+              user_permission.master.child.subject_category.delete) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          class="background_btn white--text mx-2"
+          rounded-lg
+          :disabled="selected.length == 0"
+          @click="deleteDialog = true"
+          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+        ><v-btn class="background_btn white--text mx-2" rounded-lg
+          ><v-icon>mdi-export</v-icon>Export</v-btn
+        >
       </v-col>
+    </v-row>
 
-      <v-col>
-        <v-row justify="end">
-          <v-btn v-if="(user_permission.master && user_permission.master.child.subject_category && user_permission.master.child.subject_category.delete)  || user.role_type== 'SUPER_ADMIN'"
-          class="background_btn white--text mx-2" rounded-lg :disabled="selected.length == 0"
-            @click="deleteDialog = true"><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn><v-btn class="background_btn white--text mx-2"
-            rounded-lg><v-icon>mdi-export</v-icon>Export</v-btn>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-data-table v-model="selected" :headers="headers" :items="tableData" show-select :single-select="singleSelect"  :options.sync="options"
-    :footer-props="{
-    itemsPerPageOptions: [5, 10, 20, 50,100]
-    }"  
-    :server-items-length="count">
-      <template v-slot:[`item.created_at`]="{item}">
-        {{getDate(item.created_at)}}
-       </template>
+    <v-data-table
+      v-model="selected"
+      :headers="headers"
+      :items="tableData"
+      show-select
+      :single-select="singleSelect"
+      :options.sync="options"
+      :footer-props="{
+        itemsPerPageOptions: [5, 10, 20, 50, 100],
+      }"
+      :server-items-length="count"
+    >
+      <template v-slot:[`item.created_at`]="{ item }">
+        {{ getDate(item.created_at) }}
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn v-if="(user_permission.master && user_permission.master.child.subject_category && user_permission.master.child.subject_category.update)  || user.role_type== 'SUPER_ADMIN'" 
-        icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.subject_category &&
+              user_permission.master.child.subject_category.update) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          icon
+          class="mr-2 pa-4"
+          @click="updateData(item)"
+        >
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
@@ -63,16 +136,41 @@
         <v-container fluid class="pa-0">
           <v-card-text class="text-center">
             <v-container></v-container>
-            <v-avatar color="secondary" size="90"><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar>
+            <v-avatar color="secondary" size="90"
+              ><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar
+            >
 
             <p class="text-h5 pt-6 pb-0">Delete Subject Category</p>
-            <p class="text-disabled grey--text text-subtitle-1 pt-3" color="rgba(0, 0, 0, 0.6)" disabled>This action will
-              permanently delete the item . This cannot be undone</p>
+            <p
+              class="text-disabled grey--text text-subtitle-1 pt-3"
+              color="rgba(0, 0, 0, 0.6)"
+              disabled
+            >
+              This action will permanently delete the item . This cannot be
+              undone
+            </p>
 
-            <div class="d-flex justify-space-between pt-4 pb-2" fluid> <v-btn depressed class="secondary black--text" large
-                width="157px" rounded @click="deleteDialog = false">CANCEL</v-btn> <v-btn class="black white--text"
-                depressed large width="157px" rounded :loading="dLoading"
-                @click="deleteData(selected)">DELETE</v-btn></div>
+            <div class="d-flex justify-space-between pt-4 pb-2" fluid>
+              <v-btn
+                depressed
+                class="secondary black--text"
+                large
+                width="157px"
+                rounded
+                @click="deleteDialog = false"
+                >CANCEL</v-btn
+              >
+              <v-btn
+                class="black white--text"
+                depressed
+                large
+                width="157px"
+                rounded
+                :loading="dLoading"
+                @click="deleteData(selected)"
+                >DELETE</v-btn
+              >
+            </div>
           </v-card-text>
         </v-container>
       </v-card>
@@ -84,7 +182,14 @@
             <v-icon color="error" size="96">mdi-close-circle-outline</v-icon>
             <p class="text-h5 pt-2 font-weight-medium">Error</p>
             <p class="text-h6 py-3 font-weight-regular">{{ errorMessage }}</p>
-            <v-btn class="primary" large width="157px" rounded @click="errorDialog = false">OK</v-btn>
+            <v-btn
+              class="primary"
+              large
+              width="157px"
+              rounded
+              @click="errorDialog = false"
+              >OK</v-btn
+            >
           </v-card-text>
         </v-container>
       </v-card>
@@ -95,8 +200,15 @@
         <v-container fluid class="pa-8">
           <v-card-text class="text-center">
             <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
-            <p class="text-h5 py-4">Subject Category {{formbtnValue()}}</p>
-            <v-btn class="primary" large width="157px" rounded @click="successDialog = false">OK</v-btn>
+            <p class="text-h5 py-4">Subject Category {{ formbtnValue() }}</p>
+            <v-btn
+              class="primary"
+              large
+              width="157px"
+              rounded
+              @click="successDialog = false"
+              >OK</v-btn
+            >
           </v-card-text>
         </v-container>
       </v-card>
@@ -105,7 +217,7 @@
 </template>
 <script>
 import AuthService from "@/services/AuthService";
-import SubjectCategoryController from '@/controllers/SubjectCategoryController';
+import SubjectCategoryController from "@/controllers/SubjectCategoryController";
 export default {
   name: "SubjectCategoryView",
   data() {
@@ -117,7 +229,7 @@ export default {
       errorDialog: false,
       successDialog: false,
       dialog: false,
-      errorMessage:"",
+      errorMessage: "",
       subCategory: null,
       subDescription: null,
       singleSelect: false,
@@ -128,8 +240,8 @@ export default {
       editId: null,
       formbtnBool: false,
       subjectCategoryData: {},
-      search:'',
-      searchBool:false,
+      search: "",
+      searchBool: false,
       headers: [
         { text: "Subject Category", value: "category" },
         { text: "Created  On", value: "created_at" },
@@ -139,7 +251,6 @@ export default {
       rules: {
         required: (value) => !!value || "Field is required",
       },
-
     };
   },
   computed: {
@@ -148,7 +259,7 @@ export default {
     },
     user_permission() {
       return AuthService.getPermissions();
-    }
+    },
   },
   watch: {
     options: {
@@ -156,34 +267,33 @@ export default {
         console.log(this.options);
         this.pageSize = this.options.itemsPerPage;
         this.page = this.options.page;
-        if(this.searchBool){
+        if (this.searchBool) {
           this.searchData(this.search);
-        }else{
+        } else {
           this.getSubjectCategory();
         }
-        
       },
       deep: true,
     },
-    search(newValue){
+    search(newValue) {
       console.log(newValue);
-        this.searchBool=true
-        this.pageSize = this.options.itemsPerPage;
-        this.page = this.options.page;
-        this.options.page=1;
-        this.searchData(newValue);
-        if(newValue=="" || newValue==null){
-          this.getSubjectCategory();
-          this.searchBool=false;
-        }
-    }
+      this.searchBool = true;
+      this.pageSize = this.options.itemsPerPage;
+      this.page = this.options.page;
+      this.options.page = 1;
+      this.searchData(newValue);
+      if (newValue == "" || newValue == null) {
+        this.getSubjectCategory();
+        this.searchBool = false;
+      }
+    },
   },
   methods: {
-    async searchData(search){
+    async searchData(search) {
       const response = await SubjectCategoryController.searchSubCat(
         this.pageSize,
         this.page,
-        search,
+        search
       );
       console.log(response.data);
       console.log(this.searchBool);
@@ -194,7 +304,7 @@ export default {
       return new Date(timeStamp).toString().substring(0, 16);
     },
     updateData(item) {
-      this.editId = item.id; // selected id for edit 
+      this.editId = item.id; // selected id for edit
       this.formbtnBool = true; // change update/create btn value
       this.dialog = true;
       this.subCategory = item.category;
@@ -203,14 +313,14 @@ export default {
     newCreateSubCatValue() {
       this.subCategory = null;
       this.subDescription = null;
-      this.formbtnBool=false
+      this.formbtnBool = false;
     },
 
     formbtn() {
-      return this.formbtnBool === false ? 'Create' : 'Update'
+      return this.formbtnBool === false ? "Create" : "Update";
     },
     formbtnValue() {
-      return this.formbtnBool === false ? 'Created' : 'Updated'
+      return this.formbtnBool === false ? "Created" : "Updated";
     },
 
     async saveInputs() {
@@ -219,14 +329,28 @@ export default {
         // checking case for update/create
         this.loading = true;
         if (this.formbtnBool == false) {
-          const response = await SubjectCategoryController.createCategory(this.subCategory, this.subDescription, this.subCategory, 1, 3, "icon");
-          console.log(response)
-          res = response;
-        }
-        else {
-          const response = await SubjectCategoryController.updateCategory(this.subCategory, this.subDescription, this.subCategory, 1, 3, "icon", this.editId)
+          const response = await SubjectCategoryController.createCategory(
+            this.subCategory,
+            this.subDescription,
+            this.subCategory,
+            1,
+            3,
+            "icon"
+          );
           console.log(response);
-          res = response
+          res = response;
+        } else {
+          const response = await SubjectCategoryController.updateCategory(
+            this.subCategory,
+            this.subDescription,
+            this.subCategory,
+            1,
+            3,
+            "icon",
+            this.editId
+          );
+          console.log(response);
+          res = response;
         }
         // Close the dialog
         this.loading = false;
@@ -236,38 +360,41 @@ export default {
           this.successDialog = true;
         } else {
           this.errorDialog = true;
-          this.errorMessage=res.data.error;
+          this.errorMessage = res.data.error;
         }
         this.getSubjectCategory();
       }
     },
 
     async deleteData(data) {
-      if(data.length==1){
-      this.dLoading = true;
-      const response = await SubjectCategoryController.deleteCategory(data[0].id);
-      this.getSubjectCategory();
-      this.deleteDialog = false;
-      console.log(response)
-      this.dLoading = false;
-      this.selected = []
-      }else{
-        var ids="";
-        for(var i=0;i<data.length;i++){
+      if (data.length == 1) {
+        this.dLoading = true;
+        const response = await SubjectCategoryController.deleteCategory(
+          data[0].id
+        );
+        this.getSubjectCategory();
+        this.deleteDialog = false;
+        console.log(response);
+        this.dLoading = false;
+        this.selected = [];
+      } else {
+        var ids = "";
+        for (var i = 0; i < data.length; i++) {
           ids = ids + data[i].id;
-            if( i != data.length - 1 ) {
-                ids = ids + ","
-            }
+          if (i != data.length - 1) {
+            ids = ids + ",";
+          }
         }
-      this.dLoading = true;
-      const response = await SubjectCategoryController.deleteBulkCategory(ids);
-      this.getSubjectCategory();
-      this.deleteDialog = false;
-      console.log(response)
-      this.dLoading = false;
-      this.selected = []
+        this.dLoading = true;
+        const response = await SubjectCategoryController.deleteBulkCategory(
+          ids
+        );
+        this.getSubjectCategory();
+        this.deleteDialog = false;
+        console.log(response);
+        this.dLoading = false;
+        this.selected = [];
       }
-  
     },
 
     async getSubjectCategory() {
@@ -276,12 +403,9 @@ export default {
         this.page
       );
       this.subjectCategoryData = response.data.data;
-      this.tableData = this.subjectCategoryData.rows
+      this.tableData = this.subjectCategoryData.rows;
       this.count = response.data.data.count;
-
     },
-
-
   },
   created() {
     this.getSubjectCategory();

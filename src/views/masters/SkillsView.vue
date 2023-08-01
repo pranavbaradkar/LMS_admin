@@ -1,8 +1,19 @@
 <template>
   <v-container fluid class="pa-8">
-    <v-row>
+    <v-row justify="space-between">
       <v-col>
-        <v-btn v-if="(user_permission.master && user_permission.master.child.skills && user_permission.master.child.skills.create)  || user.role_type== 'SUPER_ADMIN'"
+        <div class="text-h5">Skills</div>
+      </v-col>
+    </v-row>
+    <v-row style="align-items: center">
+      <v-col class="mb-1">
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.skills &&
+              user_permission.master.child.skills.create) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
           @click="(dialog = true), newCreateSkills()"
           class="background_btn white--text"
           large
@@ -12,7 +23,9 @@
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
             <v-card>
-              <v-card-title class="secondary mb-8">{{ formbtn() }} Skill</v-card-title>
+              <v-card-title class="secondary mb-8"
+                >{{ formbtn() }} Skill</v-card-title
+              >
               <v-card-text class="py-0 px-6">
                 <v-row class="py-0">
                   <v-col class="py-0" cols="6">
@@ -39,12 +52,17 @@
                       item-text="name"
                       item-value="id"
                     >
-                      <v-list-item slot="prepend-item" ripple @click="selectAll">
-                          <v-checkbox @click="selectAll" :value="selectedSubjects.length == subjects.length">
-
-                          </v-checkbox>
-                          <v-btn text @click="selectAll">Select all</v-btn>
-                       
+                      <v-list-item
+                        slot="prepend-item"
+                        ripple
+                        @click="selectAll"
+                      >
+                        <v-checkbox
+                          @click="selectAll"
+                          :value="selectedSubjects.length == subjects.length"
+                        >
+                        </v-checkbox>
+                        <v-btn text @click="selectAll">Select all</v-btn>
                       </v-list-item>
                       <v-divider slot="prepend-item" class="mt-2" />
                     </v-autocomplete>
@@ -165,104 +183,131 @@
               <v-card-actions class="px-6 pb-6">
                 <small>*All fields are mandatory</small>
                 <v-spacer></v-spacer>
-                <v-btn width="102px" height="48px" rounded outlined class="pa-4" @click="dialog = false"
+                <v-btn
+                  width="102px"
+                  height="48px"
+                  rounded
+                  outlined
+                  class="pa-4"
+                  @click="dialog = false"
                   >Cancel</v-btn
                 >
-                <v-btn width="102px" height="48px" rounded @click="saveInputs" class="primary pa-4">{{
-                  formbtn()
-                }}</v-btn>
+                <v-btn
+                  width="102px"
+                  height="48px"
+                  rounded
+                  @click="saveInputs"
+                  class="primary pa-4"
+                  >{{ formbtn() }}</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-form>
         </v-dialog>
       </v-col>
-      <v-col cols="4">
+      <v-col class="d-flex" style="align-items: center">
         <v-text-field
           label="Search"
           prepend-inner-icon="mdi-magnify"
           v-model="search"
           clearable
-        ></v-text-field
-      ></v-col>
-    </v-row>
-    <v-row justify="space-between" class="my-4">
-      <v-col>
-        <div class="text-h5">Skills</div>
-      </v-col>
+        ></v-text-field>
+        <v-btn
+          class="background_btn white--text mx-2"
+          rounded-lg
+          @click="filterDialog = true"
+          ><v-icon>mdi-tune</v-icon>Filter</v-btn
+        ><v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.skills &&
+              user_permission.master.child.skills.delete) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          class="background_btn white--text mx-2"
+          rounded-lg
+          :disabled="selected.length == 0"
+          @click="deleteDialog = true"
+          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+        ><v-btn class="background_btn white--text mx-2" rounded-lg
+          ><v-icon>mdi-export</v-icon>Export</v-btn
+        >
+        <v-dialog v-model="deleteDialog" max-width="366px" persistent>
+          <v-card fluid>
+            <v-container fluid class="pa-0">
+              <v-container></v-container>
+              <v-card-text class="text-center">
+                <v-icon size="70" class="pt-4">mdi-trash-can-outline</v-icon>
+                <p class="text-h5 pt-6 pb-0">Delete Skill</p>
+                <p
+                  class="text-disabled grey--text text-subtitle-1 pt-3"
+                  color="rgba(0, 0, 0, 0.6)"
+                  disabled
+                >
+                  This action will permanently delete the item . This cannot be
+                  undone
+                </p>
 
-      <v-col>
-        <v-row justify="end">
-          <v-btn class="background_btn white--text mx-2" rounded-lg @click="filterDialog = true"
-            ><v-icon>mdi-tune</v-icon>Filter</v-btn
-          ><v-btn v-if="(user_permission.master && user_permission.master.child.skills && user_permission.master.child.skills.delete)  || user.role_type== 'SUPER_ADMIN'"
-            class="background_btn white--text mx-2"
-            rounded-lg
-            :disabled="selected.length == 0"
-            @click="deleteDialog = true"
-            ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-          ><v-btn class="background_btn white--text mx-2" rounded-lg
-            ><v-icon>mdi-export</v-icon>Export</v-btn
-          >
-          <v-dialog v-model="deleteDialog" max-width="366px" persistent>
-            <v-card fluid>
-              <v-container fluid class="pa-0">
-                <v-container></v-container>
-                <v-card-text class="text-center">
-                  <v-icon size="70" class="pt-4">mdi-trash-can-outline</v-icon>
-                  <p class="text-h5 pt-6 pb-0">Delete Skill</p>
-                  <p
-                    class="text-disabled grey--text text-subtitle-1 pt-3"
-                    color="rgba(0, 0, 0, 0.6)"
-                    disabled
+                <div class="d-flex justify-space-between pt-4 pb-2" fluid>
+                  <v-btn
+                    depressed
+                    class="secondary black--text"
+                    large
+                    width="157px"
+                    rounded
+                    @click="
+                      () => {
+                        deleteDialog = false;
+                        formbtnBool = false;
+                      }
+                    "
+                    >CANCEL</v-btn
                   >
-                    This action will permanently delete the item . This cannot
-                    be undone
-                  </p>
-
-                  <div class="d-flex justify-space-between pt-4 pb-2" fluid>
-                    <v-btn
-                      depressed
-                      class="secondary black--text"
-                      large
-                      width="157px"
-                      rounded
-                      @click="
-                        () => {
-                          deleteDialog = false;
-                          formbtnBool = false;
-                        }
-                      "
-                      >CANCEL</v-btn
-                    >
-                    <v-btn
-                      class="black white--text"
-                      depressed
-                      large
-                      width="157px"
-                      rounded
-                      :disabled="selected.length == 0"
-                      @click="deleteData(selected)"
-                      >DELETE</v-btn
-                    >
-                  </div>
-                </v-card-text>
-              </v-container>
-            </v-card>
-          </v-dialog>
-        </v-row>
+                  <v-btn
+                    class="black white--text"
+                    depressed
+                    large
+                    width="157px"
+                    rounded
+                    :disabled="selected.length == 0"
+                    @click="deleteData(selected)"
+                    >DELETE</v-btn
+                  >
+                </div>
+              </v-card-text>
+            </v-container>
+          </v-card>
+        </v-dialog>
       </v-col>
     </v-row>
-    <v-data-table v-model="selected" :headers="headers" :items="tableData" show-select :single-select="singleSelect" :options.sync="options"
-    :footer-props="{
-    itemsPerPageOptions: [5, 10, 20, 50,100]
-    }"  
-    :server-items-length="count">
-      <template v-slot:[`item.created_at`]="{item}">
-        {{getDate(item.created_at)}}
-       </template>
+
+    <v-data-table
+      v-model="selected"
+      :headers="headers"
+      :items="tableData"
+      show-select
+      :single-select="singleSelect"
+      :options.sync="options"
+      :footer-props="{
+        itemsPerPageOptions: [5, 10, 20, 50, 100],
+      }"
+      :server-items-length="count"
+    >
+      <template v-slot:[`item.created_at`]="{ item }">
+        {{ getDate(item.created_at) }}
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn v-if="(user_permission.master && user_permission.master.child.skills && user_permission.master.child.skills.update)  || user.role_type== 'SUPER_ADMIN'" 
-        icon class="mr-2 pa-4" @click="updateData(item)">
+        <v-btn
+          v-if="
+            (user_permission.master &&
+              user_permission.master.child.skills &&
+              user_permission.master.child.skills.update) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          icon
+          class="mr-2 pa-4"
+          @click="updateData(item)"
+        >
           <v-icon color="black">mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
@@ -299,7 +344,7 @@
             <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
             <p v-if="formbtnBool" class="text-h5 py-4">Skill Updated</p>
 
-            <p  v-else class="text-h5 py-4">New Skill Created</p>
+            <p v-else class="text-h5 py-4">New Skill Created</p>
             <v-btn
               class="primary"
               large
@@ -415,7 +460,7 @@ export default {
       expertMin: null,
       expertMax: null,
       selectedSubjects: [],
-      filterData:false,
+      filterData: false,
       boards: [],
       board: null,
       formbtnBool: false,
@@ -425,8 +470,8 @@ export default {
       filterDialog: false,
       selectedSubjectFilter: [],
       subjects: [],
-      search:'',
-      searchBool:false,
+      search: "",
+      searchBool: false,
       headers: [
         { text: "Skill Name", value: "name" },
         { text: "Subjects", value: "subject" },
@@ -445,7 +490,7 @@ export default {
     },
     user_permission() {
       return AuthService.getPermissions();
-    }
+    },
   },
   watch: {
     options: {
@@ -453,35 +498,35 @@ export default {
         console.log(this.options);
         this.pageSize = this.options.itemsPerPage;
         this.page = this.options.page;
-        if(this.filterData){
-          this.filterSkills(this.selectedSubjectFilter)
-        }else if(this.searchBool){
+        if (this.filterData) {
+          this.filterSkills(this.selectedSubjectFilter);
+        } else if (this.searchBool) {
           this.searchData(this.search);
-        }else{
+        } else {
           this.getSkills();
         }
       },
       deep: true,
     },
-    search(newValue){
+    search(newValue) {
       console.log(newValue);
-        this.searchBool=true
-        this.pageSize = this.options.itemsPerPage;
-        this.page = this.options.page;
-        this.options.page=1;
-        this.searchData(newValue);
-        if(newValue=="" || newValue==null){
-          this.getSkills();
-          this.searchBool=false;
-        }
-    }
+      this.searchBool = true;
+      this.pageSize = this.options.itemsPerPage;
+      this.page = this.options.page;
+      this.options.page = 1;
+      this.searchData(newValue);
+      if (newValue == "" || newValue == null) {
+        this.getSkills();
+        this.searchBool = false;
+      }
+    },
   },
   methods: {
-    async searchData(search){
+    async searchData(search) {
       const response = await SkillsController.searchSkills(
         this.pageSize,
         this.page,
-        search,
+        search
       );
       console.log(response.data);
       console.log(this.searchBool);
@@ -495,7 +540,7 @@ export default {
       this.editId = item.id;
       // selected id for edit
       this.name = item.name;
-      this.selectedSubjects = item.subject_skills.map(obj => obj.id);
+      this.selectedSubjects = item.subject_skills.map((obj) => obj.id);
       console.log(item);
       this.formbtnBool = true; // change update/create btn value
       this.dialog = true;
@@ -507,7 +552,7 @@ export default {
     async newCreateSkills() {
       this.name = null;
       this.selectedSubjects = [];
-      this.formbtnBool=false
+      this.formbtnBool = false;
     },
 
     async saveInputs() {
@@ -572,10 +617,10 @@ export default {
     formbtn() {
       return this.formbtnBool === false ? "Create" : "Update";
     },
-    selectAll(){
-    // Copy all v-select's items in your selectedItem array
-    this.selectedSubjects = this.subjects.map(obj => obj.id);
-  },
+    selectAll() {
+      // Copy all v-select's items in your selectedItem array
+      this.selectedSubjects = this.subjects.map((obj) => obj.id);
+    },
     async getSkills() {
       const response = await SkillsController.getSkillsByPagination(
         this.pageSize,
@@ -585,7 +630,6 @@ export default {
       this.skillsData = response.data.data;
       this.tableData = this.skillsData.rows;
       this.count = response.data.data.count;
-
     },
     async deleteData(data) {
       if (data.length == 1) {
@@ -613,7 +657,7 @@ export default {
       this.selectedSubjectFilter = [];
       this.filterDialog = false;
       this.getSkills();
-      this.filterData=false
+      this.filterData = false;
     },
     async filterSkills(selectSubject) {
       console.log("filter function call");
@@ -622,15 +666,18 @@ export default {
         subjectIds = subjectIds + item.id + ",";
       });
       subjectIds = subjectIds.slice(0, -1);
-      const response = await SkillsController.filterSkills(subjectIds,this.pageSize,
-        this.page);
+      const response = await SkillsController.filterSkills(
+        subjectIds,
+        this.pageSize,
+        this.page
+      );
       console.log(response);
       this.filterDialog = false;
       this.schoolData = response.data.data;
       this.tableData = this.schoolData.rows;
       console.log("GradeIds", subjectIds);
       this.count = response.data.data.count;
-      this.filterData=true;
+      this.filterData = true;
     },
   },
   created() {

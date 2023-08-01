@@ -1,19 +1,27 @@
 <template>
   <v-container fluid class="pa-8">
-    <v-row>
-      <v-col>
+    <v-row justify="space-between">
+      <v-col cols="4" md="4" sm="4"> <div class="text-h5">Teachers</div></v-col>
+    </v-row>
+    <v-row style="align-items: center">
+      <v-col class="mb-1">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="background_btn white--text"
               large
               rounded-lg
-             
               v-bind="attrs"
               v-on="on"
-              v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.create) || user.role_type == 'SUPER_ADMIN')"
+              v-if="
+                (user_permission.users &&
+                  user_permission.users.panel &&
+                  user_permission.users.panel.create) ||
+                user.role_type == 'SUPER_ADMIN'
+              "
             >
-              <v-icon>mdi-plus</v-icon><div class="pl-1">Create</div>
+              <v-icon>mdi-plus</v-icon>
+              <div class="pl-1">Create</div>
             </v-btn>
           </template>
           <v-list>
@@ -43,43 +51,46 @@
           </v-list>
         </v-menu>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="8" sm="8" md="8" class="d-flex" style="align-items: center">
         <v-text-field
           label="Search"
           prepend-inner-icon="mdi-magnify"
           v-model="search"
           clearable
-        ></v-text-field
-      ></v-col>
-    </v-row>
-    <v-row justify="space-between" class="my-4">
-      <v-col cols="4" md="4" sm="4"> <div class="text-h5">Teachers</div></v-col>
-
-      <v-col cols="8" sm="8" md="8">
-        <v-row justify="end">
-          <!-- <v-btn class="primary mx-2" rounded
+        ></v-text-field>
+        <!-- <v-btn class="primary mx-2" rounded
             ><v-icon>mdi-tune</v-icon>Filter</v-btn
           > -->
-          <v-btn
-          v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.delete) || user.role_type == 'SUPER_ADMIN')"
-            class="background_btn white--text mx-2"
-            rounded-lg
-            @click="deleteDialog = true"
-            :disabled="selected.length == 0"
-            ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-          ><v-btn
-          v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.delete) || user.role_type == 'SUPER_ADMIN')"
-            class="background_btn white--text mx-2"
-            rounded-lg
-            @click="resendInvite"
-            :disabled="selected.length == 0"
-            ><v-icon>mdi-email-sync-outline</v-icon>Resend Invite</v-btn
-          ><v-btn class="background_btn white--text mx-2" rounded-lg
-            ><v-icon>mdi-export</v-icon>Export</v-btn
-          >
-        </v-row>
+        <v-btn
+          v-if="
+            (user_permission.users &&
+              user_permission.users.panel &&
+              user_permission.users.panel.delete) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          class="background_btn white--text mx-2"
+          rounded-lg
+          @click="deleteDialog = true"
+          :disabled="selected.length == 0"
+          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+        ><v-btn
+          v-if="
+            (user_permission.users &&
+              user_permission.users.panel &&
+              user_permission.users.panel.delete) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+          class="background_btn white--text mx-2"
+          rounded-lg
+          @click="resendInvite"
+          :disabled="selected.length == 0"
+          ><v-icon>mdi-email-sync-outline</v-icon>Resend Invite</v-btn
+        ><v-btn class="background_btn white--text mx-2" rounded-lg
+          ><v-icon>mdi-export</v-icon>Export</v-btn
+        >
       </v-col>
     </v-row>
+
     <v-data-table
       v-model="selected"
       :headers="headers"
@@ -91,20 +102,28 @@
       class="usertable"
       :options.sync="options"
       :footer-props="{
-      itemsPerPageOptions: [10, 25, 50, 100]
+        itemsPerPageOptions: [10, 25, 50, 100],
       }"
     >
       <template v-slot:[`item.first_name`]="{ item }">
         {{ item.first_name + " " + item.last_name }}
       </template>
-      <template v-slot:[`item.created_at`]="{item}">
-        {{getDate(item.created_at)}}
-       </template>
-       <template v-slot:[`item.updated_at`]="{item}">
-        {{getDate(item.created_at)}}
-       </template>
+      <template v-slot:[`item.created_at`]="{ item }">
+        {{ getDate(item.created_at) }}
+      </template>
+      <template v-slot:[`item.updated_at`]="{ item }">
+        {{ getDate(item.created_at) }}
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <div class="d-flex flex-row" v-if="((user_permission.users && user_permission.users.panel && user_permission.users.panel.update) || user.role_type == 'SUPER_ADMIN')">
+        <div
+          class="d-flex flex-row"
+          v-if="
+            (user_permission.users &&
+              user_permission.users.panel &&
+              user_permission.users.panel.update) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
+        >
           <img
             width="36px"
             height="36px"
@@ -126,7 +145,9 @@
         <v-container fluid class="pa-0">
           <v-card-text class="text-center">
             <v-container></v-container>
-            <v-avatar color="secondary" size="90"><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar>
+            <v-avatar color="secondary" size="90"
+              ><v-icon size="65">mdi-trash-can-outline</v-icon></v-avatar
+            >
             <p class="text-h5 pt-6 pb-0">Delete Teacher</p>
             <p
               class="text-disabled grey--text text-subtitle-1 pt-3"
@@ -368,7 +389,7 @@
                               <v-col cols="2" class="py-0">
                                 <v-select
                                   label="Gender *"
-                                  :items="['MALE', 'FEMALE','OTHERS']"
+                                  :items="['MALE', 'FEMALE', 'OTHERS']"
                                   outlined
                                   class="rounded-xl"
                                   v-model="personalInfo.gender"
@@ -643,7 +664,7 @@
                                   >
 
                                   <v-btn
-                                  v-if="academicQualifications.length != 1"
+                                    v-if="academicQualifications.length != 1"
                                     @click="openDeleteDiolog(index)"
                                     text
                                     class="d-flex justify-end red--text"
@@ -1010,7 +1031,8 @@
 
                                   <v-btn
                                     v-if="
-                                      experience == 'Experienced' && professionalInfos.length != 1
+                                      experience == 'Experienced' &&
+                                      professionalInfos.length != 1
                                     "
                                     @click="openDeleteDiolog(index)"
                                     text
@@ -1105,7 +1127,7 @@
     </v-dialog>
   </v-container>
 </template>
-  <script>
+<script>
 import "../styles.css";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
@@ -1173,7 +1195,7 @@ export default {
       subjectsData: [],
       schoolData: "",
       errorMessage: "Failed",
-      search:"",
+      search: "",
 
       headers: [
         { text: "Full Name", value: "first_name", cellClass: "w-10" },
@@ -1262,13 +1284,13 @@ export default {
       },
       deep: true,
     },
-    search(newValue){
+    search(newValue) {
       console.log(newValue);
-        this.pageSize = this.options.itemsPerPage;
-        this.page = this.options.page;
-        this.options.page=1;
-        this.fetchUsers();
-    }
+      this.pageSize = this.options.itemsPerPage;
+      this.page = this.options.page;
+      this.options.page = 1;
+      this.fetchUsers();
+    },
   },
   methods: {
     getDate(timeStamp) {
@@ -1441,15 +1463,15 @@ export default {
     },
     async resendInvite() {
       // console.log("hit")
-      this.selected.forEach(async(item)=>{
-      const response = await ResendInviteController.resendInvite(item.id);
-      if (response.data.success) {
-       console.log(response);
-      }
+      this.selected.forEach(async (item) => {
+        const response = await ResendInviteController.resendInvite(item.id);
+        if (response.data.success) {
+          console.log(response);
+        }
       });
       this.selected = [];
       this.resendInviteSuccessDialog = true;
-     // console.log("hit");
+      // console.log("hit");
     },
     async fetchUsers() {
       const response = await UsersController.getTeacher(
@@ -1592,4 +1614,3 @@ export default {
   },
 };
 </script>
-  
