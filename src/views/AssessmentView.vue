@@ -87,6 +87,7 @@
 
         <v-spacer></v-spacer>
         <v-text-field
+         v-model="searchParams"
           label="Search"
           class="ma-0 pa-0"
           prepend-inner-icon="mdi-magnify"
@@ -1422,6 +1423,7 @@ export default {
       rules: {
         required: (value) => !!value || "Field is required",
       },
+      searchParams:"",
       approveDialog: false,
       current_assessment: null,
       successMessage:'New Assessment Created',
@@ -1563,6 +1565,11 @@ export default {
       mainsQuestionsIds: [],
       editedSkill: null,
     };
+  },
+  watch: {
+    searchParams(newValue){
+      this.searchResult(newValue);
+    }
   },
   computed: {
     user() {
@@ -1958,6 +1965,20 @@ export default {
       
       console.log(response);
       return response;
+    },
+
+    async searchResult (p) {
+      console.log(p);
+      const response = await ChartsController.getAssessmentUsersData({assessment_id:this.selectedId, searchData: {search: p}});
+      if(response.data.success){
+        this.assessmentUsers = response.data.data.rows;
+      this.filterData();
+      this.assessmentUsers = this.inProgress
+      // console.log(this.assessmentUsers);
+      }
+      else{
+        alert(response.data.error)
+      }
     },
     async fetchAssessmentUsers(assessment){
       this.showUsers = true;
