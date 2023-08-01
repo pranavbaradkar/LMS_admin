@@ -148,7 +148,7 @@
               </div>
             </div>
             <div>
-              <div class="d-flex content ">
+              <div class="d-flex content ">           
                 <v-chip class="my-clear ">43 Cleared</v-chip>
                 <v-chip class="my-progress">43 In progress</v-chip>
                 <v-chip class="my-notcleared">43 Not Cleared</v-chip>
@@ -162,11 +162,11 @@
           </div>
 
           <div class="d-flex justify-space-between">
-            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class="pa-0 cursor roletype publish"
+            <v-card-title v-if="user.role_type == 'SUPER_ADMIN'" class=" cursor roletype publish"
               @click="publishMethod(data.assessment_id, data.assessment_type)">PUBLISH RESULTS </v-card-title>
-            <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
+            <!-- <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" /> -->
 
-            <img src="../assets/trash.svg" alt="Edit Icon" />
+            <img src="../assets/status-up.svg" alt="Edit Icon" />
 
           </div>
         </div>
