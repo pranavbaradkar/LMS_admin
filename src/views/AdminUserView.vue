@@ -36,7 +36,7 @@
         ></v-text-field>
        <!-- <v-btn class="primary mx-2" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn> -->
        <v-btn class="primary white--text mx-2" rounded-lg :disabled="selected.length == 0"
-         ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
+         ><img src="../assets/trash.svg" alt="Edit Icon" />Delete</v-btn
        >
        <!-- <v-btn
          class="primary mx-2"
