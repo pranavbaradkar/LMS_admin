@@ -23,7 +23,7 @@
         <v-dialog fullscreen v-model="dialog" center>
           <v-card>
             <v-row class="secondary mb-8"
-              ><v-card-title class="pl-12 mt-3 mb-2"
+              ><v-card-title class="pl-12 mt-3 mb-2 lightPurple"
                 >{{ formbtn() }} School</v-card-title
               >
               <v-spacer></v-spacer>
@@ -34,12 +34,12 @@
                   height="48px"
                   rounded
                   text
-                  class="pa-4 mr-1 mt-2"
+                  class="pa-4 mr-1 mt-2 purple-button-light lightPurple purple-button-light-height-large"
                   @click="dialog = false"
                   >Cancel</v-btn
                 >
                 <v-btn
-                  rounded
+                  rounded-lg
                   width="102px"
                   height="48px"
                   @click="saveInputs"
@@ -469,8 +469,8 @@
           clearable
         ></v-text-field>
         <v-btn
-          class="background_btn white--text mx-2"
-          rounded-lg
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
+          rounded
           @click="filterDialog = true"
           ><v-icon>mdi-tune</v-icon>Filter</v-btn
         >
@@ -481,12 +481,18 @@
               user_permission.master.child.schools.delete) ||
             user.role_type == 'SUPER_ADMIN'
           "
-          class="background_btn white--text mx-2"
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
           :disabled="selected.length == 0"
-          rounded-lg
+          rounded
           @click="deleteDialog = true"
-          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-        ><v-btn class="background_btn white--text mx-2" rounded-lg
+        >
+          <!-- <v-icon>mdi-trash-can-outline</v-icon> -->
+          <img src="./../../assets/Delete.svg" alt="" />
+          Delete</v-btn
+        >
+        <v-btn
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
+          rounded
           ><v-icon>mdi-export</v-icon>Export</v-btn
         >
       </v-col>

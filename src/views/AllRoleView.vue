@@ -19,12 +19,12 @@
           v-model="search"
         ></v-text-field>
         <v-btn
-          class="primary white--text mx-2"
+          class="purple-button-light lightPurple purple-button-light-height-large  mx-2"
           :disabled="selected.length == 0"
-          rounded-lg
+          rounded
           @click="deleteDialog = true"
           ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-        ><v-btn class="primary white--text mx-2" rounded-lg
+        ><v-btn class="purple-button-light lightPurple purple-button-light-height-large  mx-2" rounded
           ><v-icon>mdi-export</v-icon>Export</v-btn
         >
       </v-col>

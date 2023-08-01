@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-8">
     <div>
-      <div class="row my-4 justify-space-between">
+      <div class="row my-4 justify-space-between lightPurple">
         <div class="col">
           <div class="text-h5">Admin User</div>
         </div>
@@ -50,7 +50,7 @@
                     </v-col>
                     <v-col cols="3" class="d-flex ">
                       <v-col cols="" class=" ">
-                        <v-btn @click="redirectToHome()" rounded color="" class="transparent-btn">
+                        <v-btn @click="redirectToHome()" rounded color="" class="purple-button-light lightPurple purple-button-light-height-large ">
                           Cancel
                         </v-btn>
                       </v-col>
@@ -58,7 +58,7 @@
                         <div class="text-center">
                           <v-btn  :loading="loading" @click="() => {
                             isEditId > 0 ? updateUser() : createUser()
-                          }" rounded color="primary" class="black-btn" dark>
+                          }" rounded-lg color="primary" class="black-btn" dark>
                             {{ isEditId > 0 ? 'Update' : 'Create'}}
                           </v-btn>
                         </div>

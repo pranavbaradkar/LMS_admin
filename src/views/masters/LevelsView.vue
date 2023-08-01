@@ -5,7 +5,7 @@
         <div class="text-h5">Levels</div>
       </v-col>
     </v-row>
-    <v-row style="align-items: center;">
+    <v-row style="align-items: center">
       <v-col class="mb-1">
         <v-btn
           v-if="
@@ -23,7 +23,7 @@
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
             <v-card>
-              <v-card-title class="secondary mb-8"
+              <v-card-title class="lightPurple mb-8"
                 >{{ formbtn() }} Level</v-card-title
               >
               <v-card-text class="px-6 pb-0">
@@ -58,14 +58,14 @@
                   height="48px"
                   rounded
                   outlined
-                  class="pa-4"
+                  class="purple-button-light lightPurple purple-button-light-height-large pa-4"
                   @click="dialog = false"
                   >Cancel</v-btn
                 >
                 <v-btn
                   width="102px"
                   height="48px"
-                  rounded
+                  rounded-lg
                   @click="saveInputs"
                   class="primary pa-4"
                   :loading="loading"
@@ -154,8 +154,8 @@
           clearable
         ></v-text-field>
         <v-btn
-          class="background_btn white--text mx-2"
-          rounded-lg
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
+          rounded
           @click="filterDialog = true"
           ><v-icon>mdi-tune</v-icon>Filter</v-btn
         >
@@ -166,12 +166,18 @@
               user_permission.master.child.levels.delete) ||
             user.role_type == 'SUPER_ADMIN'
           "
-          class="background_btn white--text mx-2"
-          rounded-lg
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
+          rounded
           :disabled="selected.length == 0"
           @click="deleteDialog = true"
-          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-        ><v-btn class="background_btn white--text mx-2" rounded-lg
+        >
+          <!-- <v-icon>mdi-trash-can-outline</v-icon> -->
+          <img src="./../../assets/Delete.svg" alt="" />
+          Delete</v-btn
+        >
+        <v-btn
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
+          rounded
           ><v-icon>mdi-export</v-icon>Export</v-btn
         >
       </v-col>

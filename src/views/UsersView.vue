@@ -116,8 +116,8 @@
               user_permission.users.panel.delete) ||
             user.role_type == 'SUPER_ADMIN'
           "
-          class="primary white--text mx-2"
-          rounded-lg
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
+          rounded
           @click="deleteDialog = true"
           :disabled="selected.length == 0"
           ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
@@ -129,12 +129,12 @@
               user_permission.users.panel.delete) ||
             user.role_type == 'SUPER_ADMIN'
           "
-          class="primary white--text mx-2"
-          rounded-lg
+          class="purple-button-light lightPurple purple-button-light-height-large  mx-2"
+          rounded
           @click="resendInvite"
           :disabled="selected.length == 0"
           ><v-icon>mdi-email-sync-outline</v-icon>Resend Invite</v-btn
-        ><v-btn class="primary white--text mx-2" rounded-lg
+        ><v-btn class="purple-button-light lightPurple purple-button-light-height-large  mx-2" rounded
           ><v-icon>mdi-export</v-icon>Export</v-btn
         >
       </v-col>

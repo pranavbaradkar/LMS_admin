@@ -23,7 +23,7 @@
         <v-dialog max-width="887px" v-model="dialog" center>
           <v-form ref="form" lazy-validation>
             <v-card>
-              <v-card-title class="secondary mb-8"
+              <v-card-title class="lightPurple mb-8"
                 >{{ formbtn() }} Subject</v-card-title
               >
               <!---------------------- subject upload section starts here --------------------------->
@@ -122,7 +122,7 @@
                   height="48px"
                   rounded
                   outlined
-                  class="pa-4"
+                  class="purple-button-light lightPurple purple-button-light-height-large pa-4"
                   @click="dialog = false"
                   >Cancel</v-btn
                 >
@@ -130,7 +130,7 @@
                   :disabled="selectedFile == null"
                   width="102px"
                   height="48px"
-                  rounded
+                  rounded-lg
                   @click="getPreSignedUrl"
                   class="primary pa-4"
                   :loading="loading"
@@ -263,8 +263,8 @@
           prepend-inner-icon="mdi-magnify"
         ></v-text-field>
         <v-btn
-          class="background_btn white--text mx-2"
-          rounded-lg
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
+          rounded
           @click="filterDialog = true"
           ><v-icon>mdi-tune</v-icon>Filter</v-btn
         ><v-btn
@@ -274,12 +274,17 @@
               user_permission.master.child.subject.delete) ||
             user.role_type == 'SUPER_ADMIN'
           "
-          class="background_btn white--text mx-2"
-          rounded-lg
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
+          rounded
           :disabled="selected.length == 0"
           @click="deleteDialog = true"
-          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-        ><v-btn class="background_btn white--text mx-2" rounded-lg
+        >
+          <!-- <v-icon>mdi-trash-can-outline</v-icon> -->
+          <img src="./../../assets/Delete.svg" alt="" />
+          Delete</v-btn
+        ><v-btn
+          class="purple-button-light lightPurple purple-button-light-height-large mx-2"
+          rounded
           ><v-icon>mdi-export</v-icon>Export</v-btn
         >
       </v-col>
