@@ -257,7 +257,7 @@
           class="mr-2 pa-4"
           @click="updateData(item)"
         >
-          <v-icon color="black">mdi-square-edit-outline</v-icon>
+        <img src="./../../assets/edits.svg" alt="Edit Icon" />
         </v-btn>
       </template>
       <template v-slot:[`item.Subject`]="{ item }">

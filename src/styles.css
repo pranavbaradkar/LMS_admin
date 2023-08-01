@@ -827,11 +827,15 @@ text-transform: capitalize;
   font-size: 14px;
   color: gray;
 }
+.custom-button-height {
+  height: 54px!important;
+}
 
 .v-data-table > .v-data-table__wrapper > table {
   border-spacing: 0 0.5rem;
   border: none;
 }
+
 
 .theme--light.v-data-table {
   background-color: #F9F8F9;

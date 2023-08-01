@@ -69,7 +69,7 @@
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn v-if="(user_permission.master && user_permission.master.child.clusters && user_permission.master.child.clusters.update) || user.role_type == 'SUPER_ADMIN'" icon class="mr-2 pa-4" @click="updateData(item)">
-          <v-icon color="black">mdi-square-edit-outline</v-icon>
+          <img src="./../../assets/edits.svg" alt="Edit Icon" />
         </v-btn>
       </template></v-data-table>
     <v-dialog v-model="deleteDialog" max-width="366px" persistent>

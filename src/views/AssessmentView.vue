@@ -201,12 +201,14 @@
         <div class="text-h5 ml-4">
           Assessments in Draft ({{ assessments.filter((item) => item.status != 'PUBLISHED').length }})
         </div>
+        
+
       </v-col>
     </v-row>
 
     <!------------------------------------------ Assessment card here---------------------------- -->
     <div class="d-flex flex-row pb-4" id="myScroll-x" v-if="!showUsers">
-      <v-card width="427px" min-width="427px" height="auto" class="pa-5 ml-4 pb-8"
+      <v-card width="314px" min-width="314px" height="auto" class="pa-4 ml-4 pb-8"
         v-for="assessment in assessments.filter((item) => item.status != 'PUBLISHED')" :key="assessment.id">
         <v-card-title class="pa-0">
           <div style="width: 100%;" class="d-flex justify-space-between">
@@ -245,17 +247,17 @@
             </div>
             <v-chip class="my-chip">{{ data.assessment_type }}</v-chip>
             <div class="d-flex flex-row grey--text justify-space-between mt-4 mb-4 ">
-              <div class="assessmentIconColor">
-                <img src="../assets/marks.svg" alt="question Icon" />
+              <div class="assessmentIconColor font-size-12">
+                <img src="../assets/marks.svg" class="mr-1"  alt="question Icon" />
                 {{ data.total_no_of_questions }} Questions
               </div>
               
-              <div class="assessmentIconColor">
-                <img src="../assets/question.svg" alt="question Icon" />
+              <div class="assessmentIconColor font-size-12">
+                <img src="../assets/question.svg" class="mr-1"  alt="question Icon" />
                 {{ formatTime(data.duration_of_assessment) }}
               </div>
-              <div class="assessmentIconColor">
-                <img src="../assets/clock.svg" alt=" clock Icon" />
+              <div class="assessmentIconColor font-size-12">
+                <img src="../assets/clock.svg" class="mr-1"  alt=" clock Icon" />
                 {{ data.correct_score_answer }} marks
               </div>
             </div>
@@ -269,7 +271,7 @@
             </v-card-title>
           </div>
         </div>
-        <v-divider class="mb-4 mt-2"></v-divider>
+       
         <!-- Assessment type -->
       </v-card>
     </div>
@@ -306,11 +308,11 @@
             <v-toolbar-title class="text-h5">Create Assessment</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-row align="center" justify="end">
-              <v-btn text @click="cancelClicked">Cancel</v-btn>
+              <v-btn text @click="cancelClicked" class="purple-button-light lightPurple purple-button-light-height-large mx-2">Cancel</v-btn>
               <!-- <v-btn outlined rounded v-if="e1 > 1" @click="e1--" class="mr-4"
                 >Back</v-btn
               > -->
-              <v-btn width="111px" height="48px" rounded class="primary" @click="nextStep(e1)">
+              <v-btn width="111px" height="48px" class="primary" @click="nextStep(e1)">
                 <v-icon v-if="e1 == 4">mdi-book-open-variant</v-icon>{{ e1 == 4 ? isEdit ? "Update" : "Create" : "Next" }}
               </v-btn>
             </v-row>
@@ -325,7 +327,7 @@
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="e1 > 2" step="2">
+              <v-stepper-step :complete="e1 > 2" step="2" >
                 {{ assessment_type == 'MAINS' ? 'MAINS' : 'SCREENING' }} CONFIGURATION
               </v-stepper-step>
 
