@@ -847,3 +847,19 @@ tbody tr:nth-child(odd) {
   border-bottom: thin solid rgba(0, 0, 0, 0.12);
   border-top:  thin solid rgba(0, 0, 0, 0.12);
 }
+/* create form page css */
+.lightPurple{
+  color: #6E56CF !important;
+}
+/* campaign form page css */
+.book{
+  display: flex !important;
+  align-items: center !important;
+}
+.card-image{
+  align-items: center;
+}
+.font-size-14{
+  font-size: 14px;
+  color: #7B7A7B;
+}

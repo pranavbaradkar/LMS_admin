@@ -6,9 +6,11 @@
         <v-container fluid class="pa-8">
           <v-card-text class="text-center">
             <v-icon color="success" size="96">mdi-check-circle-outline</v-icon>
-            <p class="text-h5 py-4">New Campaign {{ campaignButtonValues() }}</p>
+            <p class="text-h5 py-4">
+              New Campaign {{ campaignButtonValues() }}
+            </p>
             <v-btn
-              class="primary" 
+              class="primary"
               large
               width="157px"
               rounded
@@ -65,14 +67,15 @@
       <v-card class="secondary pa-6" elevation="0" depressed>
         <div class="d-flex justify-space-between">
           <v-toolbar-title class="text-h5 ml-6 d-flex align-center"
-            >{{ campaignButtonValue() }} Campaign - Internal Staff</v-toolbar-title
+            >{{ campaignButtonValue() }} Campaign - Internal
+            Staff</v-toolbar-title
           >
           <div class="mr-6">
             <v-btn text rounded @click="dialog = false">Cancel</v-btn>
             <v-btn outlined rounded @click="e1 = e1 - 1">back</v-btn>
 
             <v-btn rounded color="primary" class="my-4 ml-4" @click="goto(e1)">
-              {{ e1 == 3 ?  campaignButtonValue()  : "next" }}
+              {{ e1 == 3 ? campaignButtonValue() : "next" }}
             </v-btn>
           </div>
         </div>
@@ -406,9 +409,9 @@
                           Add Existing Assessment*
                         </div>
                         <v-autocomplete
-                        v-model="campaignData.assessment_ids"
+                          v-model="campaignData.assessment_ids"
                           required
-                          :rules="[v => !!v || 'assessment is required']"
+                          :rules="[(v) => !!v || 'assessment is required']"
                           clearable
                           deletable-chips
                           label="Select or Search Assessments"
@@ -435,7 +438,7 @@
                     OR
                   </v-col>
                 </v-row>
-  
+
                 <v-card
                   elevation="0"
                   depressed
@@ -447,7 +450,12 @@
                       cols="6"
                       md="6"
                       class="d-flex justify-space-between align-center"
-                      v-if="((user_permission.assessments && user_permission.assessments.panel && user_permission.assessments.panel.create) || user.role_type == 'SUPER_ADMIN')"
+                      v-if="
+                        (user_permission.assessments &&
+                          user_permission.assessments.panel &&
+                          user_permission.assessments.panel.create) ||
+                        user.role_type == 'SUPER_ADMIN'
+                      "
                     >
                       <span>Create new assessment*</span>
                       <v-btn
@@ -462,7 +470,6 @@
                   </v-row>
                 </v-card>
               </v-form>
-              
             </v-stepper-content>
             <!------------------------------------------ STEP 3 ------------------------------------------>
             <v-stepper-content step="3">
@@ -534,9 +541,12 @@
         </div>
       </v-col>
     </v-row>
+
     <v-row justify="space-between" class="mb-4 mt-0">
       <v-col cols="4" sm="4" md="4">
-        <div class="text-h5">Live Campaigns ({{ this.liveCampaigns.length }})</div>
+        <div class="text-h5">
+          Live Campaigns ({{ this.liveCampaigns.length }})
+        </div>
       </v-col>
 
       <v-col cols="8" sm="8" class="d-flex justify-end align-center">
@@ -547,6 +557,7 @@
         Yet to attempt
       </v-col>
     </v-row>
+
     <div
       class="d-flex flex-row pb-4"
       id="myScroll-x"
@@ -554,14 +565,14 @@
     >
       <!-- campaign card  -->
       <v-card
-        width="373px"
-        min-width="427px"
+        width="315px"
+        min-width="312px"
         height="auto"
         class="pa-5 ml-4 overflow-hidden"
         v-for="(data, i) in this.liveCampaigns"
         :key="i"
       >
-        <div
+        <!-- <div
           class="d-flex align-center justify-center"
           :class="
             data.audience_type == 'TEACHER'
@@ -570,53 +581,108 @@
           "
         >
           {{ data.audience_type == 'TEACHER' ? 'VGOS' :data.audience_type }}
-        </div>
-        <v-row>
+        </div> -->
+
+        <!-- <v-row>
           <v-spacer></v-spacer>
           <img v-if="((user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.update) || user.role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
-        </v-row>
-        
-        <v-chip color="#06C2700F" small pill>
-          <div class="c-dot mr-2"></div>
+        </v-row> -->
+
+        <v-chip class="live pa-3">
+          <img src="../assets/radar.svg" class="mr-1" alt="question Icon" />
           Live
         </v-chip>
+        <v-btn
+          variant="tonal"
+          class="grey-round ml-2"
+          elevation="0"
+          @click="fetchAssessmentUsers(assessment)"
+        >
+          <svg
+            class="mr-2"
+            width="12"
+            height="14"
+            viewBox="0 0 12 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="Profile">
+              <path
+                id="Stroke 1"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M5.99028 9.22852C3.41187 9.22852 1.20996 9.61836 1.20996 11.1796C1.20996 12.7409 3.3979 13.1447 5.99028 13.1447C8.56869 13.1447 10.77 12.7542 10.77 11.1936C10.77 9.63296 8.58266 9.22852 5.99028 9.22852Z"
+                stroke="#1A1523"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                id="Stroke 3"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M5.98993 7.00262C7.68199 7.00262 9.05342 5.63056 9.05342 3.93849C9.05342 2.24643 7.68199 0.875 5.98993 0.875C4.29786 0.875 2.9258 2.24643 2.9258 3.93849C2.92008 5.62484 4.28262 6.9969 5.96834 7.00262H5.98993Z"
+                stroke="#1A1523"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+          </svg>
+
+          321 Users
+        </v-btn>
 
         <div class="d-flex flex-column">
-          <v-card-title class="pa-0"> {{ data.name }} </v-card-title>
-          <div class="my-2 text-subtitle-1">
-            <!-- Assessment title -->
-            <div
-              v-if="data.levels.length > 0"
-              class="d-flex flex-row w-100 h-300 flex-wrap"
-              style="height: 68px;"
-            >
-              <div
-                v-for="(item, index) in data.levels"
-                :key="index"
-                class="w-fit"
-              >
-                <v-chip
-                  small
-                  class="mr-2"
-                  v-if="item != null"
-                  color="#9cb9fba1"
-                >
-                  {{ item }}
-                </v-chip>
-              </div>
+          <v-card-title class="pa-0 font-size-16">
+            {{ data.name }}
+          </v-card-title>
+          <div class="my-1 ">
+            <!-- Assessment title --> 
+            <div class="d-flex">
+              <span class="me-2"><img src="../assets/book.svg" alt="" /></span>
+              <span class="font-size-14">Mathematics, Science, Hindi</span>
             </div>
-            <div class="mt-2">
-              <v-icon>mdi-notebook-outline</v-icon>
-              {{ data.campaign_assessments.length }} Assessments
+            <div class="d-flex">
+              <span class="me-2"><img src="../assets/Vector (13).svg" alt="" /></span>
+              <span class="font-size-14">16/04/2023 - 16/04/2023</span>
+            </div>
+            <div class="mb-1">
+              <div class="d-flex justify-space-between">
+                <v-chip class="my-clear font-size-10 v-chip-custom"
+                  >43 Cleared</v-chip
+                >
+                <v-chip class="my-progress font-size-10 v-chip-custom"
+                  >43 In progress</v-chip
+                >
+                <v-chip class="my-notcleared font-size-10 v-chip-custom"
+                  >43 Not Cleared</v-chip
+                >
+              </div>
             </div>
           </div>
         </div>
+        <div class="d-flex justify-space-between card-image">
+          <v-card-title
+            v-if="user.role_type == 'SUPER_ADMIN'"
+            class="pa-0 cursor roletype publish purple-button-light"
+            @click="publishMethod(data.assessment_id, data.assessment_type)"
+            >Publish Result
+          </v-card-title>
+          <!-- <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
 
-        <div>
+            <img src="../assets/trash.svg" alt="Edit Icon" /> -->
+          <div cols="2" wi>
+            <span> <img src="../assets/edit-2.svg" alt="" /></span>
+          </div>
+          <div cols="2">
+            <span> <img src="../assets/status-up.svg" alt="" /></span>
+          </div>
+        </div>
+
+        <!-- <div>
           <div class="d-flex flex-row my-5 card-sub-text">
-            <v-icon class="text-medium-emphasis"
-              >mdi-calendar-blank-outline</v-icon
-            >
+          
             <div class="d-flex flex-column ml-4">
               <div>From</div>
               <div class="c-date">{{ data.start_date }}</div>
@@ -699,7 +765,7 @@
               </v-card>
             </v-card>
           </v-card>
-        </div>
+        </div> -->
       </v-card>
       <!-- campaign card ending here           -->
     </div>
@@ -723,14 +789,14 @@
     >
       <!-- campaign card  -->
       <v-card
-        width="373px"
-        min-width="427px"
+        width="315px"
+        min-width="312px"
         height="auto"
         class="pa-5 ml-4 overflow-hidden d-flex flex-column justify-space-between"
         v-for="(data, i) in this.scheduledCampaigns"
         :key="i"
       >
-        <div
+        <!-- <div
           class="d-flex align-center justify-center"
           :class="
             data.audience_type == 'TEACHER'
@@ -738,17 +804,38 @@
               : 'tiled-title-job-seeker'
           "
         >
-        {{ data.audience_type == 'TEACHER' ? 'VGOS' :data.audience_type }}
-        </div>
-        <v-row>
+          {{ data.audience_type == "TEACHER" ? "VGOS" : data.audience_type }}
+        </div> -->
+        <!-- <v-row>
           <v-spacer></v-spacer>
-          <img v-if="((user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.update) || user.role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
-        </v-row>
+          <img
+            v-if="
+              (user_permission.campaigns &&
+                user_permission.campaigns.panel &&
+                user_permission.campaigns.panel.update) ||
+              user.role_type == 'SUPER_ADMIN'
+            "
+            width="28px"
+            height="28px"
+            @click="roleUpdate(data)"
+            class="cursor"
+            src="../assets/edit.svg"
+          />
+        </v-row> -->
         <div class="d-flex flex-column">
+          <v-row>
+            <v-col cols="5">
+              <v-chip class="pa-3">
+              <img src="../assets/timer.svg" class="mr-1" alt="question Icon" />
+              Expired
+            </v-chip>
+            </v-col>
+          </v-row>
           <v-card-title class="pa-0"> {{ data.name }} </v-card-title>
-          <div class="my-2 text-subtitle-1">
+          
+          <div class="my-2 ">
             <!-- Assessment title -->
-            <div
+            <!-- <div
               v-if="data.levels.length > 0"
               class="d-flex flex-row w-100 flex-wrap"
             >
@@ -757,6 +844,7 @@
                 :key="index"
                 class="w-fit"
               >
+              
                 <v-chip
                   small
                   class="mr-2"
@@ -766,45 +854,81 @@
                   {{ item }}
                 </v-chip>
               </div>
+            </div> -->
+            <div class="d-flex">
+              <span class="me-2"><img src="../assets/book.svg" alt="" /></span>
+              <span class="font-size-14">Mathematics, Science, Hindi</span>
             </div>
-            <div class="mt-2">
+            <!-- <div class="mt-2">
               <v-icon>mdi-notebook-outline</v-icon>
               {{ data.campaign_assessments.length }} Assessments
-            </div>
+            </div> -->
           </div>
         </div>
 
         <div>
-          <div class="d-flex flex-row my-5 card-sub-text">
-            <v-icon class="text-medium-emphasis"
-              >mdi-calendar-blank-outline</v-icon
-            >
-            <div class="d-flex flex-column ml-4">
-              <div>From</div>
+          <div class="d-flex flex-row  card-sub-text ">
+            <span class="me-2"><img src="../assets/Vector (13).svg" alt="" /></span>
+            <div class="d-flex flex-column">
+              <!-- <div>From</div> -->
               <div class="c-date">{{ data.start_date }}</div>
             </div>
-            <div class="ml-8 mr-8 d-flex align-center">-</div>
+            <div class="  d-flex align-center">-</div>
             <div class="d-flex flex-column">
-              <div>Till</div>
+              <!-- <div>Till</div> -->
               <div class="c-date">{{ data.end_date }}</div>
             </div>
           </div>
+          
+          
+          <div class="d-flex mt-2 justify-space-between card-image">
+          <v-card-title
+            v-if="user.role_type == 'SUPER_ADMIN'"
+            class="pa-0 cursor roletype publish purple-button-light"
+            @click="publishMethod(data.assessment_id, data.assessment_type)"
+            ><span class="mt-2 me-3 "><img src="../assets/IconBackward.svg" alt="" /></span>Edit
+          </v-card-title>
+          <!-- <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
 
-          <div class="mt-4 w-100 d-flex justify-end">
+            <img src="../assets/trash.svg" alt="Edit Icon" /> -->
+          <div cols="2"
+          class=""
+              icon
+              @click="
+                deleteDialog = true;
+                selectedId = data.id;
+              ">
+            <span> <img src="/img/trash.6e47c54a.svg" alt="" /></span>
+          </div>
+        </div>
+          <!-- <div class="mt-4 w-100 d-flex justify-space-between ">
+           <v-row>
+            <v-col cols="5">
+              <div class="v-card__title pa-0 cursor roletype publish purple-button-light" >
+              <span class="mt-2 me-3"><img src="/img/IconBackward.8c4f3860.svg" alt=""> Edit</span>
+             
+             </div>
+            </v-col>
+            <v-col cols="7">
+              
             <v-btn
-              class="mr-4"
+              class=""
               icon
               @click="
                 deleteDialog = true;
                 selectedId = data.id;
               "
             >
-              <v-icon>mdi-trash-can-outline</v-icon>
+           
+            <span> <img src="/img/trash.6e47c54a.svg" alt="" /></span>
+           
             </v-btn>
-            <v-btn rounded outlined
+            </v-col>
+           </v-row> -->
+            <!-- <v-btn rounded outlined
               ><v-icon>mdi-plus</v-icon> Add Assessment</v-btn
-            >
-          </div>
+            > -->
+          <!-- </div> -->
         </div>
       </v-card>
       <!-- campaign card ending here           -->
@@ -818,7 +942,9 @@
       v-if="this.expiredCampaigns.length > 0"
     >
       <v-col cols="4" sm="4" md="4">
-        <div class="text-h5">Expired Campaigns ({{ this.expiredCampaigns.length }})</div>
+        <div class="text-h5">
+          Expired Campaigns ({{ this.expiredCampaigns.length }})
+        </div>
       </v-col>
 
       <v-col cols="8" sm="8" class="d-flex justify-end align-center">
@@ -837,14 +963,14 @@
     >
       <!-- campaign card  -->
       <v-card
-        width="373px"
-        min-width="427px"
+        width="312px"
+        min-width="315px"
         height="auto"
         class="pa-5 ml-4 overflow-hidden"
         v-for="(data, i) in this.expiredCampaigns"
         :key="i"
       >
-        <div
+        <!-- <div
           class="d-flex align-center justify-center"
           :class="
             data.audience_type == 'TEACHER'
@@ -852,42 +978,115 @@
               : 'tiled-title-job-seeker'
           "
         >
-          {{ data.audience_type == 'TEACHER'?'VGOS': data.audience_type}}
-        </div>
-        <v-row>
+          {{ data.audience_type == "TEACHER" ? "VGOS" : data.audience_type }}
+        </div> -->
+        <!-- <v-row>
           <v-spacer></v-spacer>
-          <img v-if="((user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.update) || user.role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
-        </v-row>
-        <div class="d-flex flex-column">
-          <v-card-title class="pa-0"> {{ data.name }} </v-card-title>
-          <div class="my-2 text-subtitle-1">
-            <!-- Assessment title -->
-            <div
-              v-if="data.levels.length > 0"
-              class="d-flex flex-row w-100 flex-wrap"
+          <img
+            v-if="
+              (user_permission.campaigns &&
+                user_permission.campaigns.panel &&
+                user_permission.campaigns.panel.update) ||
+              user.role_type == 'SUPER_ADMIN'
+            "
+            width="28px"
+            height="28px"
+            @click="roleUpdate(data)"
+            class="cursor"
+            src="../assets/edit.svg"
+          />
+        </v-row> -->
+        <div class="d-flex flex-column font-size-16">
+          <div>
+            <v-chip class="pa-3">
+              <img src="../assets/timer.svg" class="mr-1" alt="question Icon" />
+              Expired
+            </v-chip>
+            <v-btn
+              variant="tonal"
+              class="grey-round ml-2"
+              elevation="0"
+              @click="fetchAssessmentUsers(assessment)"
             >
-              <div
-                v-for="(item, index) in data.levels"
-                :key="index"
-                class="w-fit"
+              <svg
+                class="mr-2"
+                width="12"
+                height="14"
+                viewBox="0 0 12 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <v-chip
-                  small
-                  class="mr-2"
-                  v-if="item != null"
-                  color="#9cb9fba1"
-                >
-                  {{ item }}
-                </v-chip>
-              </div>
+                <g id="Profile">
+                  <path
+                    id="Stroke 1"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M5.99028 9.22852C3.41187 9.22852 1.20996 9.61836 1.20996 11.1796C1.20996 12.7409 3.3979 13.1447 5.99028 13.1447C8.56869 13.1447 10.77 12.7542 10.77 11.1936C10.77 9.63296 8.58266 9.22852 5.99028 9.22852Z"
+                    stroke="#1A1523"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    id="Stroke 3"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M5.98993 7.00262C7.68199 7.00262 9.05342 5.63056 9.05342 3.93849C9.05342 2.24643 7.68199 0.875 5.98993 0.875C4.29786 0.875 2.9258 2.24643 2.9258 3.93849C2.92008 5.62484 4.28262 6.9969 5.96834 7.00262H5.98993Z"
+                    stroke="#1A1523"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </g>
+              </svg>
+
+              321 Users
+            </v-btn>
+          </div>
+
+          <v-card-title class="pa-0 font-size-16">
+            {{ data.name }}
+          </v-card-title>
+          <div class="my-2 ">
+            <!-- Assessment title -->
+            <div class="d-flex">
+              <span class="me-2"><img src="../assets/book.svg" alt="" /></span>
+              <span class="font-size-14">Mathematics, Science, Hindi</span>
             </div>
-            <div class="mt-2">
-              <v-icon>mdi-notebook-outline</v-icon>
-              {{ data.campaign_assessments.length }} Assessments
+            <div class="d-flex">
+              <span class="me-2"><img src="../assets/Vector (13).svg" alt="" /></span>
+              <span class="font-size-14">16/04/2023 - 16/04/2023</span>
+            </div>
+            <div class="">
+              <div class="d-flex justify-space-between">
+                <v-chip class="my-clear font-size-10 v-chip-custom"
+                  >43 Cleared</v-chip
+                >
+                <v-chip class="my-progress font-size-10 v-chip-custom"
+                  >43 In progress</v-chip
+                >
+                <v-chip class="my-notcleared font-size-10 v-chip-custom"
+                  >43 Not Cleared</v-chip
+                >
+              </div>
             </div>
           </div>
         </div>
+        <div class="d-flex justify-space-between card-image">
+          <v-card-title
+            v-if="user.role_type == 'SUPER_ADMIN'"
+            class="pa-0 cursor roletype publish purple-button-light"
+            @click="publishMethod(data.assessment_id, data.assessment_type)"
+            ><span class="mt-2 me-3 "><img src="../assets/IconBackward.svg" alt="" /></span>Edit
+          </v-card-title>
+          <!-- <img src="../assets/edit.svg" alt="Edit Icon" class="custom-margin" />
 
+            <img src="../assets/trash.svg" alt="Edit Icon" /> -->
+          <div cols="2">
+            <span> <img src="/img/trash.6e47c54a.svg" alt="" /></span>
+          </div>
+        </div>
+        <!-- 
         <div>
           <div class="d-flex flex-row my-5 card-sub-text">
             <v-icon class="text-medium-emphasis"
@@ -940,7 +1139,7 @@
                 <div class="graph-value liteblue">20</div>
               </v-card>
               <v-card
-              elevation="0"
+                elevation="0"
                 class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
                 width="50%"
                 height="10px"
@@ -951,7 +1150,7 @@
               </v-card>
             </v-card>
           </v-card>
-        </div>
+        </div> -->
       </v-card>
       <!-- campaign card ending here           -->
     </div>
@@ -959,7 +1158,12 @@
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          v-if="((user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.create) || user.role_type == 'SUPER_ADMIN')"
+          v-if="
+            (user_permission.campaigns &&
+              user_permission.campaigns.panel &&
+              user_permission.campaigns.panel.create) ||
+            user.role_type == 'SUPER_ADMIN'
+          "
           class="primary white--text mx-2 m-fab"
           v-bind="attrs"
           v-on="on"
@@ -976,7 +1180,7 @@
           </v-list-item-title>
         </v-list-item>
         <v-list-item @click="role('JOB_SEEKER')">
-          <v-list-item-title >
+          <v-list-item-title>
             <v-icon>mdi-email-plus-outline</v-icon> FOR JOB SEEKERS
           </v-list-item-title>
         </v-list-item>
@@ -984,9 +1188,7 @@
     </v-menu>
   </v-container>
 </template>
-  
-  
-  
+
 <script>
 import CampaignController from "@/controllers/CampaignController";
 import LevelController from "@/controllers/LevelController";
@@ -1005,7 +1207,7 @@ export default {
     return {
       dialog: false,
       e1: 1,
-      updateFlag:false,
+      updateFlag: false,
       deleteDialog: false,
       successDialog: false,
       assessments: [],
@@ -1023,7 +1225,7 @@ export default {
       liveCampaigns: [],
       scheduledCampaigns: [],
       expiredCampaigns: [],
-      campaignId:null,
+      campaignId: null,
       campaignData: {
         name: "",
         start_date: "",
@@ -1057,28 +1259,26 @@ export default {
   methods: {
     getPercentate(value, totalValue) {
       var data = (value / totalValue) * 100;
-      data = Math.trunc( data );
+      data = Math.trunc(data);
 
       return data;
     },
-    campaignButtonValue(){
-      return this.updateFlag==true?'Update':'Create'
+    campaignButtonValue() {
+      return this.updateFlag == true ? "Update" : "Create";
     },
-    campaignButtonValues(){
-      return this.updateFlag==true?'Updated':'Created'
+    campaignButtonValues() {
+      return this.updateFlag == true ? "Updated" : "Created";
     },
     async deleteCampaign(id) {
       const response = await CampaignController.deleteCampaign(id);
-     
+
       if (response.data.success) {
         this.getCampaigns();
         this.deleteDialog = false;
-        console.log(response)
+        console.log(response);
+      } else {
+        alert(response.data.error);
       }
-      else {
-        alert(response.data.error)
-      }
-      
     },
     convertDateFormat(dateString) {
       console.log(dateString);
@@ -1099,43 +1299,43 @@ export default {
     convertStartTimeFormatForUpdate(timeString) {
       console.log(timeString);
       const [hours, min] = timeString.split(":");
-      this.startHH =hours;
-      this.startMM =min;
+      this.startHH = hours;
+      this.startMM = min;
     },
     convertEndTimeFormatForUpdate(timeString) {
       console.log(timeString);
       const [hours, min] = timeString.split(":");
-      this.endHH =hours;
-      this.endMM =min;
+      this.endHH = hours;
+      this.endMM = min;
     },
     role(data) {
-      this.campaignData={}
+      this.campaignData = {};
       this.dialog = true;
       this.campaignData.audience_type = data;
-      this.updateFlag=false;
-      console.log(data)
+      this.updateFlag = false;
+      console.log(data);
     },
     roleUpdate(data) {
-      this.e1=1;
-      this.campaignId=data.id;
+      this.e1 = 1;
+      this.campaignId = data.id;
       this.dialog = true;
       this.campaignData.audience_type = data.audience_type;
-      this.updateFlag=true;
-      this.campaignData=data
+      this.updateFlag = true;
+      this.campaignData = data;
       // this.campaignData.start_date = this.convertDateFormatForUpdate(data.start_date)
       // this.campaignData.end_date = this.convertDateFormatForUpdate(data.end_date)
       this.getAssessmentsIds(data);
-      this.convertStartTimeFormatForUpdate(data.start_time)
-      this.convertEndTimeFormatForUpdate(data.end_time)
+      this.convertStartTimeFormatForUpdate(data.start_time);
+      this.convertEndTimeFormatForUpdate(data.end_time);
     },
-    getAssessmentsIds(data){
-      var ids =[];
-      for(var i=0;i<data.campaign_assessments.length;i++){
+    getAssessmentsIds(data) {
+      var ids = [];
+      for (var i = 0; i < data.campaign_assessments.length; i++) {
         ids.push(data.campaign_assessments[i].assessment_id);
-        console.log("idsss",data.campaign_assessments[i].assessment_id);
+        console.log("idsss", data.campaign_assessments[i].assessment_id);
       }
-      this.campaignData.assessment_ids =ids
-     console.log("idsss",ids);
+      this.campaignData.assessment_ids = ids;
+      console.log("idsss", ids);
     },
     goto(step) {
       switch (step) {
@@ -1146,16 +1346,16 @@ export default {
 
           break;
         case 2:
-          if (this.$refs.step2.validate()){
-             console.log("bhf")
-             this.createCampaign();
-             this.e1++;
+          if (this.$refs.step2.validate()) {
+            console.log("bhf");
+            this.createCampaign();
+            this.e1++;
           }
           break;
         case 3:
           // if (this.$refs.step1.validate())
           this.dialog = false;
-          this.successDialog = true
+          this.successDialog = true;
           break;
 
         default:
@@ -1164,92 +1364,90 @@ export default {
     },
     async createCampaign() {
       this.campaignData.start_time = this.startHH + ":" + this.startMM;
-      this.campaignData.end_time = this.endHH + ":" + this.endMM
+      this.campaignData.end_time = this.endHH + ":" + this.endMM;
       const start_date = this.campaignData.start_date;
       const end_date = this.campaignData.end_date;
-      this.campaignData.start_date = this.convertDateFormat(this.campaignData.start_date)
-      this.campaignData.end_date = this.convertDateFormat(this.campaignData.end_date)
-      if(this.updateFlag==false){
-        const response = await CampaignController.createCampaign(this.campaignData);
-        console.log("create", response)
-        if(response.data.success){
-      //  this.successDialog = true
-    }
-    else {
-      alert(response.data.error)
-    }
-      }else{
-        const response = await CampaignController.updateCampaign(this.campaignData,this.campaignId);
-        console.log("update", response)
+      this.campaignData.start_date = this.convertDateFormat(
+        this.campaignData.start_date
+      );
+      this.campaignData.end_date = this.convertDateFormat(
+        this.campaignData.end_date
+      );
+      if (this.updateFlag == false) {
+        const response = await CampaignController.createCampaign(
+          this.campaignData
+        );
+        console.log("create", response);
+        if (response.data.success) {
+          //  this.successDialog = true
+        } else {
+          alert(response.data.error);
+        }
+      } else {
+        const response = await CampaignController.updateCampaign(
+          this.campaignData,
+          this.campaignId
+        );
+        console.log("update", response);
 
-        if(response.data.success){
-      //  this.successDialog = true
-       this.campaignId =null
-    }
-    else {
-      alert(response.data.error)
-      this.campaignId =null    }
+        if (response.data.success) {
+          //  this.successDialog = true
+          this.campaignId = null;
+        } else {
+          alert(response.data.error);
+          this.campaignId = null;
+        }
       }
-      this.campaignData.start_date = start_date
-      this.campaignData.end_date = end_date
-      
+      this.campaignData.start_date = start_date;
+      this.campaignData.end_date = end_date;
     },
     async getSchool() {
       const response = await SchoolController.getSchool();
-      // console.log(response);     
-      if(response.data.success){
+      // console.log(response);
+      if (response.data.success) {
         this.schools = response.data.data.rows;
-      }
-      else {
-        alert(response.data.error)
+      } else {
+        alert(response.data.error);
       }
     },
     async getCampaigns() {
       const response = await CampaignController.getCampaigns();
 
       if (response.data.success) {
-       
-      this.campaigns = response.data.data;
-      this.liveCampaigns = this.campaigns.live_campaign;
-      this.scheduledCampaigns = this.campaigns.scheduled_campaign;
-      this.expiredCampaigns = this.campaigns.expired_campaign;   
+        this.campaigns = response.data.data;
+        this.liveCampaigns = this.campaigns.live_campaign;
+        this.scheduledCampaigns = this.campaigns.scheduled_campaign;
+        this.expiredCampaigns = this.campaigns.expired_campaign;
+      } else {
+        alert(response.data.error);
       }
-      else {
-        alert(response.data.error)
-      }
-
     },
     async getSkills() {
       const response = await SkillsController.getSkills();
       //console.log(response);
       if (response.data.success) {
         this.skills = response.data.data.rows;
-
-      }
-      else {
-        alert(response.data.error)
+      } else {
+        alert(response.data.error);
       }
     },
     async getSubjects() {
       const response = await SubjectController.getSubject();
       if (response.data.success) {
         this.subjects = response.data.data.rows;
-
-      }
-      else {
-        alert(response.data.error)
+      } else {
+        alert(response.data.error);
       }
       //console.log("surbject responser", this.subjectData);
     },
     async fetchAllClusters() {
       const response = await ClusterController.getAllClusters();
-    
+
       if (response.data.success) {
         console.log(response);
-      this.clusters = response.data.data.rows;
-      }
-      else {
-        alert(response.data.error)
+        this.clusters = response.data.data.rows;
+      } else {
+        alert(response.data.error);
       }
     },
     goToAssessment() {
@@ -1280,26 +1478,26 @@ export default {
 
     async getLevels() {
       const response = await LevelController.getLevel();
-      
+
       if (response.data.success) {
         this.levels = response.data.data.rows;
+      } else {
+        alert(response.data.error);
       }
-      else {
-        alert(response.data.error)
-      }
-      
+
       // console.log("level data", this.levelData.rows);
     },
     async fetchAssessment() {
       const response = await AssessmentController.getAssessments();
-      console.log("response from ", response)
-   
+      console.log("response from ", response);
+
       if (response.data.success) {
         this.assessments = response.data.data.rows;
-        this.assessments = this.assessments.filter((item) => item.status === 'PUBLISHED');
-      }
-      else {
-        alert(response.data.error)
+        this.assessments = this.assessments.filter(
+          (item) => item.status === "PUBLISHED"
+        );
+      } else {
+        alert(response.data.error);
       }
 
       // console.log(response.data.data);

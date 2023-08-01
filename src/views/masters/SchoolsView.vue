@@ -30,18 +30,12 @@
               <v-card-actions class="mt-3 mb-2 mr-6">
                 <small class="pa-4 mr-1 mt-2">*All fields are mandatory</small>
                 <v-btn
-                  width="102px"
-                  height="48px"
-                  rounded
                   text
-                  class="pa-4 mr-1 mt-2"
+                  class="pa-4 mr-1 mt-2 lightPurple"
                   @click="dialog = false"
                   >Cancel</v-btn
                 >
                 <v-btn
-                  rounded
-                  width="102px"
-                  height="48px"
                   @click="saveInputs"
                   class="primary pa-4 mt-2"
                   :loading="loading"
