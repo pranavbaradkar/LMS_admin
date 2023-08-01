@@ -44,7 +44,8 @@
               <v-menu :close-on-content-click="false" ref="menuRef" class="dropDown" location="bottom">
       <template v-slot:activator="{}">
         <div @click="() => {$refs.menuRef.isActive = true}" style="cursor: pointer;">
-          {{ selectedCampaign != -1 ? selectedCampaign : selectedSchool != -1 ? selectedSchool : 'Default' }}
+          {{ selectedCampaign != -1 ? selectedCampaign : selectedSchool != -1 ? selectedSchool : 'Default' }} 
+          <span> <v-icon>mdi-menu-down</v-icon> </span>
         </div>
       </template>
       <v-list height="100%">
@@ -91,31 +92,64 @@
             </div>
           </div>
 
-          <div>
-            <v-select
-                label="Period"
-                rounded
-                style="width: 200px;"
-                :items="['Today', 'Last 7 days', 'Last 1 month', 'Custom']"
-                dense
-                outlined
-                v-model="period"
-                @change="changePeriod"
-                :menu-props="{
-                      closeOnClick: true,
-                      closeOnContentClick: true,
-                      }">
-            </v-select>
+     <div style="height: 48px; border-radius: 24px;
+      border: 1px solid rgba(0, 0, 0, 0.20);" class="pr-1 d-flex justify-center align-center mb-6 pl-2 pr-2">
+      <div style="font-size: 12px; font-weight: 500; color: rgba(0, 0, 0, 0.40)" class="mr-2">
+          Period
+      </div>
+      <v-menu :close-on-content-click="false" ref="menuRefp" class="dropDown" location="bottom">
+      <template v-slot:activator="{}">
+        <div @click="() => {$refs.menuRefp.isActive = true}" style="cursor: pointer;">
+          {{ date.end && period == 'Custom' ? `${date.start} - ${date.end}` : period }} 
+          <span> <v-icon>mdi-menu-down</v-icon> </span>
+        </div>
+      </template>
+      <v-list height="100%">
+      <v-list-item @click="() => {
+        $refs.menuRefp.isActive = false;
+        changePeriod('Today')
+        }">
+        <v-list-item-content>
+          <v-list-item-title v-text="'Today'"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item @click="() => {
+        $refs.menuRefp.isActive = false;
+        changePeriod('Last 7 days')
+        }">
+        <v-list-item-content>
+          <v-list-item-title v-text="'Last 7 days'"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item @click="() => {
+        $refs.menuRefp.isActive = false;
+        changePeriod('Last 1 month')
+        }">
+        <v-list-item-content>
+          <v-list-item-title v-text="'Last 1 month'"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item @click="() => {
+        $refs.menuRefp.isActive = false;
+        changePeriod('Custom')
+        }">
+        <v-list-item-content>
+          <v-list-item-title v-text="'Custom'"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+    </v-menu>
             <VueDatePicker
                     v-model="date"
-                    style="opacity: 0; top: -200px"
-                    v-if="period == 'Custom'"
-                    :visible="period == 'Custom'"
+                    style="opacity: 100; top: -200px"
+                    v-if="calenderVisible"
+                    :visible="calenderVisible"
                     range
-    @onChange="onClickOk()"
-    @onClose="onClose()"
+                    @onChange="onClickOk()"
+                    @onClose="onClose()"
                     validate
                     :locale="{lang: 'en'}"
+                    :max-date="new Date()"
                     placeholder="Custom"/>
           </div>
         </v-col>
@@ -268,6 +302,7 @@ export default {
           title: 'Schools',
         },
       ],
+      calenderVisible: false,
       campaignList: [],
       schoolList:[],
       userType: 'ALL',
@@ -363,8 +398,8 @@ export default {
         user_type: 'ALL',
         campaign_id: -1,
         school_id: -1,
-        start_date: null,
-        end_date: null,
+        start_date: JSON.stringify(new Date(new Date().setDate(new Date().getDate() - 30))).slice(0,11),
+        end_date: JSON.stringify(new Date()).slice(0,11),
       }
     };
   },
@@ -393,20 +428,23 @@ export default {
     },
     onClose () {
       // this.period = 'Last 30 days'
+      this.calenderVisible = false;
     },
     onClickOk() {
       this.payload.start_date = this.date.start;
       this.payload.end_date = this.date.end;
-      this.getDashboardData(this.payload)
+      this.getDashboardData(this.payload);
     },
-    changePeriod() {
-      console.log(this.period)
+    changePeriod(p) {
+      console.log(p)
+      this.period = p;
       if (this.period == 'Today') {
         const end_date = new Date();
         const current_date = new Date();
         const start_date = new Date(current_date.setDate(current_date.getDate() - 1));
         this.payload.start_date = JSON.stringify(start_date).slice(1,11),
         this.payload.end_date = JSON.stringify(end_date).slice(1,11),
+        this.date = new Date();
         this.getDashboardData(this.payload)
       }
       else if (this.period == 'Last 7 days') {
@@ -415,6 +453,7 @@ export default {
         const start_date = new Date(current_date.setDate(current_date.getDate() - 7));
         this.payload.start_date = JSON.stringify(start_date).slice(1,11),
         this.payload.end_date = JSON.stringify(end_date).slice(1,11),
+        this.date = new Date();
         this.getDashboardData(this.payload)
       }
       else if (this.period == 'Last 1 month') {
@@ -423,7 +462,11 @@ export default {
         const start_date = new Date(current_date.setDate(current_date.getDate() - 30));
         this.payload.start_date = JSON.stringify(start_date).slice(1,11),
         this.payload.end_date = JSON.stringify(end_date).slice(1,11),
+        this.date = new Date();
         this.getDashboardData(this.payload)
+      }
+      else {
+        this.calenderVisible = true;
       }
     },
     changeUserType() {
@@ -503,7 +546,7 @@ export default {
   },
 
   created() {
-    this.getDashboardData({});
+    this.getDashboardData(this.payload);
     this.getCampaign();
     this.getSchool();
   },
