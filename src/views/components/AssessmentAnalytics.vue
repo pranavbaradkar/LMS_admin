@@ -25,7 +25,7 @@
             <v-card class="rounded-xl" outlined>
               <v-card-title style="font-weight: 400;">User status</v-card-title>
               <v-card-text style="text-align: center; position: relative;">
-                <div style="position: absolute; top: 70px;z-index: 1;left: 101px;">
+                <div style="position: absolute; top: 77px;z-index: 1;left: 102px;">
                   <div style="font-size: 22px; font-weight: 700; color: black;">
                     {{ NudgeData[0].value }}
                   </div>
@@ -35,7 +35,7 @@
                 </div>
                 <GChart
                   type="PieChart"
-                  :data="pieChartDataForConversion"
+                  :data="pieChartDataForStatus"
                   :options="pieChartOptions"
                   :resizeDebounce="0"
                 >
@@ -165,7 +165,7 @@
         chartDataForSkills: [],
         chartDataForDropout: [],
         pieChartDataForConversion: [],
-        pieChartDataForPlatform: [],
+        pieChartDataForStatus: [],
         chartData: [
           ["Level","Screening", "Mains"],
           ["Pre Primary", 70, 89],
@@ -262,6 +262,9 @@
 
         this.pieChartDataForConversion = this.convertData(
           response.data.data.success_rate_difficulty, ['difficulty','Success rate']
+        );
+        this.pieChartDataForStatus = this.convertData(
+          response.data.data.assessment_status, ['Status','User count']
         );
         this.chartDataForGrades = this.convertData(
           response.data.data.pass_rate_grades, ['Grade','Pass Rate']

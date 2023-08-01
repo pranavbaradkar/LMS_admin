@@ -107,18 +107,18 @@
       <v-list height="100%">
       <v-list-item @click="() => {
         $refs.menuRefp.isActive = false;
-        changePeriod('Today')
-        }">
-        <v-list-item-content>
-          <v-list-item-title v-text="'Today'"></v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item @click="() => {
-        $refs.menuRefp.isActive = false;
         changePeriod('Last 7 days')
         }">
         <v-list-item-content>
           <v-list-item-title v-text="'Last 7 days'"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item @click="() => {
+        $refs.menuRefp.isActive = false;
+        changePeriod('Last 15 days')
+        }">
+        <v-list-item-content>
+          <v-list-item-title v-text="'Last 15 days'"></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-list-item @click="() => {
@@ -179,7 +179,7 @@
           <v-card class="rounded-xl" outlined>
             <v-card-title style="font-weight: 400;">Teacher's Conversion</v-card-title>
             <v-card-text style="text-align: center; position: relative;">
-              <div style="position: absolute; top: 74px;z-index: 1;left: 104px;">
+              <div style="position: absolute; top: 78px;z-index: 1;left: 107px;">
                 <div style="font-size: 22px; font-weight: 700; color: black;">
                   {{ NudgeData[3].value }}
                 </div>
@@ -213,13 +213,13 @@
         </v-col>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Success %</v-card-title>
+            <v-card-title style="font-weight: 400;">Assessment success rate</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
                 :height="260"
                 type="ColumnChart"
                 :data="chartDataForSuccess"
-                :options="chartOptionsForVgosScreening"
+                :options="chartOptionsForVgosScreeningCount"
                 :resizeDebounce="0"
               />
             </v-card-text>
@@ -243,13 +243,13 @@
         </v-col>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">User</v-card-title>
+            <v-card-title style="font-weight: 400;">Assessment attempted count</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
                 :height="260"
                 type="ColumnChart"
                 :data="chartDataForUsers"
-                :options="chartOptionsForVgosScreening"
+                :options="chartOptionsForVgosScreeningCount"
                 :resizeDebounce="0"
               />
             </v-card-text>
@@ -259,7 +259,7 @@
           <v-card class="rounded-xl" outlined>
             <v-card-title style="font-weight: 400;">Sign Up by Platform</v-card-title>
             <v-card-text style="text-align: center; position: relative;">
-              <div style="position: absolute; top: 74px;z-index: 1;left: 104px;">
+              <div style="position: absolute; top: 78px;z-index: 1;left: 107px;">
                 <div style="font-size: 22px; font-weight: 700; color: black;">
                   265
                 </div>
@@ -379,6 +379,17 @@ export default {
         height: 200,
         width: 385,
         chartArea: {width: '80%', height: '50%', left: 50},
+        vAxis: {title: 'Percentage', titleTextStyle: {fontSize: 10, italic: false}},
+        hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}}
+      },
+      chartOptionsForVgosScreeningCount: {
+        //title: "VGOS Screening",
+        curveType: "function",
+        legend: { position: "top", alignment: "end" },
+        colors: ["#467BCA", "#FFB200"],
+        height: 200,
+        width: 385,
+        chartArea: {width: '80%', height: '50%', left: 50},
         vAxis: {title: 'No. of users', titleTextStyle: {fontSize: 10, italic: false}},
         hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}}
       },
@@ -438,10 +449,10 @@ export default {
     changePeriod(p) {
       console.log(p)
       this.period = p;
-      if (this.period == 'Today') {
+      if (this.period == 'Last 15 days') {
         const end_date = new Date();
         const current_date = new Date();
-        const start_date = new Date(current_date.setDate(current_date.getDate() - 1));
+        const start_date = new Date(current_date.setDate(current_date.getDate() - 15));
         this.payload.start_date = JSON.stringify(start_date).slice(1,11),
         this.payload.end_date = JSON.stringify(end_date).slice(1,11),
         this.date = new Date();

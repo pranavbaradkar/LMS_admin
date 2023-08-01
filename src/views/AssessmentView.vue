@@ -62,17 +62,17 @@
             <v-tab
               active-class="white ma-1 black--text"
               class="rounded"
-              v-on:click="assessmentUsers = yetToAttempt"
+              v-on:click="assessmentUsers = notCleared"
             >
               Not Cleared
             </v-tab>
-            <v-tab
+            <!-- <v-tab
               active-class="ma-1 white black--text"
               class="rounded"
               v-on:click="assessmentUsers = yetToAttempt"
             >
               Yet To Attempt
-            </v-tab>
+            </v-tab> -->
           </v-tabs>
         </div>
       </v-col>
@@ -374,9 +374,9 @@
       </template>
 
       <template v-slot:[`item.status`]="{item}">
-        <div class="success-badge" v-if="item.status == 'cleared'"><i class="dot me-2" />Cleared </div>
-        <div class="failed-badge" v-if="item.status == 'not_cleared'"><i class="dot me-2" />Not cleared </div>
-        <div class="warning-badge" v-if="item.status == 'in_progress'"><i class="dot me-2" />In progress</div>
+        <div class="success-badge" v-if="item.status == 'PASSED'"><i class="dot me-2" />Cleared </div>
+        <div class="failed-badge" v-if="item.status == 'FAILED'"><i class="dot me-2" />Not cleared </div>
+        <div class="warning-badge" v-if="item.status == 'FINISHED'"><i class="dot me-2" />In progress</div>
       </template>
     </v-data-table>
 
