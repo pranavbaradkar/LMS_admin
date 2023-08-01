@@ -364,7 +364,7 @@
       :items="assessmentUsers"
     >
       <template v-slot:[`item.actions`]="{item}">
-        <a :href="`/#/users/profile/${item}`">
+        <a :href="`/#/users/profile/${item.id}`">
         <img width="30px" class="pt-2 cursor" src="../assets/user.svg" />
         </a>
       </template>
