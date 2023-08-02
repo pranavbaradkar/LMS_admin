@@ -230,7 +230,7 @@
                 :height="260"
                 type="ColumnChart"
                 :data="chartDataForSuccess"
-                :options="chartOptionsForVgosScreeningCount"
+                :options="chartOptionsForVgosScreening"
                 :resizeDebounce="0"
               />
             </v-card-text>
@@ -268,11 +268,11 @@
         </v-col>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Sign Up by Platform</v-card-title>
+            <v-card-title style="font-weight: 400;">Sign Up by levels</v-card-title>
             <v-card-text style="text-align: center; position: relative;">
               <div style="position: absolute; top: 78px;z-index: 1;left: 107px;">
                 <div style="font-size: 22px; font-weight: 700; color: black;">
-                  265
+                  {{ NudgeData[0].value }}
                 </div>
                 <div style="color: black;">
                   Teachers
@@ -374,7 +374,7 @@ export default {
       ],
       pieChartOptions: {
         legend: { position: "right"},
-        colors: ["#06C270", "#FF9F0A", "#FF453A"],
+        colors: ["#06C270", "#FF9F0A", "#FF453A","#467BCA","#8445BC", "#68DDFD"],
         height: 200,
         width: 385,
         pieHole: 0.75,
@@ -414,7 +414,7 @@ export default {
         chartArea: {width: '80%', height: '50%', left: 50},
         vAxis: {title: 'Avg time (sec)', titleTextStyle: {fontSize: 10, italic: false}},
         hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}},
-        isStacked: true,
+        isStacked: false,
       },
       payload: {
         user_type: 'ALL',

@@ -103,12 +103,20 @@
             </v-col>
           <v-col cols="4">
             <v-card class="rounded-xl" outlined>
-              <v-card-title style="font-weight: 400;">Dropout Rate- Grades</v-card-title>
-              <v-card-text style="text-align: center">
+              <v-card-title style="font-weight: 400;">Dropout Rate- Levels</v-card-title>
+              <v-card-text style="text-align: center; position: relative;">
+                <div style="position: absolute; top: 80px;z-index: 1;left: 188px;">
+                  <div style="font-size: 22px; font-weight: 700; color: black;">
+                    {{ chartDataForDropout[1][1] }}%
+                  </div>
+                  <div style="color: black;">
+                    Rate
+                  </div>
+                </div>
                 <GChart
-                  type="SteppedAreaChart"
+                  type="PieChart"
                   :data="chartDataForDropout"
-                  :options="chartOptionsForDropOut"
+                  :options="pieChartOptionsDropout"
                   :resizeDebounce="0"
                 />
               </v-card-text>
@@ -191,6 +199,24 @@
           pieSliceTextStyle: {color: 'black', fontSize: 14},
           pieSliceText: 'none',
         },
+        pieChartOptionsDropout: {
+          legend: 'none',
+          height: 200,
+          width: 370,
+          pieHole: 0.90,
+          pieStartAngle: 214,
+          chartArea: {width: '100%', height: '100%'},
+          pieSliceTextStyle: {color: 'black', fontSize: 14},
+          pieSliceText: 'none',
+          tooltip: {
+            text: 'value'
+          },
+          slices: {
+            0: { color: "#277BC0" },
+            1: {color: "#EBEBEB"},
+            2: { color: 'transparent'}
+          }
+        },
         chartOptionsForPass: {
           //title: "VGOS Screening",
           curveType: "function",
@@ -219,7 +245,7 @@
           legend: 'none',
           height: 200, 
           width: 370,
-          chartArea: {width: '85%', height: '50%', left: 40},
+          chartArea: {width: '90%', height: '50%', left: 50},
           vAxis: {title: 'Difficulty', titleTextStyle: {fontSize: 12, italic: false}},
           hAxis: {title: 'Success rate', titleTextStyle: {fontSize: 12, italic: false}}
         },
@@ -241,7 +267,7 @@
           width: 370,
           chartArea: {width: '85%', height: '50%', left: 40},
           vAxis: {title: 'Dropout rate', titleTextStyle: {fontSize: 12, italic: false}},
-          hAxis: {title: 'Grades', titleTextStyle: {fontSize: 12, italic: false}},
+          hAxis: {title: 'Levels', titleTextStyle: {fontSize: 12, italic: false}},
         },
       };
     },
@@ -277,9 +303,13 @@
           response.data.data.average_scores, ['Skill','Avg-marks']
         );
 
-        this.chartDataForDropout = this.convertData(
-          response.data.data.dropout_rate, ['Grade','Rate']
-        );
+        // this.chartDataForDropout = this.convertData(
+        //   response.data.data.dropout_rate, ['Levels','Rate']
+        // );
+
+        const rateD = response.data.data.dropout_rate.length ? response.data.data.dropout_rate[0].rate : 0;
+        const transD = 100 - rateD;
+        this.chartDataForDropout = [['Levels', 'Rate'],['',rateD],['',transD],['',25]]
         // this.chartDataForUsers = this.convertData(
         //   response.data.data.users, ['Level','Screening', 'Mains']
         // );
