@@ -92,9 +92,9 @@
           class="ma-0 pa-0"
           prepend-inner-icon="mdi-magnify"
         ></v-text-field>
-        <v-btn class="primary ml-2" rounded>
+        <!-- <v-btn class="primary ml-2" rounded>
           <v-icon>mdi-tune</v-icon>Filter</v-btn
-        >
+        > -->
       </v-col>
     </v-row>
 
