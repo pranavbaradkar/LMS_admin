@@ -33,8 +33,10 @@ export default {
         }
     },
     getAssessmentUsersData: async function (formdata) {
+        console.log(formdata.search);
         try {
             const response = await instance.get(`admin/assessment/${formdata.assessment_id}/users/reports`,{
+                params: formdata.searchData,
                 headers: {
                     'Authorization': AuthService.getToken()
                 }
