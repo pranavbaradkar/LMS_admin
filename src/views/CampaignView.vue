@@ -25,7 +25,7 @@
         <v-container fluid class="pa-0">
           <v-card-text class="text-center">
             <v-icon size="70" class="pt-4">mdi-trash-can-outline</v-icon>
-            <p class="text-h5 pt-4 pb-0">Delete User</p>
+            <p class="text-h5 pt-4 pb-0">Delete Campaign</p>
             <p
               class="text-disabled grey--text text-subtitle-1"
               color="rgba(0, 0, 0, 0.6)"
@@ -500,7 +500,7 @@
       </v-card>
     </v-dialog>
     <!-- first row -->
-    <div class="d-flex w-100 flex-row justify-space-between">
+    <!-- <div class="d-flex w-100 flex-row justify-space-between">
       <div class="ma-0 pa-0">
         <span class="cursor">Campaign</span>
         <v-icon>mdi-chevron-right</v-icon>
@@ -516,10 +516,10 @@
           prepend-inner-icon="mdi-magnify"
         ></v-text-field>
       </div>
-    </div>
+    </div> -->
 
     <!-- second row -->
-    <v-row justify="space-between" class="my-0">
+    <!-- <v-row justify="space-between" class="my-0">
       <v-col cols="4" sm="4" md="4">
         <div class="text-h5">All Campaigns</div>
       </v-col>
@@ -533,10 +533,55 @@
           >
         </div>
       </v-col>
+    </v-row> -->
+
+    <v-row cols="12" sm="12" md="" class="ma-0 pa-0 f-flex align-center" >
+      <v-col cols="6" sm="6" class="d-flex justify-end">
+        <div class="m-tab">
+          <v-tabs
+            background-color="#0000000D"
+            class="ml-2 d-flex space-evenly tab-style"
+            height="38"
+            hide-slider
+          >
+            <v-tab
+              active-class=" white ma-1 black--text text-transform-cap"
+              class="rounded  text-transform-cap"
+              v-on:click="campaignFilter('TEACHER')"
+            >
+              All
+            </v-tab>
+
+            <v-tab
+              active-class=" white ma-1 black--text text-transform-cap"
+              class="rounded  text-transform-cap"
+              v-on:click="campaignFilter('TEACHER')"
+            >
+              Internal Teacher
+            </v-tab>
+
+            <v-tab
+              active-class=" white ma-1 black--text "
+              class="rounded text-transform-cap"
+              v-on:click="campaignFilter('JOB_SEEKER')"
+            >
+              Job Seeker
+            </v-tab>
+          </v-tabs>
+        </div>
+      </v-col>
+      <!-- <v-col cols="6" sm="6" class="d-flex justify-end">
+        <div>
+          <v-btn class="purple-button-light lightPurple purple-button-light-height-large mx-2"  elevation="0" rounded @click="filterDialog = true"><v-icon>mdi-tune</v-icon>Filter</v-btn>
+          <v-btn class="purple-button-light lightPurple purple-button-light-height-large mx-2" elevation="0" rounded><v-icon>mdi-export</v-icon>Export</v-btn>
+        </div>
+      </v-col> -->
     </v-row>
-    <v-row justify="space-between" class="mb-4 mt-0">
+
+
+    <v-row cols="12" sm="12" md="" class="ma-0 pa-0 f-flex align-center">
       <v-col cols="4" sm="4" md="4">
-        <div class="text-h5">Live Campaigns ({{ this.liveCampaigns.length }})</div>
+        <div class="text-h5">Live Campaign's ({{ this.liveCampaigns.length }})</div>
       </v-col>
 
       <v-col cols="8" sm="8" class="d-flex justify-end align-center">
@@ -554,14 +599,14 @@
     >
       <!-- campaign card  -->
       <v-card
-        width="373px"
-        min-width="427px"
+        width="315px"
+        min-width="312px"
         height="auto"
         class="pa-5 ml-4 overflow-hidden"
         v-for="(data, i) in this.liveCampaigns"
         :key="i"
       >
-        <div
+        <!-- <div
           class="d-flex align-center justify-center"
           :class="
             data.audience_type == 'TEACHER'
@@ -570,152 +615,107 @@
           "
         >
           {{ data.audience_type == 'TEACHER' ? 'VGOS' :data.audience_type }}
-        </div>
-        <v-row>
-          <v-spacer></v-spacer>
-          <img v-if="((user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.update) || user.role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
-        </v-row>
-        
-        <v-chip color="#06C2700F" small pill>
-          <div class="c-dot mr-2"></div>
+        </div> -->
+        <v-chip class="live pa-3">
+          <img src="../assets/radar.svg" class="mr-1" alt="question Icon" />
           Live
         </v-chip>
 
         <div class="d-flex flex-column">
-          <v-card-title class="pa-0"> {{ data.name }} </v-card-title>
-          <div class="my-2 text-subtitle-1">
-            <!-- Assessment title -->
-            <div
-              v-if="data.levels.length > 0"
-              class="d-flex flex-row w-100 h-300 flex-wrap"
-              style="height: 68px;"
-            >
-              <div
-                v-for="(item, index) in data.levels"
-                :key="index"
-                class="w-fit"
-              >
-                <v-chip
-                  small
-                  class="mr-2"
-                  v-if="item != null"
-                  color="#9cb9fba1"
+          <v-card-title class="pa-0 font-size-16">
+            {{ data.name }}
+          </v-card-title>
+          <div class="my-1 ">
+            <!-- Assessment title --> 
+            <div class="d-flex" v-if="data.levels.length > 0">
+              <span class="me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M16.5 12.5543V3.50179C16.5 2.60179 15.765 1.93429 14.8725 2.00929H14.8275C13.2525 2.14429 10.86 2.94679 9.525 3.78679L9.3975 3.86929C9.18 4.00429 8.82 4.00429 8.6025 3.86929L8.415 3.75679C7.08 2.92429 4.695 2.12929 3.12 2.00179C2.2275 1.92679 1.5 2.60179 1.5 3.49429V12.5543C1.5 13.2743 2.085 13.9493 2.805 14.0393L3.0225 14.0693C4.65 14.2868 7.1625 15.1118 8.6025 15.8993L8.6325 15.9143C8.835 16.0268 9.1575 16.0268 9.3525 15.9143C10.7925 15.1193 13.3125 14.2868 14.9475 14.0693L15.195 14.0393C15.915 13.9493 16.5 13.2743 16.5 12.5543Z" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 4.11719V15.3672" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M5.8125 6.36719H4.125" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6.375 8.61719H4.125" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="font-size-14">
+
+                {{ data.levels.join(', ') }}
+
+              </span>
+            </div>
+            <div class="d-flex">
+              <span class="me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M14.25 3H12.75V2.25C12.75 2.05109 12.671 1.86032 12.5303 1.71967C12.3897 1.57902 12.1989 1.5 12 1.5C11.8011 1.5 11.6103 1.57902 11.4697 1.71967C11.329 1.86032 11.25 2.05109 11.25 2.25V3H6.75V2.25C6.75 2.05109 6.67098 1.86032 6.53033 1.71967C6.38968 1.57902 6.19891 1.5 6 1.5C5.80109 1.5 5.61032 1.57902 5.46967 1.71967C5.32902 1.86032 5.25 2.05109 5.25 2.25V3H3.75C3.15326 3 2.58097 3.23705 2.15901 3.65901C1.73705 4.08097 1.5 4.65326 1.5 5.25V14.25C1.5 14.8467 1.73705 15.419 2.15901 15.841C2.58097 16.2629 3.15326 16.5 3.75 16.5H14.25C14.8467 16.5 15.419 16.2629 15.841 15.841C16.2629 15.419 16.5 14.8467 16.5 14.25V5.25C16.5 4.65326 16.2629 4.08097 15.841 3.65901C15.419 3.23705 14.8467 3 14.25 3ZM15 14.25C15 14.4489 14.921 14.6397 14.7803 14.7803C14.6397 14.921 14.4489 15 14.25 15H3.75C3.55109 15 3.36032 14.921 3.21967 14.7803C3.07902 14.6397 3 14.4489 3 14.25V9H15V14.25ZM15 7.5H3V5.25C3 5.05109 3.07902 4.86032 3.21967 4.71967C3.36032 4.57902 3.55109 4.5 3.75 4.5H5.25V5.25C5.25 5.44891 5.32902 5.63968 5.46967 5.78033C5.61032 5.92098 5.80109 6 6 6C6.19891 6 6.38968 5.92098 6.53033 5.78033C6.67098 5.63968 6.75 5.44891 6.75 5.25V4.5H11.25V5.25C11.25 5.44891 11.329 5.63968 11.4697 5.78033C11.6103 5.92098 11.8011 6 12 6C12.1989 6 12.3897 5.92098 12.5303 5.78033C12.671 5.63968 12.75 5.44891 12.75 5.25V4.5H14.25C14.4489 4.5 14.6397 4.57902 14.7803 4.71967C14.921 4.86032 15 5.05109 15 5.25V7.5Z" fill="#7B7A7B"/>
+                </svg>
+              </span>
+              <span class="font-size-14">{{ data.start_date }} <strong>To</strong> {{ data.end_date }}</span>
+            </div>
+
+            <div class="d-flex">
+              <span class="me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M16.5 12.5543V3.50179C16.5 2.60179 15.765 1.93429 14.8725 2.00929H14.8275C13.2525 2.14429 10.86 2.94679 9.525 3.78679L9.3975 3.86929C9.18 4.00429 8.82 4.00429 8.6025 3.86929L8.415 3.75679C7.08 2.92429 4.695 2.12929 3.12 2.00179C2.2275 1.92679 1.5 2.60179 1.5 3.49429V12.5543C1.5 13.2743 2.085 13.9493 2.805 14.0393L3.0225 14.0693C4.65 14.2868 7.1625 15.1118 8.6025 15.8993L8.6325 15.9143C8.835 16.0268 9.1575 16.0268 9.3525 15.9143C10.7925 15.1193 13.3125 14.2868 14.9475 14.0693L15.195 14.0393C15.915 13.9493 16.5 13.2743 16.5 12.5543Z" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 4.11719V15.3672" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M5.8125 6.36719H4.125" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6.375 8.61719H4.125" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="font-size-14"> {{ data.campaign_assessments.length }} Assessments</span>
+            </div>
+
+            <div class="mb-1">
+              <div class="d-flex justify-space-between">
+                <v-chip class="my-clear font-size-10 v-chip-custom"
+                  >{{ data.assessed }} Assessed</v-chip
                 >
-                  {{ item }}
-                </v-chip>
+                <v-chip class="my-progress font-size-10 v-chip-custom"
+                  >0 In progress</v-chip
+                >
+                <v-chip class="my-notcleared font-size-10 v-chip-custom"
+                  >{{ data.yet_to_attempt }} Yet to Attempt</v-chip
+                >
               </div>
             </div>
-            <div class="mt-2">
-              <v-icon>mdi-notebook-outline</v-icon>
-              {{ data.campaign_assessments.length }} Assessments
-            </div>
-          </div>
-        </div>
 
-        <div>
-          <div class="d-flex flex-row my-5 card-sub-text">
-            <v-icon class="text-medium-emphasis"
-              >mdi-calendar-blank-outline</v-icon
-            >
-            <div class="d-flex flex-column ml-4">
-              <div>From</div>
-              <div class="c-date">{{ data.start_date }}</div>
+
+            <div class="d-flex mt-2 justify-space-between card-image align-center" v-if="((user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.update) || user.role_type == 'SUPER_ADMIN')">
+              <v-card-title
+                class="pa-0 cursor roletype publish purple-button-light"
+                @click="roleUpdate(data)" 
+                >
+                <span class="mt-2 me-3 ">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M3.3335 12.0006H6.16016C6.2479 12.0011 6.33488 11.9843 6.4161 11.9511C6.49733 11.9179 6.5712 11.8691 6.6335 11.8073L11.2468 7.18728L13.1402 5.33394C13.2026 5.27197 13.2522 5.19823 13.2861 5.11699C13.3199 5.03576 13.3374 4.94862 13.3374 4.86061C13.3374 4.7726 13.3199 4.68547 13.2861 4.60423C13.2522 4.52299 13.2026 4.44925 13.1402 4.38728L10.3135 1.52728C10.2515 1.46479 10.1778 1.4152 10.0965 1.38135C10.0153 1.3475 9.92817 1.33008 9.84016 1.33008C9.75216 1.33008 9.66502 1.3475 9.58378 1.38135C9.50254 1.4152 9.42881 1.46479 9.36683 1.52728L7.48683 3.41394L2.86016 8.03394C2.79838 8.09624 2.74949 8.17011 2.71632 8.25134C2.68314 8.33256 2.66632 8.41954 2.66683 8.50728V11.3339C2.66683 11.5108 2.73707 11.6803 2.86209 11.8053C2.98712 11.9304 3.15669 12.0006 3.3335 12.0006ZM9.84016 2.94061L11.7268 4.82728L10.7802 5.77394L8.8935 3.88728L9.84016 2.94061ZM4.00016 8.78061L7.9535 4.82728L9.84016 6.71394L5.88683 10.6673H4.00016V8.78061ZM14.0002 13.3339H2.00016C1.82335 13.3339 1.65378 13.4042 1.52876 13.5292C1.40373 13.6542 1.3335 13.8238 1.3335 14.0006C1.3335 14.1774 1.40373 14.347 1.52876 14.472C1.65378 14.597 1.82335 14.6673 2.00016 14.6673H14.0002C14.177 14.6673 14.3465 14.597 14.4716 14.472C14.5966 14.347 14.6668 14.1774 14.6668 14.0006C14.6668 13.8238 14.5966 13.6542 14.4716 13.5292C14.3465 13.4042 14.177 13.3339 14.0002 13.3339Z" fill="#6E56CF"/>
+                  </svg>
+                </span>Edit
+              </v-card-title>
+
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M6.87988 18.1501V16.0801" stroke="#2D2D2D" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M12 18.1498V14.0098" stroke="#2D2D2D" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M17.1201 18.1497V11.9297" stroke="#2D2D2D" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M17.1199 5.84961L16.6599 6.38961C14.1099 9.36961 10.6899 11.4796 6.87988 12.4296" stroke="#2D2D2D" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M14.1899 5.84961H17.1199V8.76961" stroke="#2D2D2D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="#2D2D2D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              
             </div>
-            <div class="ml-8 mr-8 d-flex align-center">-</div>
-            <div class="d-flex flex-column">
-              <div>Till</div>
-              <div class="c-date">{{ data.end_date }}</div>
-            </div>
+
+
           </div>
-          <v-card
-            class="d-flex flex-row pa-0 ma-0"
-            width="100%"
-            height="40px"
-            color="transparent"
-            depressed
-            elevation="0"
-          >
-            <v-card
-              class="d-flex flex-row pa-0 ma-0"
-              width="100%"
-              height="40px"
-              color="transparent"
-              depressed
-              elevation="0"
-            >
-              <v-card
-                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
-                :width="
-                  getPercentate(
-                    data.assessed,
-                    data.assessed + data.yet_to_attempt
-                  )
-                "
-                height="10px"
-                color="#43ff64d9"
-                justify-center
-              >
-                <div class="graph-value litegreen">
-                  {{
-                    getPercentate(
-                      data.assessed,
-                      data.assessed + data.yet_to_attempt
-                    )
-                  }}
-                </div>
-              </v-card>
-              <v-card
-                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
-                width="0%"
-                height="10px"
-                color="#1b72e8b3"
-                justify-center
-                elevation="0"
-              >
-                <div class="graph-value liteblue">0</div>
-              </v-card>
-              <v-card
-              elevation="0"
-                class="d-flex flex-row pa-0 ma-0 justify-center rounded-0"
-                :width="
-                  getPercentate(
-                    data.yet_to_attempt,
-                    data.assessed + data.yet_to_attempt
-                  ) + '%'
-                "
-                height="10px"
-                color="#D9D9D9"
-                justify-center
-              >
-                <div class="graph-value">
-                  {{
-                    getPercentate(
-                      data.yet_to_attempt,
-                      data.assessed + data.yet_to_attempt
-                    )
-                  }}
-                </div>
-                
-              </v-card>
-            </v-card>
-          </v-card>
         </div>
       </v-card>
       <!-- campaign card ending here           -->
     </div>
     <!-- campaign scroll view ending here -->
 
-    <v-row
-      justify="space-between"
-      class="mb-2 mt-2"
-      v-if="this.scheduledCampaigns.length > 0"
-    >
+    <v-row cols="12" sm="12" md="" class="ma-0 pa-0 f-flex align-center">
       <v-col cols="4" sm="4" md="4">
-        <div class="text-h5">Scheduled Campaigns</div>
+        <div class="text-h5">Scheduled Campaign's ({{ this.scheduledCampaigns.length }})</div>
       </v-col>
-
-      <v-col cols="8" sm="8" class="d-flex justify-end align-center"> </v-col>
     </v-row>
+
+
     <div
       class="d-flex flex-row pb-4"
       id="myScroll-x"
@@ -723,14 +723,14 @@
     >
       <!-- campaign card  -->
       <v-card
-        width="373px"
-        min-width="427px"
+        width="315px"
+        min-width="312px"
         height="auto"
-        class="pa-5 ml-4 overflow-hidden d-flex flex-column justify-space-between"
+        class="pa-5 ml-4 overflow-hidden"
         v-for="(data, i) in this.scheduledCampaigns"
         :key="i"
       >
-        <div
+        <!-- <div
           class="d-flex align-center justify-center"
           :class="
             data.audience_type == 'TEACHER'
@@ -738,72 +738,83 @@
               : 'tiled-title-job-seeker'
           "
         >
-        {{ data.audience_type == 'TEACHER' ? 'VGOS' :data.audience_type }}
-        </div>
-        <v-row>
-          <v-spacer></v-spacer>
-          <img v-if="((user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.update) || user.role_type == 'SUPER_ADMIN')" width="28px" height="28px"  @click="roleUpdate(data)" class="cursor" src="../assets/edit.svg" />
-        </v-row>
+          {{ data.audience_type == 'TEACHER' ? 'VGOS' :data.audience_type }}
+        </div> -->
+        <v-chip class="pa-3">
+          <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8.00016 15.1673C4.04683 15.1673 0.833496 11.954 0.833496 8.00065C0.833496 4.04732 4.04683 0.833984 8.00016 0.833984C11.9535 0.833984 15.1668 4.04732 15.1668 8.00065C15.1668 11.954 11.9535 15.1673 8.00016 15.1673ZM8.00016 1.83398C4.60016 1.83398 1.8335 4.60065 1.8335 8.00065C1.8335 11.4007 4.60016 14.1673 8.00016 14.1673C11.4002 14.1673 14.1668 11.4007 14.1668 8.00065C14.1668 4.60065 11.4002 1.83398 8.00016 1.83398Z" fill="#292D32"/>
+            <path d="M10.4736 10.6192C10.3869 10.6192 10.3003 10.5992 10.2203 10.5459L8.15359 9.31253C7.64025 9.00586 7.26025 8.33253 7.26025 7.73919V5.00586C7.26025 4.73253 7.48692 4.50586 7.76025 4.50586C8.03359 4.50586 8.26025 4.73253 8.26025 5.00586V7.73919C8.26025 7.97919 8.46025 8.33253 8.66692 8.45253L10.7336 9.68586C10.9736 9.82586 11.0469 10.1325 10.9069 10.3725C10.8069 10.5325 10.6403 10.6192 10.4736 10.6192Z" fill="#292D32"/>
+          </svg>
+          Scheduled
+        </v-chip>
+
         <div class="d-flex flex-column">
-          <v-card-title class="pa-0"> {{ data.name }} </v-card-title>
-          <div class="my-2 text-subtitle-1">
-            <!-- Assessment title -->
-            <div
-              v-if="data.levels.length > 0"
-              class="d-flex flex-row w-100 flex-wrap"
-            >
-              <div
-                v-for="(item, index) in data.levels"
-                :key="index"
-                class="w-fit"
-              >
-                <v-chip
-                  small
-                  class="mr-2"
-                  v-if="item != null"
-                  color="#9cb9fba1"
+          <v-card-title class="pa-0 font-size-16">
+            {{ data.name }}
+          </v-card-title>
+          <div class="my-1 ">
+            <!-- Assessment title --> 
+            <div class="d-flex" v-if="data.levels.length > 0">
+              <span class="me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M16.5 12.5543V3.50179C16.5 2.60179 15.765 1.93429 14.8725 2.00929H14.8275C13.2525 2.14429 10.86 2.94679 9.525 3.78679L9.3975 3.86929C9.18 4.00429 8.82 4.00429 8.6025 3.86929L8.415 3.75679C7.08 2.92429 4.695 2.12929 3.12 2.00179C2.2275 1.92679 1.5 2.60179 1.5 3.49429V12.5543C1.5 13.2743 2.085 13.9493 2.805 14.0393L3.0225 14.0693C4.65 14.2868 7.1625 15.1118 8.6025 15.8993L8.6325 15.9143C8.835 16.0268 9.1575 16.0268 9.3525 15.9143C10.7925 15.1193 13.3125 14.2868 14.9475 14.0693L15.195 14.0393C15.915 13.9493 16.5 13.2743 16.5 12.5543Z" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 4.11719V15.3672" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M5.8125 6.36719H4.125" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6.375 8.61719H4.125" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="font-size-14">
+
+                {{ data.levels.join(', ') }}
+
+              </span>
+            </div>
+            <div class="d-flex">
+              <span class="me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M14.25 3H12.75V2.25C12.75 2.05109 12.671 1.86032 12.5303 1.71967C12.3897 1.57902 12.1989 1.5 12 1.5C11.8011 1.5 11.6103 1.57902 11.4697 1.71967C11.329 1.86032 11.25 2.05109 11.25 2.25V3H6.75V2.25C6.75 2.05109 6.67098 1.86032 6.53033 1.71967C6.38968 1.57902 6.19891 1.5 6 1.5C5.80109 1.5 5.61032 1.57902 5.46967 1.71967C5.32902 1.86032 5.25 2.05109 5.25 2.25V3H3.75C3.15326 3 2.58097 3.23705 2.15901 3.65901C1.73705 4.08097 1.5 4.65326 1.5 5.25V14.25C1.5 14.8467 1.73705 15.419 2.15901 15.841C2.58097 16.2629 3.15326 16.5 3.75 16.5H14.25C14.8467 16.5 15.419 16.2629 15.841 15.841C16.2629 15.419 16.5 14.8467 16.5 14.25V5.25C16.5 4.65326 16.2629 4.08097 15.841 3.65901C15.419 3.23705 14.8467 3 14.25 3ZM15 14.25C15 14.4489 14.921 14.6397 14.7803 14.7803C14.6397 14.921 14.4489 15 14.25 15H3.75C3.55109 15 3.36032 14.921 3.21967 14.7803C3.07902 14.6397 3 14.4489 3 14.25V9H15V14.25ZM15 7.5H3V5.25C3 5.05109 3.07902 4.86032 3.21967 4.71967C3.36032 4.57902 3.55109 4.5 3.75 4.5H5.25V5.25C5.25 5.44891 5.32902 5.63968 5.46967 5.78033C5.61032 5.92098 5.80109 6 6 6C6.19891 6 6.38968 5.92098 6.53033 5.78033C6.67098 5.63968 6.75 5.44891 6.75 5.25V4.5H11.25V5.25C11.25 5.44891 11.329 5.63968 11.4697 5.78033C11.6103 5.92098 11.8011 6 12 6C12.1989 6 12.3897 5.92098 12.5303 5.78033C12.671 5.63968 12.75 5.44891 12.75 5.25V4.5H14.25C14.4489 4.5 14.6397 4.57902 14.7803 4.71967C14.921 4.86032 15 5.05109 15 5.25V7.5Z" fill="#7B7A7B"/>
+                </svg>
+              </span>
+              <span class="font-size-14">{{ data.start_date }} <strong>To</strong> {{ data.end_date }}</span>
+            </div>
+
+            <div class="d-flex">
+              <span class="me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M16.5 12.5543V3.50179C16.5 2.60179 15.765 1.93429 14.8725 2.00929H14.8275C13.2525 2.14429 10.86 2.94679 9.525 3.78679L9.3975 3.86929C9.18 4.00429 8.82 4.00429 8.6025 3.86929L8.415 3.75679C7.08 2.92429 4.695 2.12929 3.12 2.00179C2.2275 1.92679 1.5 2.60179 1.5 3.49429V12.5543C1.5 13.2743 2.085 13.9493 2.805 14.0393L3.0225 14.0693C4.65 14.2868 7.1625 15.1118 8.6025 15.8993L8.6325 15.9143C8.835 16.0268 9.1575 16.0268 9.3525 15.9143C10.7925 15.1193 13.3125 14.2868 14.9475 14.0693L15.195 14.0393C15.915 13.9493 16.5 13.2743 16.5 12.5543Z" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 4.11719V15.3672" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M5.8125 6.36719H4.125" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6.375 8.61719H4.125" stroke="#7B7A7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="font-size-14"> {{ data.campaign_assessments.length }} Assessments</span>
+            </div>
+
+            <div class="d-flex mt-2 justify-space-between card-image align-center" v-if="((user_permission.campaigns && user_permission.campaigns.panel && user_permission.campaigns.panel.update) || user.role_type == 'SUPER_ADMIN')">
+              <v-card-title
+                class="pa-0 cursor roletype publish purple-button-light"
+                @click="roleUpdate(data)" 
                 >
-                  {{ item }}
-                </v-chip>
+                <span class="mt-2 me-3 ">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M3.3335 12.0006H6.16016C6.2479 12.0011 6.33488 11.9843 6.4161 11.9511C6.49733 11.9179 6.5712 11.8691 6.6335 11.8073L11.2468 7.18728L13.1402 5.33394C13.2026 5.27197 13.2522 5.19823 13.2861 5.11699C13.3199 5.03576 13.3374 4.94862 13.3374 4.86061C13.3374 4.7726 13.3199 4.68547 13.2861 4.60423C13.2522 4.52299 13.2026 4.44925 13.1402 4.38728L10.3135 1.52728C10.2515 1.46479 10.1778 1.4152 10.0965 1.38135C10.0153 1.3475 9.92817 1.33008 9.84016 1.33008C9.75216 1.33008 9.66502 1.3475 9.58378 1.38135C9.50254 1.4152 9.42881 1.46479 9.36683 1.52728L7.48683 3.41394L2.86016 8.03394C2.79838 8.09624 2.74949 8.17011 2.71632 8.25134C2.68314 8.33256 2.66632 8.41954 2.66683 8.50728V11.3339C2.66683 11.5108 2.73707 11.6803 2.86209 11.8053C2.98712 11.9304 3.15669 12.0006 3.3335 12.0006ZM9.84016 2.94061L11.7268 4.82728L10.7802 5.77394L8.8935 3.88728L9.84016 2.94061ZM4.00016 8.78061L7.9535 4.82728L9.84016 6.71394L5.88683 10.6673H4.00016V8.78061ZM14.0002 13.3339H2.00016C1.82335 13.3339 1.65378 13.4042 1.52876 13.5292C1.40373 13.6542 1.3335 13.8238 1.3335 14.0006C1.3335 14.1774 1.40373 14.347 1.52876 14.472C1.65378 14.597 1.82335 14.6673 2.00016 14.6673H14.0002C14.177 14.6673 14.3465 14.597 14.4716 14.472C14.5966 14.347 14.6668 14.1774 14.6668 14.0006C14.6668 13.8238 14.5966 13.6542 14.4716 13.5292C14.3465 13.4042 14.177 13.3339 14.0002 13.3339Z" fill="#6E56CF"/>
+                  </svg>
+                </span>Edit
+              </v-card-title>
+
+              <div cols="2"
+                class=""
+                  icon
+                  @click="
+                    deleteDialog = true;
+                    selectedId = data.id;
+                  ">
+                <span> <img src="/img/trash.6e47c54a.svg" alt="" /></span>
               </div>
+              
             </div>
-            <div class="mt-2">
-              <v-icon>mdi-notebook-outline</v-icon>
-              {{ data.campaign_assessments.length }} Assessments
-            </div>
-          </div>
-        </div>
 
-        <div>
-          <div class="d-flex flex-row my-5 card-sub-text">
-            <v-icon class="text-medium-emphasis"
-              >mdi-calendar-blank-outline</v-icon
-            >
-            <div class="d-flex flex-column ml-4">
-              <div>From</div>
-              <div class="c-date">{{ data.start_date }}</div>
-            </div>
-            <div class="ml-8 mr-8 d-flex align-center">-</div>
-            <div class="d-flex flex-column">
-              <div>Till</div>
-              <div class="c-date">{{ data.end_date }}</div>
-            </div>
-          </div>
 
-          <div class="mt-4 w-100 d-flex justify-end">
-            <v-btn
-              class="mr-4"
-              icon
-              @click="
-                deleteDialog = true;
-                selectedId = data.id;
-              "
-            >
-              <v-icon>mdi-trash-can-outline</v-icon>
-            </v-btn>
-            <v-btn rounded outlined
-              ><v-icon>mdi-plus</v-icon> Add Assessment</v-btn
-            >
           </div>
         </div>
       </v-card>
@@ -1055,6 +1066,9 @@ export default {
   },
 
   methods: {
+    campaignFilter(type){
+      console.log(type);
+    },
     getPercentate(value, totalValue) {
       var data = (value / totalValue) * 100;
       data = Math.trunc( data );
