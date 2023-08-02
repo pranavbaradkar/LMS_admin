@@ -188,7 +188,7 @@
       <v-row class="pt-0">
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Teacher's Conversion</v-card-title>
+            <v-card-title style="font-weight: 400;">Conversions</v-card-title>
             <v-card-text style="text-align: center; position: relative;">
               <div style="position: absolute; top: 78px;z-index: 1;left: 107px;">
                 <div style="font-size: 22px; font-weight: 700; color: black;">
@@ -210,7 +210,7 @@
         </v-col>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Interview/Demo success rate</v-card-title>
+            <v-card-title style="font-weight: 400;">Interview/Demo Success Rate</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
                 :height="260"
@@ -224,7 +224,7 @@
         </v-col>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Assessment success rate</v-card-title>
+            <v-card-title style="font-weight: 400;">Assessment Success Rate</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
                 :height="260"
@@ -241,10 +241,10 @@
       <v-row>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Avg. Time To Answer (sec)</v-card-title>
+            <v-card-title style="font-weight: 400;">Avg. Time To Answer (secs)</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
-                type="SteppedAreaChart"
+                type="ColumnChart"
                 :data="chartDataForTimeToAnswer"
                 :options="chartOptionsForAvgTime"
                 :resizeDebounce="0"
@@ -254,7 +254,7 @@
         </v-col>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Assessment attempted count</v-card-title>
+            <v-card-title style="font-weight: 400;">Attempted Assessments</v-card-title>
             <v-card-text style="text-align: center">
               <GChart
                 :height="260"
@@ -268,7 +268,7 @@
         </v-col>
         <v-col cols="4">
           <v-card class="rounded-xl" outlined>
-            <v-card-title style="font-weight: 400;">Sign Up by levels</v-card-title>
+            <v-card-title style="font-weight: 400;">Signup By Level</v-card-title>
             <v-card-text style="text-align: center; position: relative;">
               <div style="position: absolute; top: 78px;z-index: 1;left: 107px;">
                 <div style="font-size: 22px; font-weight: 700; color: black;">
@@ -325,7 +325,7 @@ export default {
       date: new Date(),
       NudgeData: [
         {
-        title: "Total Sign Up",
+        title: "Total Signups",
         value: 4500,
         percentage: 0,
         },
@@ -412,7 +412,7 @@ export default {
         height: 200,
         width: 385,
         chartArea: {width: '80%', height: '50%', left: 50},
-        vAxis: {title: 'Avg time (sec)', titleTextStyle: {fontSize: 10, italic: false}},
+        vAxis: {title: 'Avg Time (secs)', titleTextStyle: {fontSize: 10, italic: false}},
         hAxis: {title: 'Levels', titleTextStyle: {fontSize: 10, italic: false}},
         isStacked: false,
       },

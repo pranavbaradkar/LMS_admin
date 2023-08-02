@@ -23,7 +23,7 @@
         <v-row class="pt-0">
             <v-col cols="4">
             <v-card class="rounded-xl" outlined>
-              <v-card-title style="font-weight: 400;">User status</v-card-title>
+              <v-card-title style="font-weight: 400;">Status Report</v-card-title>
               <v-card-text style="text-align: center; position: relative;">
                 <div style="position: absolute; top: 77px;z-index: 1;left: 102px;">
                   <div style="font-size: 22px; font-weight: 700; color: black;">
@@ -45,7 +45,7 @@
           </v-col>
           <v-col cols="4">
             <v-card class="rounded-xl" outlined>
-              <v-card-title style="font-weight: 400;">Pass Rate- Grades</v-card-title>
+              <v-card-title style="font-weight: 400;">Pass Rate w.r.t Grade</v-card-title>
               <v-card-text style="text-align: center">
                 <GChart
                   :height="260"
@@ -59,7 +59,7 @@
           </v-col>
           <v-col cols="4">
             <v-card class="rounded-xl" outlined>
-              <v-card-title style="font-weight: 400;">Bloom’s Taxonomy</v-card-title>
+              <v-card-title style="font-weight: 400;">Avg Marks w.r.t Bloom’s Taxonomy</v-card-title>
               <v-card-text style="text-align: center">
                 <GChart
                   :height="260"
@@ -76,7 +76,7 @@
         <v-row>
           <v-col cols="4">
             <v-card class="rounded-xl" outlined>
-              <v-card-title style="font-weight: 400;">Avg. Score</v-card-title>
+              <v-card-title style="font-weight: 400;">Avg. Score w.r.t Skill</v-card-title>
               <v-card-text style="text-align: center">
                 <GChart
                   type="SteppedAreaChart"
@@ -89,7 +89,7 @@
           </v-col>
           <v-col cols="4">
             <v-card class="rounded-xl" outlined>
-              <v-card-title style="font-weight: 400;">Success Rate-Difficulty Level</v-card-title>
+              <v-card-title style="font-weight: 400;">Success Rate w.r.t Difficulty Level</v-card-title>
               <v-card-text style="text-align: center">
                 <GChart
                   :height="260"
@@ -103,14 +103,14 @@
             </v-col>
           <v-col cols="4">
             <v-card class="rounded-xl" outlined>
-              <v-card-title style="font-weight: 400;">Dropout Rate- Levels</v-card-title>
+              <v-card-title style="font-weight: 400;">Total Dropout Rate</v-card-title>
               <v-card-text style="text-align: center; position: relative;">
-                <div style="position: absolute; top: 80px;z-index: 1;left: 188px;">
+                <div style="position: absolute; top: 80px;z-index: 1;left: 159px;text-align: center">
                   <div style="font-size: 22px; font-weight: 700; color: black;">
                     {{ chartDataForDropout[1][1] }}%
                   </div>
                   <div style="color: black;">
-                    Rate
+                    Dropout Rate
                   </div>
                 </div>
                 <GChart
@@ -224,8 +224,8 @@
           height: 200,
           width: 370,
           chartArea: {width: '85%', height: '50%', left: 40},
-          vAxis: {title: 'Pass rate', titleTextStyle: {fontSize: 12, italic: false}},
-          hAxis: {title: 'Grades', titleTextStyle: {fontSize: 12, italic: false}},
+          vAxis: {title: 'Pass Rate', titleTextStyle: {fontSize: 12, italic: false}},
+          hAxis: {title: 'Grade', titleTextStyle: {fontSize: 12, italic: false}},
           colors: ['#467BCA']
         },
         chartOptionsForBloom: {
@@ -257,7 +257,7 @@
           width: 370,
           chartArea: {width: '85%', height: '50%', left: 40},
           vAxis: {title: 'Avg score', titleTextStyle: {fontSize: 12, italic: false}},
-          hAxis: {title: 'Skills', titleTextStyle: {fontSize: 12, italic: false}},
+          hAxis: {title: 'Skill', titleTextStyle: {fontSize: 12, italic: false}},
         },
         chartOptionsForDropOut: {
           //title: "VGOS Screening",
