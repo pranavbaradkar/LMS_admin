@@ -31,13 +31,13 @@
                 <small class="pa-4 mr-1 mt-2">*All fields are mandatory</small>
                 <v-btn
                   text
-                  class="pa-4 mr-1 mt-2 lightPurple"
+                  class="pa-4 mr-1 mt-2 lightPurple text-capitalize"
                   @click="dialog = false"
                   >Cancel</v-btn
                 >
                 <v-btn
                   @click="saveInputs"
-                  class="primary pa-4 mt-2"
+                  class="primary pa-4 mt-2 text-capitalize"
                   :loading="loading"
                   >{{ formbtn() }}</v-btn
                 >

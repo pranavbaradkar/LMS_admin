@@ -406,7 +406,6 @@
                   tick-size="4"
                   thumb-label="always"
                   track-color="grey"
-                  color="#277BC0"
                 ></v-slider>
               </v-col>
             </v-row>
@@ -455,7 +454,6 @@
                   tick-size="4"
                   thumb-label="always"
                   track-color="grey"
-                  color="#277BC0"
                 ></v-slider>
               </v-col>
             </v-row>
@@ -508,7 +506,6 @@
                   tick-size="4"
                   thumb-label="always"
                   track-color="grey"
-                  color="#277BC0"
                 ></v-slider>
               </v-col>
             </v-row>
@@ -558,7 +555,6 @@
                   tick-size="4"
                   thumb-label="always"
                   track-color="grey"
-                  color="#277BC0"
                 ></v-slider>
               </v-col>
             </v-row>
@@ -608,7 +604,6 @@
                   tick-size="4"
                   thumb-label="always"
                   track-color="grey"
-                  color="#277BC0"
                 ></v-slider>
               </v-col>
             </v-row>
@@ -656,7 +651,6 @@
                   tick-size="4"
                   thumb-label="always"
                   track-color="grey"
-                  color="#277BC0"
                 ></v-slider>
               </v-col>
             </v-row>
@@ -779,7 +773,6 @@
                   tick-size="4"
                   thumb-label="always"
                   track-color="grey"
-                  color="#277BC0"
                 ></v-slider>
               </v-col>
             </v-row>
@@ -810,7 +803,7 @@
       </v-row>
       <v-row>
         <v-col cols="2">
-          <v-btn @click="submitForm" class="submit-btn">Submit </v-btn>
+          <v-btn @click="submitForm" class="primary text-capitalize">Submit </v-btn>
         </v-col>
       </v-row>
     </v-container>

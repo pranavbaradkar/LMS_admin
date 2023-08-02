@@ -306,11 +306,11 @@
             <v-toolbar-title class="text-h5">Create Assessment</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-row align="center" justify="end">
-              <v-btn class="lightPurple me-2" text @click="cancelClicked">Cancel</v-btn>
+              <v-btn class="lightPurple me-2 text-capitalize" text @click="cancelClicked">Cancel</v-btn>
               <!-- <v-btn outlined rounded v-if="e1 > 1" @click="e1--" class="mr-4"
                 >Back</v-btn
               > -->
-              <v-btn class="primary" @click="nextStep(e1)">
+              <v-btn class="primary text-capitalize" @click="nextStep(e1)">
                 <v-icon v-if="e1 == 4">mdi-book-open-variant</v-icon>{{ e1 == 4 ? isEdit ? "Update" : "Create" : "Next" }}<span class=" "><img src="../assets/u_arrow-right.svg" alt="" /></span>
               </v-btn>
             </v-row>
