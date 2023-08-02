@@ -23,10 +23,9 @@
           :disabled="selected.length == 0"
           rounded
           @click="deleteDialog = true"
-          ><v-icon>mdi-trash-can-outline</v-icon>Delete</v-btn
-        ><v-btn class="purple-button-light lightPurple purple-button-light-height-large  mx-2" rounded
-          ><v-icon>mdi-export</v-icon>Export</v-btn
+          ><img src="../assets/trash.svg" alt="Edit Icon" /> Delete</v-btn
         >
+        <v-btn class="purple-button-light lightPurple purple-button-light-height-large  mx-2" rounded ><v-icon>mdi-export</v-icon>Export</v-btn>
       </v-col>
     </v-row>
 
